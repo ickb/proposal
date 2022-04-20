@@ -131,27 +131,67 @@ While in our case the Protocol proceed by un-wrapping CKB++ transactions into ba
 - with the first transaction the user sends to the protocol the fixed amount of CKB++ and chooses the specific deposit to withdraw from, while the Protocol in turn assigns to the user that specific deposit and burns the received CKB++;
 - with the second transaction the user withdraws the equivalent CKB amount. Same constraints as with the second NervosDAO transaction.
 
-## 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇 WORK IN PROGRESS 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇
-
 ## Incentivization Layer
 
 ### Incentivization Layer is On-Chain, Trust-less & Decentralized
 
-As for the Core, the Incentivization Layer of the Protocol lives completely on-chain, once deployed it's independent from any entity, so it's not upgradable. This layer exist as the Protocol needs to incentivize a well time distributed deposit pool and to dis-incentivize actions that leads to the opposite. This layer cannot be bypassed as direct access to the core layer is disabled.
+As for the Core, the Incentivization Layer of the Protocol lives completely on-chain, once deployed it's independent from any entity, so it's not upgradable. This Layer exist as the Protocol needs to incentivize a well time distributed deposit pool and needs to dis-incentivize actions that leads to the opposite. Since direct access to the Core Layer is disabled this layer cannot be bypassed.
 
-### Managing Fees
+### Adding Incentives and Disincentives
 
-Any improvement involves fees, which means a central accumulator script which automatically receives fees/disincentives and automatically distributes incentives with-in user transaction.
+Any improvement aimed to incentivize a well time distributed deposit pool involves fees. In particular this entails a central entity with automated logic, so a L1 script, which with-in every user transactions:
 
-### Fees for withdrawing
+- sets disincentives in form of CKB++ fees;
+- accumulates them;
+- distributes incentives in form of CKB++ benefits;
 
-Withdrawing means using a shared resource, so others may not use it. Fees leads to a slight lock-in as user needs to fetch from secondary markets these additional CKB++ to pay for the fees.
+A benefit of asking for CKB++ fees is that leads to a slight lock-in as a user needs to fetch from secondary markets these additional CKB++ to pay for the fees.
 
-### Incentives and Disincentives for Deposits
+Another approach would be to have strict rules, that for example clearly states when a deposit/withdrawal can happen or not, but usually it's easy for a determined attacker to abuse stricter rules against everyone else.
 
-Fees for bad deposits, so deposits in already overpopulated epochs, incentives for good deposits so in scarcely populated epochs.
+In the following sections I'll refer to the **epoch population** concept, this is a short hand for quantity of deposits at maturity in a certain epoch in the Core Layer deposit pool.
 
-## Deposit size & Periphery Layer
+### Withdrawing
+
+Withdrawing means consuming a shared resource, so any other user will not be able to use it.
+
+Let's **assume** we don't implement the Incentivization Layer, so users have direct access to the Core Layer. Then a attacker with minimal expenditure of capital can simply:
+
+- exchange CKB++ for CKB deposits near maturity;
+- deposit CKB for CKB++, postponing the maturity;
+- ...
+
+An attack aimed at postponing indefinitely the deposit maturity would greatly reduce the quality of the service for everyone, hampering its fruition.
+
+A good countermeasure is to add withdrawal fees that depends on how much is populated the epoch:
+
+- scarcely populated: high withdrawal fees, up to 180 epochs worth of CKB interests;
+- average populated: from minimal to no withdrawal fees;
+- over-populated: from no fees to incentives;
+
+### Depositing
+
+Depositing means adding a shared resource, so any other user will be able to use it, but there is a catch.
+
+Let's **assume** we don't implement the Incentivization Layer, so users have direct access to the Core Layer. Then a attacker with minimal expenditure of capital can simply:
+
+- exchange CKB++ for CKB deposits in sparsely populated epochs;
+- deposit CKB for CKB++ in already densely populated epochs;
+- ...
+
+This would greatly reduce the quality of the service for everyone, as the Protocol ability to exchange CKB++ into CKB would be halted outside the overpopulated epochs, hampering its fruition.
+
+So the catch is that the utility of a deposit depends on how much already populated is that epoch.
+
+A good countermeasure is to add deposit fees that depends on how much is populated the epoch:
+
+- over-populated: high deposit fees, up to 180 epochs worth of CKB interests;
+- average populated: from minimal to no deposit fees;
+- scarcely populated: from no fees to incentives;
+
+## 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇 WORK IN PROGRESS 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇
+
+## Periphery Layer & Deposit size
 
 ### Deposit size choice
 
@@ -177,7 +217,7 @@ Fees for bad deposits, so deposits in already overpopulated epochs, incentives f
 - DAO could happen [similarly to this](https://genesysgo.medium.com/the-comprehensive-guide-to-genesysgo-and-the-shdw-ido-278b90d3186c) (thanks Sebastien for nominating it months ago), but would carry a big development overhead;
 - Directly managed by me: it's still decentralized as anyone can write a bot to arbitrage between the core and limit orders & AMM contracts. Alternatively a third party can design a totally independent system to interface users and the core protocol, as the core is totally independent from me.
 
-## Roadmap
+## Road-map & Incentives
 
 I'll go from learning L1 scripting to creating a fully functional L1 & L2 Protocol. So while I'm pretty independent, I'll need dedicated support from the Nervos, monday to friday, no more than 48 hours delays in responses.
 
