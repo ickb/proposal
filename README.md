@@ -88,16 +88,6 @@ Any technically viable solution needs to consider [NervosDAO RFCs](https://githu
 
 This part of the Protocol lives completely on-chain, once deployed it's independent from any entity, so it's not upgradable. It fixes a CKB++-equivalent size deposit, so CKB capacity for any deposit is determined in fixed CKB++-equivalent terms. It wraps NervosDAO transactions, transforming them appropriately into CKB++.
 
-### Deposits
-
-In NervosDAO a CKB holder can lock his CKB in exchange for a receipt of that specific deposit, while in our case the Protocol proceed by wrapping NervosDAO deposit transaction into CKB++. The Protocol in one transaction:
-
-- requires a fixed CKB++-equivalent size deposit;
-- takes control of the deposit;
-- stakes it in NervosDAO;
-- adds the receipt to its pool of receipts;
-- mints to the depositor a fixed amount of CKB++;
-
 ### CKB / CKB++ Rate
 
 Let's assume we fix an EPOCH-0 so a block when 1 CKB = 1 CKB++, then as time moves on 1 CKB < 1 CKB++ = 1 CKB staked at EPOCH-0, so we can think:
@@ -116,7 +106,43 @@ Now this inflation rate is well defined by the [NervosDAO compensation rate](htt
 
 So the CKB / CKB++ Rate cannot be broken except in the case of an attacker being able to compromise the CKB++ minter or the pool of CKB deposits. This kind of attack vectors are greatly mitigated by external audits.
 
-### Withdrawals
+### Fixed CKB++-Equivalent Deposit Size
+
+Let's **assume** we don't implement any requirement on deposit size, so as in NervosDAO users can choose the deposit size they prefer. Then an attacker who can borrow a big enough capital can simply:
+
+- exchange CKB++ for smaller CKB deposits;
+- deposit CKB for CKB++ in deposits as big the the entirety of his capital;
+- ...
+
+This would greatly reduce the quality of the service for everyone, as the only remaining deposits would be as big or bigger than the attacker capital and since it's impossible to withdraw partially from a NervosDAO deposit, this would greatly hamper the Protocol fruition.
+
+A good countermeasure is to fix a reasonable standard deposit size. As in real life bricks can be used to build a brick house of any size, in the same way:
+
+- deposits too big should be split into standard deposits, possibly even spread over longer periods;
+- deposits too small are better served by secondary markets, such as Uniswap-alike AMMs.
+
+This deposit standard size can be defined in CKB terms or in CBK++ terms:
+
+- a fixed CKB means that as deposit are made in time every deposit would have a different size due to the NervosDAO interests, so it's a bad idea;
+- a fixed CKB++-equivalent deposit size means that at every block all the deposits have the same size both in CKB and CKB++, of course as time passes this standard deposit size will gradually increase.
+
+This way a few goals are achieved:
+
+- split big deposits increase the overall Protocol liquidity;
+- no size mismatch means anybody can use anybody else deposit freely to withdraw;
+- a fixed CKB++-equivalent deposit size simplifies code, so minimize the hacks attack surface.
+
+### Deposits from Core Layer Perspective
+
+In NervosDAO a CKB holder can lock his CKB in exchange for a receipt of that specific deposit, while in our case the Protocol proceed by wrapping NervosDAO deposit transaction into CKB++. The Protocol in one transaction:
+
+- requires a fixed CKB++-equivalent size deposit;
+- takes control of the deposit;
+- stakes it in NervosDAO;
+- adds the receipt to its pool of receipts;
+- mints to the depositor a fixed amount of CKB++;
+
+### Withdrawals from Core Layer Perspective
 
 Withdrawals are a bit more complicated in NervosDAO, time is slotted in batches of 180 epochs depending on the initial deposit timing, so a withdrawal goes like this:
 
@@ -151,25 +177,7 @@ Another approach would be to have strict rules, that for example clearly states 
 
 In the following sections I'll refer to the **epoch population** concept, this is a short hand for quantity of deposits at maturity in a certain epoch in the Core Layer deposit pool.
 
-### Withdrawing
-
-Withdrawing means consuming a shared resource, so any other user will not be able to use it.
-
-Let's **assume** we don't implement the Incentivization Layer, so users have direct access to the Core Layer. Then a attacker with minimal expenditure of capital can simply:
-
-- exchange CKB++ for CKB deposits near maturity;
-- deposit CKB for CKB++, postponing the maturity;
-- ...
-
-An attack aimed at postponing indefinitely the deposit maturity would greatly reduce the quality of the service for everyone, hampering its fruition.
-
-A good countermeasure is to add withdrawal fees that depends on how much is populated the epoch:
-
-- scarcely populated: high withdrawal fees, up to 180 epochs worth of CKB interests;
-- average populated: from minimal to no withdrawal fees;
-- over-populated: from no fees to incentives;
-
-### Depositing
+### Deposits from Incentivization Layer Perspective
 
 Depositing means adding a shared resource, so any other user will be able to use it, but there is a catch.
 
@@ -189,21 +197,29 @@ A good countermeasure is to add deposit fees that depends on how much is populat
 - average populated: from minimal to no deposit fees;
 - scarcely populated: from no fees to incentives;
 
+### Withdrawals from Incentivization Layer Perspective
+
+Withdrawing means consuming a shared resource, so any other user will not be able to use it.
+
+Let's **assume** we don't implement the Incentivization Layer, so users have direct access to the Core Layer. Then a attacker with minimal expenditure of capital can simply:
+
+- exchange CKB++ for CKB deposits near maturity;
+- deposit CKB for CKB++, postponing the maturity;
+- ...
+
+An attack aimed at postponing indefinitely the deposit maturity would greatly reduce the quality of the service for everyone, hampering its fruition.
+
+A good countermeasure is to add withdrawal fees that depends on how much is populated the epoch:
+
+- scarcely populated: high withdrawal fees, up to 180 epochs worth of CKB interests;
+- average populated: from minimal to no withdrawal fees;
+- over-populated: from no fees to incentives;
+
 ## 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇 WORK IN PROGRESS 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇
 
-## Periphery Layer & Deposit Size
+## Periphery Layer
 
-### Deposit Size Choice
-
-- adaptive bad idea, can be manipulated adversarially
-- fixed CKB++-equivalent deposit size set a common standard and simplify code, so minimize possibility of hacks
-- block of such a size to minimize over-head, but not too big that makes hard for everyone to freely get in and out
-- variable size deposits can be adapted to use a fix deposit size
-- deposits too Big cannot be accepted as such, but they need to be split into standard deposits, better if spread over a longer period
-- deposits too Small are better served by secondary markets, such as AMMs
-- if the choice of the block size 10 years from now becomes evidently wrong, then it's always possible to hard fork the protocol into a V2.0
-
-### Periphery Layer
+### Periphery Layer Overview
 
 - CKB/CKB++ limit orders platform on L1 + arbitrage bot
 - CKB/CKB++ limit orders & Uniswap alike AMM on L2  + arbitrage bot
@@ -217,7 +233,7 @@ A good countermeasure is to add deposit fees that depends on how much is populat
 - DAO could happen [similarly to this](https://genesysgo.medium.com/the-comprehensive-guide-to-genesysgo-and-the-shdw-ido-278b90d3186c) (thanks Sebastien for nominating it months ago), but would carry a big development overhead;
 - Directly managed by me: it's still decentralized as anyone can write a bot to arbitrage between the core and limit orders & AMM contracts. Alternatively a third party can design a totally independent system to interface users and the core protocol, as the core is totally independent from me.
 
-## Road-map & Incentives
+## Road-Map & Incentives
 
 I'll go from learning L1 scripting to creating a fully functional L1 & L2 Protocol. So while I'm pretty independent, I'll need dedicated support from the Nervos, monday to friday, no more than 48 hours delays in responses.
 
