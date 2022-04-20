@@ -14,7 +14,7 @@ In particular this Protocol could enable the future Hexmate development of an IS
 
 ## Solution Bird View
 
-### dCKB (Unmaintained)
+### DCKB (Unmaintained)
 
 In the past there has been an effort to tackle this challenge by NexisDAO with dCKB. Their approach is to tokenize the holder receipt, which in turn becomes tradeable and so the holder keeps being liquid. The issue with their approach is that only the original owner can unlock the deposit. Currently dCKB seems unmaintained.
 
@@ -65,13 +65,13 @@ I'm the the ideas baker and solidity developer behind Opthy, 3° among peers at 
 
 Fast forward, two months ago while [testing the ground for Hexmate's ISPO](https://discord.com/channels/657799690070523914/657799690552606745/943306112889933864), I discovered the untapped need for a token that liquefies and bridges interests from L1 to L2 and so I started researching its feasibility.
 
-### Departing From Hexmate To Focus On CKB++
+### Departing from Hexmate to Focus on CKB++
 
 In the meantime I embarked on a journey of all-round self-discovery and after a while I realized that I identify as a solo Indie Hacker, a long time dream. Coincidentally CKB++ is of the right size to be incrementally worked on as a solo Indie Hacker!
 
 While nobody is able to work in total isolation, with the right feedback, guidance and support from Nervos Community & Foundation I can transform CKB++ into a reality in a less than year.
 
-## Technical challenges
+## Technical Challenges
 
 ### NervosDAO Gotchas
 
@@ -84,7 +84,7 @@ Any technically viable solution needs to consider [NervosDAO RFCs](https://githu
 
 ## Core Layer
 
-### Core Layer is On-Chain, Trust-less & Decentralized
+### Core Layer is On-Chain, Trust-Less & Decentralized
 
 This part of the Protocol lives completely on-chain, once deployed it's independent from any entity, so it's not upgradable. It fixes a CKB++-equivalent size deposit, so CKB capacity for any deposit is determined in fixed CKB++-equivalent terms. It wraps NervosDAO transactions, transforming them appropriately into CKB++.
 
@@ -133,7 +133,7 @@ While in our case the Protocol proceed by un-wrapping CKB++ transactions into ba
 
 ## Incentivization Layer
 
-### Incentivization Layer is On-Chain, Trust-less & Decentralized
+### Incentivization Layer is On-Chain, Trust-Less & Decentralized
 
 As for the Core, the Incentivization Layer of the Protocol lives completely on-chain, once deployed it's independent from any entity, so it's not upgradable. This Layer exist as the Protocol needs to incentivize a well time distributed deposit pool and needs to dis-incentivize actions that leads to the opposite. Since direct access to the Core Layer is disabled this layer cannot be bypassed.
 
@@ -191,9 +191,9 @@ A good countermeasure is to add deposit fees that depends on how much is populat
 
 ## 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇 WORK IN PROGRESS 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇
 
-## Periphery Layer & Deposit size
+## Periphery Layer & Deposit Size
 
-### Deposit size choice
+### Deposit Size Choice
 
 - adaptive bad idea, can be manipulated adversarially
 - fixed CKB++-equivalent deposit size set a common standard and simplify code, so minimize possibility of hacks
@@ -210,7 +210,7 @@ A good countermeasure is to add deposit fees that depends on how much is populat
 - deposits too BIG can (but don't need to) use limit orders. An arbitrage bot takes care of exchange them gradually
 - deposits too SMALL are better served by AMM. An arbitrage bot takes care of keeping the price balanced
 
-### Path to sustainability
+### Path to Sustainability
 
 - Bot & limit orders fees leads to a future where I can maintain and upgrade the services offered
 - Fees can be managed by DAO or directly by me
@@ -229,7 +229,7 @@ I'll create a Proof of Concept L1 script, showing the basic functionalities of t
 
 This is a risky period, there might exists some technical blocks long or impossible to work around. While I love everything about CKB++, I do need to ask a starting 1000$ incentive in CKB from Nervos foundation, so we are both taking a small risk.
 
-### First four months: Core & Incentivization Layers
+### First Four Months: Core & Incentivization Layers
 
 I'll create the definitive L1 scripts for Core & Incentivization Layers. I'll need to simulate the Protocol incentives. I'll set-up an Aggron Testnet based basic website. The code will be released under a BUSL-1.1 license.
 
@@ -237,7 +237,7 @@ If time permits it I'll set-up these L1 scrips on Lina Mainnet and add a basic s
 
 Once these layer are online I'll personally gain nothing from them, so as incentives I need to ask for additional 10000$ in CKB. This excludes external Core & Incentivization Layers audits or expenses to deploy them on Mainnet.
 
-### First year: Fully Working Protocol
+### First Year: Fully Working Protocol
 
 I'll create and deploy the Periphery Layer, which comprises many L1 & L2 contracts and off-chain bots. I'll create a fully working Aggron testnet and Lina Mainnet well designed website. The code developed in this stage probably will live in a private repository. It may become public under BUSL-1.1 if I create a DAO at a later stage.
 
@@ -247,7 +247,7 @@ If we audit at the same time Core, Incentivization & Periphery Layer the audit e
 
 About the cost of deploying the Periphery contracts on Lina Mainnet, I'll need to understand the associated costs and possibly ask for a refund.
 
-### Future plans
+### Future Plans
 
 Once everything is realized, I may develop a DAO and a token wrapping the generated fees and distributing the arbitrage bot responsibilities.
 
