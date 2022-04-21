@@ -233,29 +233,30 @@ On side we have defined a Protocol essentially by excluding ideas not compatible
 
 The Periphery Layer addresses these user needs, making the the Protocol handy to use irrespective of user capital size and location.
 
-## 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇 WORK IN PROGRESS 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇
-
 ### Periphery Layer's Technology
 
-Basically we need technology that can interface user needs to the Protocol.
+We need to find a technology that can interface variable user needs on L1 & L2 to the Protocol Internal layers on L1, but actually in the wild already exists a more general solution to this problem, we are essentially approaching a CKB / CKB++ market.
 
-Focus solely on limit orders, maybe with automatic switch to the other side, rebalanced by bot
+Any kind of technology that enables market price discovery could theoretically work. This is because we can develop an off-chain bot that every time the CKB / CKB++ price is unbalanced, it arbitrages the price difference between the CKB / CKB++ market and the Protocol, balancing it back again.
 
-This is achieved by using a combination of on-chain and off-chain components.
+Currently in the DeFi space there are two main techniques of price discovery:
 
-As for the Core, the Incentivization Layer of the Protocol lives completely on-chain, once deployed it's independent from any entity, so it's not upgradable. This Layer exist as the Protocol needs to incentivize a well time distributed deposit pool and needs to dis-incentivize actions that leads to the opposite. Since direct access to the Core Layer is disabled this layer cannot be bypassed.
+- [Limit Orders Book](https://www.investopedia.com/terms/o/order-book.asp) based markets, the traditional solution;
+- [Geometric Mean Market Maker](https://arxiv.org/abs/1911.03380) such as Uniswap, a new and evolving solution;
 
-- CKB/CKB++ limit orders platform on L1 + arbitrage bot
-- CKB/CKB++ limit orders on L2  + arbitrage bot
-- deposits too BIG can (but don't need to) use limit orders. An arbitrage bot takes care of exchange them gradually
-- deposits too SMALL are better served by secondary markets. An arbitrage bot takes care of keeping the price balanced
+Geometric Mean Market Makers are a form of Automated Market Makers and they are very successful in DeFi as they're relatively easy to implement, provide liquidity to and trade against. On the other side trades of size comparable to the liquidity pool experience high slippage. Of course this behavior depends highly on the bonding curve.
+
+On the other side Limit Orders Book based markets have a very different kind of slippage and big trades can work around slippage by using Limit Orders. On the other side they have different issues in DeFi, as being on-chain doesn't really work well with high frequency trading, both for the blockchain speed and fee costs associated with every on-chain transaction.
+
+Currently hybrid models are being researched by different parties, myself included, and in all likelihood the Periphery Layer will adapts one of these to its particular needs.
 
 ### Path to Sustainability
 
-- Bot & limit orders fees leads to a future where I can maintain and upgrade the services offered
-- Fees can be managed by DAO or directly by me
-- DAO could happen [similarly to this](https://genesysgo.medium.com/the-comprehensive-guide-to-genesysgo-and-the-shdw-ido-278b90d3186c) (thanks Sebastien for nominating it months ago), but would carry a big development overhead;
-- Directly managed by me: it's still decentralized as anyone can write a bot to arbitrage between the core and limit orders. Alternatively a third party can design a totally independent system to interface users and the core protocol, as the core is totally independent from me.
+Both the arbitrage bot and the market platform could generate fees. This is good as it leads to a future where I can maintain the service for the long run and possibly upgrade it to a DAO.
+
+On one side in the beginning the service offered by the Periphery Layer will be directly managed by me. This could even work in the long term as it's still decentralized as anyone can write a bot to arbitrage between the Inner Protocol and the CKB/CKB++ market. To be even more decentralized a third party can design a totally independent system to interface users and the Inner Protocol, as the Inner Protocol is totally independent from me.
+
+On the other side in the long term the DAO could happen similarly to [GenesysGo](https://genesysgo.medium.com/the-comprehensive-guide-to-genesysgo-and-the-shdw-ido-278b90d3186c), but would carry a big development overhead and it's something that should be developed at a later time.
 
 ## Road-Map & Incentives
 
@@ -267,7 +268,7 @@ I do not plan on selling any CKB that I ask as incentives because the the arbitr
 
 I'll create a Proof of Concept L1 script, showing the basic functionalities of the core layer from command line in Aggron Testnet. Possibly not safe to use in production, but with a clear path to a safe resolution.
 
-This is a risky period, there might exists some technical blocks long or impossible to work around. While I love everything about CKB++, I do need to ask a starting 1000$ incentive in CKB from Nervos foundation, so we are both taking a small risk.
+This is a risky period, there might exists some technical blocks long or impossible to work around. While I love everything about CKB++, I do need to ask a starting 1000$ incentive in CKB from Nervos foundation, so both parties are taking a small risk.
 
 ### First Four Months: Core & Incentivization Layers
 
@@ -289,6 +290,4 @@ About the cost of deploying the Periphery contracts on Lina Mainnet, I'll need t
 
 ### Future Plans
 
-Once everything is realized, I may develop a DAO and a token wrapping the generated fees and distributing the arbitrage bot responsibilities.
-
-Looking even more far away CKB++ will enable Hexmate ISPO, the official Nervos DAO community voting mechanism and a multitude more L1 & L2 applications!
+Once this Protocol is realized, I may develop a DAO, a token wrapping the generated fees and distributing the arbitrage bot responsibilities. Looking even more far away CKB++ will enable Hexmate ISPO, the official Nervos DAO community voting mechanism and a multitude more L1 & L2 applications!
