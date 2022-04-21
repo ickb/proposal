@@ -116,10 +116,10 @@ Let's **assume** we don't implement any requirement on deposit size, so as in Ne
 
 This would greatly reduce the quality of the service for everyone, as the only remaining deposits would be as big or bigger than the attacker capital and since it's impossible to withdraw partially from a NervosDAO deposit, this would greatly hamper the Protocol fruition.
 
-A good countermeasure is to fix a reasonable standard deposit size. As in real life bricks can be used to build a brick house of any size, in the same way:
+A good countermeasure is to fix a reasonable standard deposit size. As in real life bricks can be used to build houses of any size, in the same way:
 
-- deposits too big should be split into standard deposits, possibly even spread over longer periods;
-- deposits too small are better served by secondary markets, such as Uniswap-alike AMMs.
+- deposits too big should be split into standard deposits and possibly even spread over longer periods;
+- deposits too small are better served by secondary markets.
 
 This deposit standard size can be defined in CKB terms or in CBK++ terms:
 
@@ -128,7 +128,7 @@ This deposit standard size can be defined in CKB terms or in CBK++ terms:
 
 This way a few goals are achieved:
 
-- split big deposits increase the overall Protocol liquidity;
+- big deposits now increase the overall Protocol liquidity;
 - no size mismatch means anybody can use anybody else deposit freely to withdraw;
 - a fixed CKB++-equivalent deposit size simplifies code, so minimize the hacks attack surface.
 
@@ -171,7 +171,10 @@ Any improvement aimed to incentivize a well time distributed deposit pool involv
 - accumulates them;
 - distributes incentives in form of CKB++ benefits;
 
-A benefit of asking for CKB++ fees is that leads to a slight lock-in as a user needs to fetch from secondary markets these additional CKB++ to pay for the fees.
+There are two benefits of asking for CKB++ fees, such as either:
+
+- a slight lock-in, as the user needs to fetch from secondary markets these additional CKB++ for paying the fees;
+- a more liquid Protocol, as the user prioritizes actions without fees, so actions that benefit everyone.
 
 Another approach would be to have strict rules, that for example clearly states when a deposit/withdrawal can happen or not, but usually it's easy for a determined attacker to abuse stricter rules against everyone else.
 
@@ -215,23 +218,44 @@ A good countermeasure is to add withdrawal fees that depends on how much is popu
 - average populated: from minimal to no withdrawal fees;
 - over-populated: from no fees to incentives;
 
-## 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇 WORK IN PROGRESS 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇
-
 ## Periphery Layer
 
-### Periphery Layer Overview
+### Taking Care of User Needs
+
+The Core Layer of the Protocol defines a solid way to exchange between CKB and CKB++ in fixed blocks, while the Incentivization Layer takes care of making this exchange liquid.
+
+The standard deposit size makes already very easy for most users to exchange back and forth between CKB and CKB++, but naturally there are two under-served categories of users:
+
+- big depositors, those with a capital more than hundred times the standard deposit size. These users would need to spend a lot of time manually choosing the timing for each standard deposit;
+- small depositors, those with a capital smaller than the standard deposit size. These users would need to rely on secondary markets.
+
+On side we have defined a Protocol essentially by excluding ideas not compatible with NervosDAO substrate, on the other we have these very legit user needs.
+
+The Periphery Layer addresses these user needs, making the the Protocol handy to use irrespective of user capital size and location.
+
+## 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇 WORK IN PROGRESS 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇
+
+### Periphery Layer's Technology
+
+Basically we need technology that can interface user needs to the Protocol.
+
+Focus solely on limit orders, maybe with automatic switch to the other side, rebalanced by bot
+
+This is achieved by using a combination of on-chain and off-chain components.
+
+As for the Core, the Incentivization Layer of the Protocol lives completely on-chain, once deployed it's independent from any entity, so it's not upgradable. This Layer exist as the Protocol needs to incentivize a well time distributed deposit pool and needs to dis-incentivize actions that leads to the opposite. Since direct access to the Core Layer is disabled this layer cannot be bypassed.
 
 - CKB/CKB++ limit orders platform on L1 + arbitrage bot
-- CKB/CKB++ limit orders & Uniswap alike AMM on L2  + arbitrage bot
+- CKB/CKB++ limit orders on L2  + arbitrage bot
 - deposits too BIG can (but don't need to) use limit orders. An arbitrage bot takes care of exchange them gradually
-- deposits too SMALL are better served by AMM. An arbitrage bot takes care of keeping the price balanced
+- deposits too SMALL are better served by secondary markets. An arbitrage bot takes care of keeping the price balanced
 
 ### Path to Sustainability
 
 - Bot & limit orders fees leads to a future where I can maintain and upgrade the services offered
 - Fees can be managed by DAO or directly by me
 - DAO could happen [similarly to this](https://genesysgo.medium.com/the-comprehensive-guide-to-genesysgo-and-the-shdw-ido-278b90d3186c) (thanks Sebastien for nominating it months ago), but would carry a big development overhead;
-- Directly managed by me: it's still decentralized as anyone can write a bot to arbitrage between the core and limit orders & AMM contracts. Alternatively a third party can design a totally independent system to interface users and the core protocol, as the core is totally independent from me.
+- Directly managed by me: it's still decentralized as anyone can write a bot to arbitrage between the core and limit orders. Alternatively a third party can design a totally independent system to interface users and the core protocol, as the core is totally independent from me.
 
 ## Road-Map & Incentives
 
