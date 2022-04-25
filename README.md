@@ -8,7 +8,7 @@ NervosDAO is possibly the most important smart-contract of Nervos Layer 1 (L1 fo
 
 ### Untapped Potential
 
-In the Nervos ecosystem exists the untapped potential for a Protocol that liquefies and bridges NervosDAO interests from L1 to L2. This Protocol could enable NervosDAO-based ISPOs, the official Nervos DAO community voting mechanism and a multitude more L1 & L2 applications!
+In the Nervos ecosystem exists the untapped potential for a Protocol that liquefies and bridges NervosDAO interests from L1 to L2. This Protocol could enable CKB-based [Initial Stake Pool Offerings](https://www.meld.com/ispo) (ISPO for short), the official Nervos DAO community voting mechanism and a multitude more L1 & L2 applications!
 
 In particular this Protocol could enable the future Hexmate development of an ISPO, which I highly support and anticipate!
 
@@ -16,11 +16,11 @@ In particular this Protocol could enable the future Hexmate development of an IS
 
 ### DCKB (Unmaintained)
 
-In the past there has been an effort to tackle this challenge by NexisDAO with dCKB. Their approach is to tokenize the holder receipt, which in turn becomes tradeable and so the holder keeps being liquid. The issue with their approach is that only the original owner can unlock the deposit. Currently dCKB seems unmaintained.
+In the past there has been an effort to tackle this challenge by [NexisDAO with dCKB](https://docs.nexisdao.com/nexisdao/mint-dckb). Their approach is to tokenize the holder receipt, which in turn becomes tradeable and so the holder keeps being liquid. The issue with their approach is that only the original owner can unlock the deposit. Currently dCKB seems unmaintained.
 
 ### Enter CKB++
 
-CKB++ is provisional name for a sUDT token that represents deposits in the Protocol. As with dCKB, CKB++'s approach is to tokenize NervosDAO receipts, but with a twist: the Protocol owns all the CKB deposits and maintains a pool of them. This means that all the deposits and withdrawals are shared, so anyone can use anyone else's deposit to exit once it's mature.
+CKB++ is provisional name for a [sUDT token](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333) that represents deposits in the Protocol. As with dCKB, CKB++'s approach is to tokenize NervosDAO receipts, but with a twist: the Protocol owns all the CKB deposits and maintains a pool of them. This means that all the deposits and withdrawals are shared, so anyone can use anyone else's deposit to exit once it's mature.
 
 ### Water Mill Analogy
 
@@ -171,7 +171,7 @@ Any improvement aimed to incentivize a well time distributed deposit pool involv
 - accumulates them;
 - distributes incentives in form of CKB++ benefits;
 
-There are two benefits of asking for CKB++ fees, such as either:
+There are two advantages of asking for CKB++ fees, such as either:
 
 - a slight lock-in, as the user needs to fetch from secondary markets these additional CKB++ for paying the fees;
 - a more liquid Protocol, as the user prioritizes actions without fees, so actions that benefit everyone.
@@ -229,13 +229,13 @@ The standard deposit size makes already very easy for most users to exchange bac
 - big depositors, those with a capital more than hundred times the standard deposit size. These users would need to spend a lot of time manually choosing the timing for each standard deposit;
 - small depositors, those with a capital smaller than the standard deposit size. These users would need to rely on secondary markets.
 
-On side we have defined a Protocol essentially by excluding ideas not compatible with NervosDAO substrate, on the other we have these very legit user needs.
+On one side we have defined a Protocol essentially by excluding ideas not compatible with NervosDAO substrate, on the other we have these very legit user needs.
 
 The Periphery Layer addresses these user needs, making the the Protocol handy to use irrespective of user capital size and location.
 
 ### Periphery Layer's Technology
 
-We need to find a technology that can interface variable user needs on L1 & L2 to the Protocol Internal layers on L1, but actually in the wild already exists a more general solution to this problem, we are essentially approaching a CKB / CKB++ market.
+We need to find a technology that can interface, abstract and adequately prioritize variable user needs on L1 & L2 to the Protocol Internal layers on L1, but actually in the wild already exists a more general solution to this problem, we are essentially approaching a CKB / CKB++ market.
 
 Any kind of technology that enables market price discovery could theoretically work. This is because we can develop an off-chain bot that every time the CKB / CKB++ price is unbalanced, it arbitrages the price difference between the CKB / CKB++ market and the Protocol, balancing it back again.
 
@@ -244,11 +244,16 @@ Currently in the DeFi space there are two main techniques of price discovery:
 - [Limit Orders Book](https://www.investopedia.com/terms/o/order-book.asp) based markets, the traditional solution;
 - [Geometric Mean Market Maker](https://arxiv.org/abs/1911.03380) such as Uniswap, a new and evolving solution;
 
-Geometric Mean Market Makers are a form of Automated Market Makers and they are very successful in DeFi as they're relatively easy to implement, provide liquidity to and trade against. On the other side trades of size comparable to the liquidity pool experience high slippage. Of course this behavior depends highly on the bonding curve.
+Geometric Mean Market Makers are a form of Automated Market Makers and they are very successful in DeFi as they're relatively easy to implement, provide liquidity to and trade against. On the other side trades of size comparable to the liquidity pool experience high slippage. Of course this behavior depends highly on the bonding curve and liquidity pool size.
 
 On the other side Limit Orders Book based markets have a very different kind of slippage and big trades can work around slippage by using Limit Orders. On the other side they have different issues in DeFi, as being on-chain doesn't really work well with high frequency trading, both for the blockchain speed and fee costs associated with every on-chain transaction.
 
-Currently hybrid models are being researched by different parties, myself included, and in all likelihood the Periphery Layer will adapts one of these to its particular needs.
+Currently hybrid models are being researched by different parties, myself included, and in all likelihood the Periphery Layer will adapt one of these to its particular needs, which are:
+
+- CKB / CKB++ exchange rate is well defined, any significant deviation must be easily arbitraged back;
+- Limit orders are needed to interface, abstract and adequately prioritize deposits & withdrawals;
+- A form of Automated Market Maker is needed to minimize liquidity providers interactions;
+- Fair incentives for every stakeholder: users, liquidity providers and service maintainers.
 
 ### Path to Sustainability
 
@@ -256,7 +261,7 @@ Both the arbitrage bot and the market platform could generate fees. This is good
 
 On one side in the beginning the service offered by the Periphery Layer will be directly managed by me. This could even work in the long term as it's still decentralized as anyone can write a bot to arbitrage between the Inner Protocol and the CKB/CKB++ market. To be even more decentralized a third party can design a totally independent system to interface users and the Inner Protocol, as the Inner Protocol is totally independent from me.
 
-On the other side in the long term the DAO could happen similarly to [GenesysGo](https://genesysgo.medium.com/the-comprehensive-guide-to-genesysgo-and-the-shdw-ido-278b90d3186c), but would carry a big development overhead and it's something that should be developed at a later time.
+On the other side in the long term the DAO could happen similarly to [GenesysGo](https://genesysgo.medium.com/the-comprehensive-guide-to-genesysgo-and-the-shdw-ido-278b90d3186c), but would carry a big development overhead and it's something that can only be developed at a later time.
 
 ## Road-Map & Incentives
 
@@ -266,28 +271,37 @@ I do not plan on selling any CKB that I ask as incentives because the the arbitr
 
 ### First Month: Proof of Concept
 
-I'll create a Proof of Concept L1 script, showing the basic functionalities of the core layer from command line in Aggron Testnet. Possibly not safe to use in production, but with a clear path to a safe resolution.
+I'll create a Proof of Concept L1 script, showing the basic functionalities of the core layer from command line in Testnet. Possibly not safe to use in production, but with a clear path to a safe resolution.
 
 This is a risky period, there might exists some technical blocks long or impossible to work around. While I love everything about CKB++, I do need to ask a starting 1000$ incentive in CKB from Nervos foundation, so both parties are taking a small risk.
 
 ### First Four Months: Core & Incentivization Layers
 
-I'll create the definitive L1 scripts for Core & Incentivization Layers. I'll need to simulate the Protocol incentives. I'll set-up an Aggron Testnet based basic website. The code will be released under a BUSL-1.1 license.
+I'll create the definitive L1 scripts for Core & Incentivization Layers. I'll need to simulate the Protocol incentives. I'll set-up a L1 Testnet based basic website. This website will provide users the ability to directly interact with the Incentivization Layer, with the addition of off-chain utilities for gradually exchanging CKB and CKB++. This will happen by keeping the browser tab open, bypassing the future Periphery Layer. The code will be released under a BUSL-1.1 license.
 
-If time permits it I'll set-up these L1 scrips on Lina Mainnet and add a basic styling on this website.
+If time permits it I'll set-up these L1 scrips on Mainnet and add a basic styling on this website.
 
 Once these layer are online I'll personally gain nothing from them, so as incentives I need to ask for additional 10000$ in CKB. This excludes external Core & Incentivization Layers audits or expenses to deploy them on Mainnet.
 
 ### First Year: Fully Working Protocol
 
-I'll create and deploy the Periphery Layer, which comprises many L1 & L2 contracts and off-chain bots. I'll create a fully working Aggron testnet and Lina Mainnet well designed website. The code developed in this stage probably will live in a private repository. It may become public under BUSL-1.1 if I create a DAO at a later stage.
+I'll create and deploy the Periphery Layer, which comprises many L1 & L2 contracts and off-chain bots. I'll create a fully working Testnet and Mainnet well designed website which will provide users the ability to either:
+
+- on L1 & L2 interact with the Periphery Layer and its associated on-chain limit order utilities for gradually exchanging CKB and CKB++.
+- only on L1 directly interact with the Incentivization Layer using its off-chain utilities;
+
+The code developed in this stage probably will live in a private repository. It may become public under BUSL-1.1 if I create a DAO at a later stage.
 
 Once everything is on Mainnet and audited, I **may** gain personally from this, still it's a risky long shot, so I'm open about discussing incentives for this phase. I estimate the incentives for this stage as additional 20000$ in CKB, in two separate steps so that Nervos can evaluate the progress I make on the the Periphery Layer private repositories and on the website.
 
 If we audit at the same time Core, Incentivization & Periphery Layer the audit expenses should be lower and so Nervos could fully sponsor them.
 
-About the cost of deploying the Periphery contracts on Lina Mainnet, I'll need to understand the associated costs and possibly ask for a refund.
+About the cost of deploying the Periphery contracts on Mainnet, I'll need to understand the associated costs and possibly ask for a refund.
 
 ### Future Plans
 
-Once this Protocol is realized, I may develop a DAO, a token wrapping the generated fees and distributing the arbitrage bot responsibilities. Looking even more far away CKB++ will enable Hexmate ISPO, the official Nervos DAO community voting mechanism and a multitude more L1 & L2 applications!
+Once this Protocol is realized, I may develop a DAO, a token wrapping the generated fees and distributing the arbitrage bot responsibilities. Looking even more far away CKB++ will enable CKB-based Initial Stake Pool Offerings, the official Nervos DAO community voting mechanism and a multitude more L1 & L2 applications!
+
+### License
+
+This proposal is licensed under the terms of the [Creative Commons Attribution Share Alike 4.0 International license](LICENSE.txt).
