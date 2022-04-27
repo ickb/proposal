@@ -111,26 +111,34 @@ So the CKB / CKB++ Rate cannot be broken except in the case of an attacker being
 Let's **assume** we don't implement any requirement on deposit size, so as in NervosDAO users can choose the deposit size they prefer. Then an attacker who can borrow a big enough capital can simply:
 
 - exchange CKB++ for smaller CKB deposits;
-- deposit CKB for CKB++ in deposits as big the the entirety of his capital;
+- deposit CKB for CKB++ in deposits as big as the entirety of his capital;
 - ...
 
 This would greatly reduce the quality of the service for everyone, as the only remaining deposits would be as big or bigger than the attacker capital and since it's impossible to withdraw partially from a NervosDAO deposit, this would greatly hamper the Protocol fruition.
 
-A good countermeasure is to fix a reasonable standard deposit size. As in real life bricks can be used to build houses of any size, in the same way:
+Let's now instead **assume** we require deposits to be capped at certain size. Then as before an attacker who can borrow a capital as big as the maximum deposit size can simply:
+
+- exchange CKB++ for smaller CKB deposits;
+- deposit CKB for CKB++ in deposits as big as the maximum deposit size;
+- ...
+
+This would greatly reduce the quality of the service for users trying to withdraw smaller deposits, as the only remaining deposits would be as big as the maximum deposit size and since it's impossible to withdraw partially from a NervosDAO deposit, this would hamper the Protocol fruition for a whole category of users.
+
+A good countermeasure is to fix a reasonably small standard deposit size. As in real life bricks can be used to build houses of any size, in the same way:
 
 - deposits too big should be split into standard deposits and possibly even spread over longer periods;
 - deposits too small are better served by secondary markets.
 
 This deposit standard size can be defined in CKB terms or in CBK++ terms:
 
-- a fixed CKB means that as deposit are made in time every deposit would have a different size due to the NervosDAO interests, so it's a bad idea;
-- a fixed CKB++-equivalent deposit size means that at every block all the deposits have the same size both in CKB and CKB++, of course as time passes this standard deposit size will gradually increase.
+- a fixed CKB means that as deposit are made in time, every deposit would have a different size due to the NervosDAO interests, so it's not working as intended;
+- a fixed CKB++-equivalent deposit size means that at every block all the deposits would have the same size both in CKB and CKB++, of course as time passes this standard deposit size would gradually increase.
 
-This way a few goals are achieved:
+In this way a few goals are achieved:
 
 - big deposits now increase the overall Protocol liquidity;
 - no size mismatch means anybody can use anybody else deposit freely to withdraw;
-- a fixed CKB++-equivalent deposit size simplifies code, so minimize the hacks attack surface.
+- a fixed CKB++-equivalent deposit size simplifies code, so it minimizes the hacks attack surface.
 
 ### Deposits from Core Layer Perspective
 
