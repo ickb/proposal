@@ -227,72 +227,84 @@ The Core Layer of the Protocol defines a solid way to exchange between CKB and C
 The standard deposit size makes already very easy for most users to exchange back and forth between CKB and CKB++, but naturally there are two under-served categories of users:
 
 - big depositors, those with a capital more than hundred times the standard deposit size. These users would need to spend a lot of time manually choosing the timing for each standard deposit;
-- small depositors, those with a capital smaller than the standard deposit size. These users would need to rely on secondary markets.
+- small depositors, those with a capital smaller than the standard deposit size. These users would otherwise need to rely on secondary markets.
 
 On one side we have defined a Protocol essentially by excluding ideas not compatible with NervosDAO substrate, on the other we have these very legit user needs.
 
-The Periphery Layer addresses these user needs, making the the Protocol handy to use irrespective of user capital size and location.
+The Periphery Layer addresses these user needs, making the the Protocol handy to use irrespective of user capital size.
 
-### Periphery Layer's Technology
+### Periphery Layer's Requirements
 
-We need to find a technology that can interface, abstract and adequately prioritize variable user needs on L1 & L2 to the Protocol Internal layers on L1, but actually in the wild already exists a more general solution to this problem, we are essentially approaching a CKB / CKB++ market.
+We need a technology that can adequately prioritize variable user needs and interface them to the fixed blocks used by Protocol Internal layers, but actually in the wild already exists a more general solution to this problem: we are essentially approaching a CKB / CKB++ market!
 
-Any kind of technology that enables market price discovery could theoretically work. This is because we can develop an off-chain bot that every time the CKB / CKB++ price is unbalanced, it arbitrages the price difference between the CKB / CKB++ market and the Protocol, balancing it back again.
+Theoretically any kind of technology that enables market price discovery could work. This is because we can develop an off-chain bot that every time the CKB / CKB++ price is unbalanced, it arbitrages the price difference between the CKB / CKB++ market and the Protocol, balancing it back again.
 
 Currently in the DeFi space there are two main techniques of price discovery:
 
-- [Limit Orders Book](https://www.investopedia.com/terms/o/order-book.asp) based markets, the traditional solution;
 - [Geometric Mean Market Maker](https://arxiv.org/abs/1911.03380) such as Uniswap, a new and evolving solution;
+- [Limit Orders Book](https://www.investopedia.com/terms/o/order-book.asp) based markets, the traditional solution;
 
-Geometric Mean Market Makers are a form of Automated Market Makers and they are very successful in DeFi as they're relatively easy to implement, provide liquidity to and trade against. On the other side trades of size comparable to the liquidity pool experience high slippage. Of course this behavior depends highly on the bonding curve and liquidity pool size.
+Geometric Mean Market Makers are a form of Automated Market Makers. On one side they are very successful in DeFi as they're relatively easy to implement, provide liquidity to and trade against. On the other side trades of size comparable to the liquidity pool experience high slippage. While of course this behavior depends on the bonding curve and liquidity pool size, they don't seem to solve properly our problem.
 
-On the other side Limit Orders Book based markets have a very different kind of slippage and big trades can work around slippage by using Limit Orders. On the other side they have different issues in DeFi, as being on-chain doesn't really work well with high frequency trading, both for the blockchain speed and fee costs associated with every on-chain transaction.
+Limit Orders Book based markets are the traditional solution, trades of any size can work around Market Orders slippage by using Limit Orders. In DeFi they have different issues due to the cost of every on-chain transaction, so high frequency trading is impractical, which may actually be positive!
 
-Currently hybrid models are being researched by different parties, myself included, and in all likelihood the Periphery Layer will adapt one of these to its particular needs, which are:
+So a variation of this could fit our high level requirements, which are:
 
-- CKB / CKB++ exchange rate is well defined, any significant deviation must be easily arbitraged back;
+- CKB / CKB++ exchange rate is well defined, so any significant deviation must be easily arbitraged back;
 - Limit orders are needed to interface, abstract and adequately prioritize deposits & withdrawals;
 - A form of Automated Market Maker is needed to minimize liquidity providers interactions;
-- Fair incentives for every stakeholder: users, liquidity providers and service maintainers.
+- Every stakeholder should be as liquid as possible;
+- Fair incentives for every stakeholder.
+
+In the eyes of this protocol the stakeholders are:
+
+- traders;
+- liquidity providers;
+- price arbitrageurs;
+- service maintainers.
 
 ### Path to Sustainability
 
 Both the arbitrage bot and the market platform could generate fees. This is good as it leads to a future where I can maintain the service for the long run and possibly upgrade it to a DAO.
 
-On one side in the beginning the service offered by the Periphery Layer will be directly managed by me. This could even work in the long term as it's still decentralized as anyone can write a bot to arbitrage between the Inner Protocol and the CKB/CKB++ market. To be even more decentralized a third party can design a totally independent system to interface users and the Inner Protocol, as the Inner Protocol is totally independent from me.
+On one side in the beginning the service offered by the Periphery Layer will be directly managed by me. This could even work in the long term as it's still decentralized as anyone can arbitrage between the Inner Protocol and the CKB/CKB++ market. To be even more decentralized a third party can design a totally independent system to interface users and the Inner Protocol, as the Inner Protocol is totally independent from me.
 
 On the other side in the long term the DAO could happen similarly to [GenesysGo](https://genesysgo.medium.com/the-comprehensive-guide-to-genesysgo-and-the-shdw-ido-278b90d3186c), but would carry a big development overhead and it's something that can only be developed at a later time.
 
 ## Road-Map & Incentives
 
-I'll go from learning L1 scripting to creating a fully functional L1 & L2 Protocol. So while I'm pretty independent, I'll need dedicated support from the Nervos, monday to friday, no more than 48 hours delays in responses.
-
-I do not plan on selling any CKB that I ask as incentives because the the arbitrage bots will need CKB capital to indeed arbitrage.
+While I'm pretty independent, I'll go from learning L1 scripting to creating a complex L1 Protocol, so I'll probably need substantial support from Nervos Team, Community & Foundation.
 
 ### First Month: Proof of Concept
 
 I'll create a Proof of Concept L1 script, showing the basic functionalities of the core layer from command line in Testnet. Possibly not safe to use in production, but with a clear path to a safe resolution.
 
-This is a risky period, there might exists some technical blocks long or impossible to work around. While I love everything about CKB++, I do need to ask a starting 1000$ incentive in CKB from Nervos foundation, so both parties are taking a small risk.
+This is a risky period, there might exists some technical blocks long or impossible to work around. While I love everything about CKB++, I do need to ask a starting 1000 USD-equivalent in incentives from Nervos foundation, so both parties are taking a small risk.
 
 ### First Four Months: Core & Incentivization Layers
 
-I'll create the definitive L1 scripts for Core & Incentivization Layers. I'll need to simulate the Protocol incentives. I'll set-up a L1 Testnet based basic website. This website will provide users the ability to directly interact with the Incentivization Layer, with the addition of off-chain utilities for gradually exchanging CKB and CKB++. This will happen by keeping the browser tab open, bypassing the future Periphery Layer. The code will be released under a BUSL-1.1 license.
+I'll create the definitive L1 scripts for Core & Incentivization Layers. I'll need to simulate the Protocol incentives. This code will be released under a Business Source License 1.1 (BUSL-1.1 for short), the same kind license as [Uniswap v3 core](https://github.com/Uniswap/v3-core/blob/main/LICENSE).
+
+Moreover I'll set-up a L1 Testnet based basic website. This website will provide users the ability to directly interact with the Incentivization Layer, with the addition of off-chain utilities for gradually exchanging CKB and CKB++. This will happen both by keeping the browser tab open or by a stand-alone script. This code will be released under a GNU General Public License v3.0 or later (GPL-3.0-or-later in short), in this way anybody can do almost anything with the interface code, except distributing a closed source version.
 
 If time permits it I'll set-up these L1 scrips on Mainnet and add a basic styling on this website.
 
-Once these layer are online I'll personally gain nothing from them, so as incentives I need to ask for additional 10000$ in CKB. This excludes external Core & Incentivization Layers audits or expenses to deploy them on Mainnet.
+Once these layer are online I'll personally gain nothing from them, so I need to ask for additional 10000 USD-equivalent in incentives. This excludes external Core & Incentivization Layers audits or expenses to deploy them on Mainnet.
 
 ### First Year: Fully Working Protocol
 
-I'll create and deploy the Periphery Layer, which comprises many L1 & L2 contracts and off-chain bots. I'll create a fully working Testnet and Mainnet well designed website which will provide users the ability to either:
+I'll create the L1 scripts for the Periphery Layer. I'll need to simulate any adverse scenarios and non-trivial user interaction in respect to L1 scripts. As with Core & Incentivization L1 scripts this code will be released under BUSL-1.1.
 
-- on L1 & L2 interact with the Periphery Layer and its associated on-chain limit order utilities for gradually exchanging CKB and CKB++.
-- only on L1 directly interact with the Incentivization Layer using its off-chain utilities;
+I'll create a fully working Testnet and Mainnet well designed website which will provide users the ability to interact either:
 
-The code developed in this stage probably will live in a private repository. It may become public under BUSL-1.1 if I create a DAO at a later stage.
+- with the Periphery Layer and its associated on-chain limit order utilities for gradually exchanging CKB and CKB++.
+- with the Incentivization Layer using its off-chain utilities as a fallback method;
 
-Once everything is on Mainnet and audited, I **may** gain personally from this, still it's a risky long shot, so I'm open about discussing incentives for this phase. I estimate the incentives for this stage as additional 20000$ in CKB, in two separate steps so that Nervos can evaluate the progress I make on the the Periphery Layer private repositories and on the website.
+I'll create off-chain arbitraging bots, both as integrated in the website and as stand-alone code, that requires no capital to operate, except for initially paying the block-chain transaction fees.
+
+As with the Incentivization layer, the web interface and arbitraging bots code will be released under GPL-3.0-or-later.
+
+Once everything is on Mainnet and audited, I **may** gain personally from this, still it's a risky long shot, so I'm open about discussing incentives for this phase. I estimate the cost for this stage as additional 20000 USD-equivalent in incentives, in two separate steps so that Nervos can evaluate the progress I make on the the Periphery Layers L1 scripts, arbitraging bots and website.
 
 If we audit at the same time Core, Incentivization & Periphery Layer the audit expenses should be lower and so Nervos could fully sponsor them.
 
