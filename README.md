@@ -24,7 +24,7 @@ CKB++ is provisional name for a [sUDT token](https://talk.nervos.org/t/rfc-simpl
 
 ### Water Mill Analogy
 
-A water mill has many distinct buckets, each at different wheel positions, in which the water is:
+As a [water mill](https://tenor.com/view/water-wheel-mill-gif-19806697) has many distinct buckets, each at different wheel positions, in which the water is:
 
 - collected;
 - kept and transported;
@@ -265,7 +265,7 @@ So a variation of this technique could fit our high level requirements, which ar
 - Every stakeholder should be as liquid as possible;
 - Fair incentives for every stakeholder.
 
-While in this protocol the stakeholders are:
+In this Protocol the stakeholders are:
 
 - traders;
 - liquidity providers;
@@ -274,21 +274,21 @@ While in this protocol the stakeholders are:
 
 ### Deposits from Periphery Layer Perspective
 
-Deposits are basically limit orders seeking to convert CKB into CKB++. They can be matched either by:
+Deposits are basically limit orders seeking to convert CKB into CKB++. They can be matched partially or fully by:
 
-- an arbitrageur who creates in the Incentivization Layer a new deposit using partially (or fully) one (or more) limit order funds, minting CKB++ tokens in the process and later distributing them correctly. No capital required from the arbitrageur;
+- an arbitrageur who creates in the Incentivization Layer a new deposit using one or more limit order funds, minting CKB++ tokens in the process and later distributing them correctly. No capital required from the arbitrageur;
 - a counterparty seeking to convert CKB++ into CKB.
 
 ### Withdrawals from Periphery Layer Perspective
 
-Withdrawals are basically limit orders seeking to convert CKB++ into CKB. They can be matched either by:
+Withdrawals are basically limit orders seeking to convert CKB++ into CKB. They can be matched partially or fully by:
 
-- an arbitrageur who creates in the Incentivization Layer a new withdrawal request for a deposit near maturity using partially (or fully) one (or more) limit order funds, burning those CKB++ in the process and later distributing the withdrawn CKB correctly. No capital required from the arbitrageur;
+- an arbitrageur who creates in the Incentivization Layer a new withdrawal request for a deposit near maturity using one or more limit order funds, burning those CKB++ in the process and later distributing the withdrawn CKB correctly. No capital required from the arbitrageur;
 - a counterparty seeking to convert CKB into CKB++.
 
 ## Path to Sustainability
 
-[To cite a section from the blog that introduced the World to Uniswap V2](https://uniswap.org/blog/uniswap-v2#path-to-sustainability):
+[To cite a section from the blog that introduced Uniswap V2 to the World](https://uniswap.org/blog/uniswap-v2#path-to-sustainability):
 
 >Decentralization is in many ways about increasing participation and removing central points of failure. Uniswap V1 is already highly decentralized, trustless, and censorship resistant. But for it to achieve its full potential as infrastructure in a fair and open financial system — it must continue to grow and improve.
 >
@@ -304,7 +304,7 @@ In the long term a DAO should take over the Periphery Layer and manage it, but t
 
 ## Road-Map & Incentives
 
-While I'm pretty independent, I'll go from learning L1 scripting to creating a complex L1 Protocol, so I'll probably need substantial support from Nervos Team, Community & Foundation.
+While I'm pretty independent, I'll go from learning L1 scripting to creating a complex L1 Protocol, so in all likelihood I'll need substantial support from Nervos Team, Community & Foundation.
 
 ### First Month: Proof of Concept
 
@@ -316,13 +316,13 @@ This is a risky period, there might exists some technical blocks long or impossi
 
 I'll need to simulate any adverse user interaction with the Protocol incentives and only then I'll create the definitive L1 scripts for Core & Incentivization Layers. This code will be released under a Business Source License 1.1 (BUSL-1.1 for short), the same kind license as [Uniswap v3 core](https://github.com/Uniswap/v3-core/blob/main/LICENSE).
 
-Moreover I'll set-up a L1 Testnet based basic website. This website will provide users the ability to directly interact with the Incentivization Layer, with the addition of off-chain utilities for gradually exchanging CKB and CKB++. This will happen both by keeping the browser tab open or by a stand-alone script. This code will be released under a GNU General Public License v3.0 or later (GPL-3.0-or-later in short), in this way anybody can do almost anything with the interface code, except distributing a closed source version.
+Moreover I'll set-up a L1 Testnet based basic website. This website will provide users the ability to directly interact with the Incentivization Layer, with the addition of off-chain utilities for gradually exchanging CKB and CKB++. This will happen both by keeping the browser tab open or by a stand-alone script. This code will be released under a GNU General Public License v3.0 or later (GPL-3.0-or-later for short), in this way anybody can do almost anything with the interface code, except distributing a closed source version.
 
 If time permits it I'll set-up these L1 scrips on Mainnet and add a basic styling on this website.
 
 Once these layer are online I'll personally gain nothing from them, so I need to ask for additional 10000 USD-equivalent in incentives for the additional three months of work. This excludes external Core & Incentivization Layers audits or expenses to deploy them on Mainnet.
 
-### First Year: Fully Working Protocol
+### First Ten Months: Fully Working Protocol
 
 I'll need to simulate any adverse user interaction with the Periphery Layer and only then I'll create the L1 scripts for the Periphery Layer. As with Core & Incentivization L1 scripts this code will be released under BUSL-1.1.
 
@@ -335,7 +335,9 @@ I'll create off-chain arbitraging bots, both integrated in the website and as st
 
 As with the Incentivization layer interface, the web interface and arbitraging bots code will be released under GPL-3.0-or-later.
 
-Once everything is on Mainnet and audited, I **may** gain personally from this, so I'm open about discussing incentives for this phase, still it's a risky long shot. I estimate the cost for this stage as additional 20000 USD-equivalent in incentives for the additional eight months of work. This could happen in two separate steps so that Nervos can evaluate the progress I make on the the Periphery Layers L1 scripts, arbitraging bots and website.
+I'll create a GitBook-alike documenting all the concepts, the layers and the website. It will be released under Creative Commons Attribution Share Alike 4.0 International License (CC-BY-SA-4.0 for short).
+
+Once everything is on Mainnet and audited, I **may** gain personally from this, so I'm open about discussing incentives for this phase, still it's a risky long shot. I estimate the cost for this stage as additional 20000 USD-equivalent in incentives for the additional six months of work. This could happen in two separate steps so that Nervos can evaluate the progress I make on the the Periphery Layers L1 scripts, arbitraging bots and website.
 
 If we audit at the same time Core, Incentivization & Periphery Layer the audit expenses should be lower and so Nervos could fully sponsor them.
 
@@ -347,4 +349,4 @@ Once this Protocol is realized, I may develop a DAO, a token wrapping the genera
 
 ## License
 
-This proposal is licensed under the terms of the [Creative Commons Attribution Share Alike 4.0 International license](LICENSE.txt).
+This proposal is licensed under the terms of the [Creative Commons Attribution Share Alike 4.0 International License](LICENSE.txt).
