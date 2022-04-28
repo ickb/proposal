@@ -256,28 +256,49 @@ Geometric Mean Market Makers are a form of Automated Market Makers. On one side 
 
 Limit Orders Book based markets are the traditional solution, trades of any size can work around Market Orders slippage by using Limit Orders. In DeFi they have different issues due to the cost of every on-chain transaction, so high frequency trading is impractical, which may actually be positive!
 
-So a variation of this could fit our high level requirements, which are:
+So a variation of this technique could fit our high level requirements, which are:
 
 - CKB / CKB++ exchange rate is well defined, so any significant deviation must be easily arbitraged back;
+- Arbitraging should have no barrier to entry, being closer to triggering a method than arbitraging;
 - Limit orders are needed to interface, abstract and adequately prioritize deposits & withdrawals;
 - A form of Automated Market Maker is needed to minimize liquidity providers interactions;
 - Every stakeholder should be as liquid as possible;
 - Fair incentives for every stakeholder.
 
-In the eyes of this protocol the stakeholders are:
+While this protocol stakeholders are:
 
 - traders;
 - liquidity providers;
 - price arbitrageurs;
 - service maintainers.
 
-### Path to Sustainability
+### Deposits from Periphery Layer Perspective
 
-Both the arbitrage bot and the market platform could generate fees. This is good as it leads to a future where I can maintain the service for the long run and possibly upgrade it to a DAO.
+Deposits are basically limit orders seeking to convert CKB into CKB++. They can be matched either by:
 
-On one side in the beginning the service offered by the Periphery Layer will be directly managed by me. This could even work in the long term as it's still decentralized as anyone can arbitrage between the Inner Protocol and the CKB/CKB++ market. To be even more decentralized a third party can design a totally independent system to interface users and the Inner Protocol, as the Inner Protocol is totally independent from me.
+- an arbitrageur creating in the Incentivization Layer a new deposit using partially (or fully) one (or more) limit order funds, minting CKB++ tokens in the process and later distributing them correctly. No capital required from the arbitrageur;
+- a counterparty seeking to convert CKB++ into CKB.
 
-On the other side in the long term the DAO could happen similarly to [GenesysGo](https://genesysgo.medium.com/the-comprehensive-guide-to-genesysgo-and-the-shdw-ido-278b90d3186c), but would carry a big development overhead and it's something that can only be developed at a later time.
+### Withdrawals from Periphery Layer Perspective
+
+Withdrawals are basically limit orders seeking to convert CKB++ into CKB. They can be matched either by:
+
+- an arbitrageur creating in the Incentivization Layer a new withdrawal request for a deposit near maturity using partially (or fully) one (or more) limit order funds, burning those CKB++ in the process and later distributing the withdrawn CKB correctly. No capital required from the arbitrageur;
+- a counterparty seeking to convert CKB into CKB++.
+
+## Path to Sustainability
+
+To cite a [section from the blog that introduced the world to Uniswap V2](https://uniswap.org/blog/uniswap-v2#path-to-sustainability):
+
+>Decentralization is in many ways about increasing participation and removing central points of failure. Uniswap V1 is already highly decentralized, trustless, and censorship resistant. But for it to achieve its full potential as infrastructure in a fair and open financial system — it must continue to grow and improve.
+>To open a path to self-sustainability, the code for Uniswap V2 includes a small protocol charge mechanism. At launch, the protocol charge will default to 0, and the liquidity provider fee will be 0.30%. If the protocol charge is switched on, it will become 0.05% and the liquidity provider fee will be 0.25%.
+>This feature, including the exact percentage amounts, is hardcoded into the core contracts which remain decentralized and non-upgradable. It can be turned on, and directed by, a decentralized governance process deployed after the Uniswap V2 launch. There is no expectation that it will be turned on in the near future but it opens the possibility for future exploration.
+
+In the same way the Periphery Layer, both the arbitrage bot and the market platform, could include a hardcoded fee switch, turned off at the beginning. This is good as it leads to a future where service maintainers are incentivized to fulfill their role for the long run and upgrade it to a DAO.
+
+In the beginning the service offered by the Periphery Layer will be directly managed by me. This could even work in the long term as it's still decentralized as anyone can arbitrage between the Inner Protocol and Periphery Layer. To be even more decentralized a third party could design a totally independent system to interface users and the Inner Protocol, as the latter it's totally independent from me.
+
+In the long term a DAO should take over the Periphery Layer and manage it, but this would carry a big development overhead, so it's something that can only happen at a later time.
 
 ## Road-Map & Incentives
 
@@ -285,9 +306,9 @@ While I'm pretty independent, I'll go from learning L1 scripting to creating a c
 
 ### First Month: Proof of Concept
 
-I'll create a Proof of Concept L1 script, showing the basic functionalities of the core layer from command line in Testnet. Possibly not safe to use in production, but with a clear path to a safe resolution.
+I'll create a Proof of Concept L1 script, showing the basic functionalities of the core layer from command line. Possibly not safe to use in production, but with a clear path to a safe resolution.
 
-This is a risky period, there might exists some technical blocks long or impossible to work around. While I love everything about CKB++, I do need to ask a starting 1000 USD-equivalent in incentives from Nervos foundation, so both parties are taking a small risk.
+This is a risky period, there might exists some technical blocks long or impossible to work around. While I designed CKB++ from the bottom-up and I love everything about it, I do need to ask Nervos Foundation for a starting 1000 USD-equivalent in incentives for the first month of work, so both parties are taking a small risk.
 
 ### First Four Months: Core & Incentivization Layers
 
@@ -297,7 +318,7 @@ Moreover I'll set-up a L1 Testnet based basic website. This website will provide
 
 If time permits it I'll set-up these L1 scrips on Mainnet and add a basic styling on this website.
 
-Once these layer are online I'll personally gain nothing from them, so I need to ask for additional 10000 USD-equivalent in incentives. This excludes external Core & Incentivization Layers audits or expenses to deploy them on Mainnet.
+Once these layer are online I'll personally gain nothing from them, so I need to ask for additional 10000 USD-equivalent in incentives for the additional three months of work. This excludes external Core & Incentivization Layers audits or expenses to deploy them on Mainnet.
 
 ### First Year: Fully Working Protocol
 
@@ -312,11 +333,11 @@ I'll create off-chain arbitraging bots, both as integrated in the website and as
 
 As with the Incentivization layer, the web interface and arbitraging bots code will be released under GPL-3.0-or-later.
 
-Once everything is on Mainnet and audited, I **may** gain personally from this, still it's a risky long shot, so I'm open about discussing incentives for this phase. I estimate the cost for this stage as additional 20000 USD-equivalent in incentives, in two separate steps so that Nervos can evaluate the progress I make on the the Periphery Layers L1 scripts, arbitraging bots and website.
+Once everything is on Mainnet and audited, I **may** gain personally from this, still it's a risky long shot, so I'm open about discussing incentives for this phase. I estimate the cost for this stage as additional 20000 USD-equivalent in incentives for the additional eight months of work. This could happen in two separate steps so that Nervos can evaluate the progress I make on the the Periphery Layers L1 scripts, arbitraging bots and website.
 
 If we audit at the same time Core, Incentivization & Periphery Layer the audit expenses should be lower and so Nervos could fully sponsor them.
 
-About the cost of deploying the Periphery contracts on Mainnet, I'll need to understand the associated costs and possibly ask for a refund.
+About the cost of deploying the Periphery contracts on Mainnet, I need to understand the associated costs and possibly ask for a refund.
 
 ### Future Plans
 
