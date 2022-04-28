@@ -31,7 +31,7 @@ A water mill has many distinct buckets, each at different wheel positions, in wh
 - released;
 - ...
 
-In the same way, the Protocol can have many distinct liquidity buckets, each at different time-phases, in which CKB are:
+In the same way, the Protocol can have many distinct liquidity buckets, each at different stages of maturity, in which CKB are:
 
 - collected: users deposit CKB and receive CKB++;
 - kept to accrue interests;
@@ -69,7 +69,7 @@ Fast forward, two months ago while [testing the ground for Hexmate's ISPO](https
 
 In the meantime I embarked on a journey of all-round self-discovery and after a while I realized that I identify as a solo Indie Hacker, a long time dream. Coincidentally CKB++ is of the right size to be incrementally worked on as a solo Indie Hacker!
 
-While nobody is able to work in total isolation, with the right feedback, guidance and support from Nervos Community & Foundation I can transform CKB++ into a reality in a less than year.
+While nobody is able to work in total isolation, with the right feedback, guidance and support from Nervos Team, Community & Foundation I can transform CKB++ into a reality in a less than year.
 
 ## Technical Challenges
 
@@ -90,7 +90,7 @@ This part of the Protocol lives completely on-chain, once deployed it's independ
 
 ### CKB / CKB++ Rate
 
-Let's assume we fix an EPOCH-0 so a block when 1 CKB = 1 CKB++, then as time moves on 1 CKB < 1 CKB++ = 1 CKB staked at EPOCH-0, so we can think:
+Let's assume we fix an EPOCH-0 so a block when 1 CKB = 1 CKB++, then as time passes 1 CKB < 1 CKB++ = 1 CKB staked at EPOCH-0, so we can think:
 
 - CKB as inflationary
 - CKB++ as non inflationary
@@ -129,10 +129,10 @@ A good countermeasure is to fix a reasonably small standard deposit size. As in 
 - deposits too big should be split into standard deposits and possibly even spread over longer periods;
 - deposits too small are better served by secondary markets.
 
-This deposit standard size can be defined in CKB terms or in CBK++ terms:
+This deposit standard size could be defined in CKB terms or in CBK++ terms:
 
 - a fixed CKB means that as deposit are made in time, every deposit would have a different size due to the NervosDAO interests, so it's not working as intended;
-- a fixed CKB++-equivalent deposit size means that at every block all the deposits would have the same size both in CKB and CKB++, of course as time passes this standard deposit size would gradually increase.
+- a fixed CKB++-equivalent deposit size means that at every block all the deposits would have the same size both in CKB and CKB++. Of course as time passes, the deposit size would be fixed CKB++-equivalent terms but gradually increasing in CKB terms.
 
 In this way a few goals are achieved:
 
@@ -173,7 +173,7 @@ As for the Core, the Incentivization Layer of the Protocol lives completely on-c
 
 ### Adding Incentives and Disincentives
 
-Any improvement aimed to incentivize a well time distributed deposit pool involves fees. In particular this entails a central entity with automated logic, so a L1 script, which with-in every user transactions:
+Any improvement aimed to incentivize a well time distributed deposit pool involves fees. In particular this entails a central entity with automated logic, so a L1 script, which with-in every user transaction:
 
 - sets disincentives in form of CKB++ fees;
 - accumulates them;
@@ -184,7 +184,7 @@ There are two advantages of asking for CKB++ fees, such as either:
 - a slight lock-in, as the user needs to fetch from secondary markets these additional CKB++ for paying the fees;
 - a more liquid Protocol, as the user prioritizes actions without fees, so actions that benefit everyone.
 
-Another approach would be to have strict rules, that for example clearly states when a deposit/withdrawal can happen or not, but usually it's easy for a determined attacker to abuse stricter rules against everyone else.
+Another approach would be to have strict rules, for example that clearly states when a deposit/withdrawal can happen or not, but usually it's easier for a determined attacker to abuse strict rules against everyone else.
 
 In the following sections I'll refer to the **epoch population** concept, this is a short hand for quantity of deposits at maturity in a certain epoch in the Core Layer deposit pool.
 
@@ -234,7 +234,7 @@ The Core Layer of the Protocol defines a solid way to exchange between CKB and C
 
 The standard deposit size makes already very easy for most users to exchange back and forth between CKB and CKB++, but naturally there are two under-served categories of users:
 
-- big depositors, those with a capital more than hundred times the standard deposit size. These users would need to spend a lot of time manually choosing the timing for each standard deposit;
+- big depositors, those with a capital more than hundred times the standard deposit size. These users would otherwise need to spend a lot of time manually choosing the timing for each standard deposit;
 - small depositors, those with a capital smaller than the standard deposit size. These users would otherwise need to rely on secondary markets.
 
 On one side we have defined a Protocol essentially by excluding ideas not compatible with NervosDAO substrate, on the other we have these very legit user needs.
@@ -252,9 +252,9 @@ Currently in the DeFi space there are two main techniques of price discovery:
 - [Geometric Mean Market Maker](https://arxiv.org/abs/1911.03380) such as Uniswap, a new and evolving solution;
 - [Limit Orders Book](https://www.investopedia.com/terms/o/order-book.asp) based markets, the traditional solution;
 
-Geometric Mean Market Makers are a form of Automated Market Makers. On one side they are very successful in DeFi as they're relatively easy to implement, provide liquidity to and trade against. On the other side trades of size comparable to the liquidity pool experience high slippage. While of course this behavior depends on the bonding curve and liquidity pool size, they don't seem to solve properly our problem.
+Geometric Mean Market Makers are a form of Automated Market Makers. On one side they are very successful in DeFi as they're relatively easy to implement, provide liquidity to and trade against. On the other side, trades of size comparable to the liquidity pool experience high slippage. While of course this behavior depends on the bonding curve and liquidity pool size, they don't seem to solve properly our problem.
 
-Limit Orders Book based markets are the traditional solution, trades of any size can work around Market Orders slippage by using Limit Orders. In DeFi they have different issues due to the cost of every on-chain transaction, so high frequency trading is impractical, which may actually be positive!
+Limit Orders Book based markets are the traditional solution, trades of any size can work around Market Orders slippage by using Limit Orders. In DeFi there are some issues due to the associated cost of every on-chain transaction, so high frequency trading is impractical, which may actually be positive!
 
 So a variation of this technique could fit our high level requirements, which are:
 
@@ -265,7 +265,7 @@ So a variation of this technique could fit our high level requirements, which ar
 - Every stakeholder should be as liquid as possible;
 - Fair incentives for every stakeholder.
 
-While this protocol stakeholders are:
+While in this protocol the stakeholders are:
 
 - traders;
 - liquidity providers;
@@ -276,27 +276,29 @@ While this protocol stakeholders are:
 
 Deposits are basically limit orders seeking to convert CKB into CKB++. They can be matched either by:
 
-- an arbitrageur creating in the Incentivization Layer a new deposit using partially (or fully) one (or more) limit order funds, minting CKB++ tokens in the process and later distributing them correctly. No capital required from the arbitrageur;
+- an arbitrageur who creates in the Incentivization Layer a new deposit using partially (or fully) one (or more) limit order funds, minting CKB++ tokens in the process and later distributing them correctly. No capital required from the arbitrageur;
 - a counterparty seeking to convert CKB++ into CKB.
 
 ### Withdrawals from Periphery Layer Perspective
 
 Withdrawals are basically limit orders seeking to convert CKB++ into CKB. They can be matched either by:
 
-- an arbitrageur creating in the Incentivization Layer a new withdrawal request for a deposit near maturity using partially (or fully) one (or more) limit order funds, burning those CKB++ in the process and later distributing the withdrawn CKB correctly. No capital required from the arbitrageur;
+- an arbitrageur who creates in the Incentivization Layer a new withdrawal request for a deposit near maturity using partially (or fully) one (or more) limit order funds, burning those CKB++ in the process and later distributing the withdrawn CKB correctly. No capital required from the arbitrageur;
 - a counterparty seeking to convert CKB into CKB++.
 
 ## Path to Sustainability
 
-To cite a [section from the blog that introduced the world to Uniswap V2](https://uniswap.org/blog/uniswap-v2#path-to-sustainability):
+[To cite a section from the blog that introduced the World to Uniswap V2](https://uniswap.org/blog/uniswap-v2#path-to-sustainability):
 
 >Decentralization is in many ways about increasing participation and removing central points of failure. Uniswap V1 is already highly decentralized, trustless, and censorship resistant. But for it to achieve its full potential as infrastructure in a fair and open financial system — it must continue to grow and improve.
+>
 >To open a path to self-sustainability, the code for Uniswap V2 includes a small protocol charge mechanism. At launch, the protocol charge will default to 0, and the liquidity provider fee will be 0.30%. If the protocol charge is switched on, it will become 0.05% and the liquidity provider fee will be 0.25%.
+>
 >This feature, including the exact percentage amounts, is hardcoded into the core contracts which remain decentralized and non-upgradable. It can be turned on, and directed by, a decentralized governance process deployed after the Uniswap V2 launch. There is no expectation that it will be turned on in the near future but it opens the possibility for future exploration.
 
 In the same way the Periphery Layer, both the arbitrage bot and the market platform, could include a hardcoded fee switch, turned off at the beginning. This is good as it leads to a future where service maintainers are incentivized to fulfill their role for the long run and upgrade it to a DAO.
 
-In the beginning the service offered by the Periphery Layer will be directly managed by me. This could even work in the long term as it's still decentralized as anyone can arbitrage between the Inner Protocol and Periphery Layer. To be even more decentralized a third party could design a totally independent system to interface users and the Inner Protocol, as the latter it's totally independent from me.
+In the beginning the service offered by the Periphery Layer will be directly managed by me. This could even work in the long term as it's still decentralized as anyone can arbitrage between the Inner Protocol and Periphery Layer. To be even more decentralized a third party could design a totally independent system to interface users and the Inner Protocol, as the latter it's already totally decentralized.
 
 In the long term a DAO should take over the Periphery Layer and manage it, but this would carry a big development overhead, so it's something that can only happen at a later time.
 
@@ -308,11 +310,11 @@ While I'm pretty independent, I'll go from learning L1 scripting to creating a c
 
 I'll create a Proof of Concept L1 script, showing the basic functionalities of the core layer from command line. Possibly not safe to use in production, but with a clear path to a safe resolution.
 
-This is a risky period, there might exists some technical blocks long or impossible to work around. While I designed CKB++ from the bottom-up and I love everything about it, I do need to ask Nervos Foundation for a starting 1000 USD-equivalent in incentives for the first month of work, so both parties are taking a small risk.
+This is a risky period, there might exists some technical blocks long or impossible to work around. While I designed CKB++ from the bottom-up and I love everything about it, I need to ask Nervos Foundation for a starting 1000 USD-equivalent in incentives for the first month of work, so both parties are taking a small risk.
 
 ### First Four Months: Core & Incentivization Layers
 
-I'll create the definitive L1 scripts for Core & Incentivization Layers. I'll need to simulate the Protocol incentives. This code will be released under a Business Source License 1.1 (BUSL-1.1 for short), the same kind license as [Uniswap v3 core](https://github.com/Uniswap/v3-core/blob/main/LICENSE).
+I'll need to simulate any adverse user interaction with the Protocol incentives and only then I'll create the definitive L1 scripts for Core & Incentivization Layers. This code will be released under a Business Source License 1.1 (BUSL-1.1 for short), the same kind license as [Uniswap v3 core](https://github.com/Uniswap/v3-core/blob/main/LICENSE).
 
 Moreover I'll set-up a L1 Testnet based basic website. This website will provide users the ability to directly interact with the Incentivization Layer, with the addition of off-chain utilities for gradually exchanging CKB and CKB++. This will happen both by keeping the browser tab open or by a stand-alone script. This code will be released under a GNU General Public License v3.0 or later (GPL-3.0-or-later in short), in this way anybody can do almost anything with the interface code, except distributing a closed source version.
 
@@ -322,18 +324,18 @@ Once these layer are online I'll personally gain nothing from them, so I need to
 
 ### First Year: Fully Working Protocol
 
-I'll create the L1 scripts for the Periphery Layer. I'll need to simulate any adverse scenarios and non-trivial user interaction in respect to L1 scripts. As with Core & Incentivization L1 scripts this code will be released under BUSL-1.1.
+I'll need to simulate any adverse user interaction with the Periphery Layer and only then I'll create the L1 scripts for the Periphery Layer. As with Core & Incentivization L1 scripts this code will be released under BUSL-1.1.
 
 I'll create a fully working Testnet and Mainnet well designed website which will provide users the ability to interact either:
 
 - with the Periphery Layer and its associated on-chain limit order utilities for gradually exchanging CKB and CKB++.
 - with the Incentivization Layer using its off-chain utilities as a fallback method;
 
-I'll create off-chain arbitraging bots, both as integrated in the website and as stand-alone code, that requires no capital to operate, except for initially paying the block-chain transaction fees.
+I'll create off-chain arbitraging bots, both integrated in the website and as stand-alone script, that requires no capital to operate, except for paying for the first block-chain transaction fee.
 
-As with the Incentivization layer, the web interface and arbitraging bots code will be released under GPL-3.0-or-later.
+As with the Incentivization layer interface, the web interface and arbitraging bots code will be released under GPL-3.0-or-later.
 
-Once everything is on Mainnet and audited, I **may** gain personally from this, still it's a risky long shot, so I'm open about discussing incentives for this phase. I estimate the cost for this stage as additional 20000 USD-equivalent in incentives for the additional eight months of work. This could happen in two separate steps so that Nervos can evaluate the progress I make on the the Periphery Layers L1 scripts, arbitraging bots and website.
+Once everything is on Mainnet and audited, I **may** gain personally from this, so I'm open about discussing incentives for this phase, still it's a risky long shot. I estimate the cost for this stage as additional 20000 USD-equivalent in incentives for the additional eight months of work. This could happen in two separate steps so that Nervos can evaluate the progress I make on the the Periphery Layers L1 scripts, arbitraging bots and website.
 
 If we audit at the same time Core, Incentivization & Periphery Layer the audit expenses should be lower and so Nervos could fully sponsor them.
 
@@ -343,6 +345,6 @@ About the cost of deploying the Periphery contracts on Mainnet, I need to unders
 
 Once this Protocol is realized, I may develop a DAO, a token wrapping the generated fees and distributing the arbitrage bot responsibilities. Looking even more far away CKB++ will enable CKB-based Initial Stake Pool Offerings, the official Nervos DAO community voting mechanism and a multitude more L1 & L2 applications!
 
-### License
+## License
 
 This proposal is licensed under the terms of the [Creative Commons Attribution Share Alike 4.0 International license](LICENSE.txt).
