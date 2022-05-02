@@ -71,17 +71,6 @@ In the meantime I embarked on a journey of all-round self-discovery and after a 
 
 While nobody is able to work in total isolation, with the right feedback, guidance and support from Nervos Team, Community & Foundation I can transform CKB++ into a reality in a less than year.
 
-## Technical Challenges
-
-### NervosDAO Gotchas
-
-Any technically viable solution needs to consider [NervosDAO RFCs](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md). A particular detail that rules out most of the competing implementations for CKB++ is well documented in its [Gotchas section](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#gotchas):
-
->CKB has a maturity constraint on referencing header: a block header can only be referenced in a cell that is committed at least 4 epochs after the referenced block header. This constraint limits Nervos DAO withdrawal in the following ways:
->
-> - Phase 1 withdrawal transaction can only be committed 4 epochs after the fund is originally deposited.
-> - Phase 2 withdrawal transaction can only be committed 4 epochs after phase 1 withdrawal transaction is committed.
-
 ## Core Layer
 
 ### Core Layer is On-Chain, Trust-Less & Decentralized
@@ -154,8 +143,8 @@ In NervosDAO a CKB holder can lock his CKB in exchange for a receipt of that spe
 
 Withdrawals are a bit more complicated in NervosDAO, time is slotted in batches of 180 epochs depending on the initial deposit timing, so a withdrawal goes like this:
 
-- with the first transaction the user request the withdrawal. Must be 4 epochs after deposit;
-- with the second transaction the user withdraw the deposit plus interests. Must be 4 epochs after the first transaction and after the end of the 180 epoch batch in which the first transaction happened.
+- with the first transaction the user request the withdrawal;
+- with the second transaction the user withdraw the deposit plus interests. Must be after the end of the 180 epoch batch in which the first transaction happened.
 
 As seen with [calculations](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation) the actual withdrawn CKB amount depends on the timing of the request of withdrawal transaction in respect to the epoch batch.
 
