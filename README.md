@@ -74,6 +74,14 @@ While nobody is able to work in total isolation, with the right feedback, guidan
 
 This protocol could also enable the future development of Hexmate using a ISPO, which I highly support and anticipate!
 
+## Protocol Layers Introduction
+
+The protocol logic is divided in three layers:
+
+- Core Layer: it defines a solid way to exchange between CKB and CKB++ in fixed blocks.
+- Incentivization Layer: it takes care of making this exchange liquid.
+- Periphery Layer: it makes the the protocol handy to use irrespective of user capital size.
+
 ## Core Layer
 
 ### Core Layer is On-Chain, Trust-Less & Decentralized
