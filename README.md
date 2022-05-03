@@ -35,9 +35,9 @@ As a [water mill](https://tenor.com/view/water-wheel-mill-gif-19806697) has many
 
 In the same way, the protocol can have many distinct liquidity buckets, each of them constantly moving at different stages of maturity:
 
-- Collected: Users deposit CKB into liquidity buckets and receive CKB++.
-- Maintained: Liquidity buckets accrue interest in the NervosDAO.
-- Released: If a user wants to exchange CKB++ for CKB, they can use any liquidity bucket that is at maturity.
+- **Collected**: Users deposit CKB into liquidity buckets and receive CKB++.
+- **Maintained**: Liquidity buckets accrue interest in the NervosDAO.
+- **Released**: If a user wants to exchange CKB++ for CKB, they can use any liquidity bucket that is at maturity.
 
 ### Feedback
 
@@ -78,9 +78,9 @@ This protocol could also enable the future development of Hexmate using a ISPO, 
 
 The protocol logic is divided in three layers:
 
-- Core Layer: it defines a solid way to exchange between CKB and CKB++ in fixed blocks.
-- Incentivization Layer: it takes care of making this exchange liquid.
-- Periphery Layer: it makes the the protocol handy to use irrespective of user capital size.
+- **Core Layer**: It defines a solid way to exchange between CKB and CKB++ in fixed blocks.
+- **Incentivization Layer**: It takes care of making this exchange liquid.
+- **Periphery Layer**: It makes the the protocol handy to use irrespective of user capital size.
 
 ## Core Layer
 
@@ -201,9 +201,9 @@ So the catch is that the utility of a deposit depends on how much already popula
 
 A good countermeasure is to add deposit fees that depends on how much is populated the epoch:
 
-- Over-populated: high deposit fees, up to 180 epochs worth of CKB interests.
-- Average populated: from minimal to no deposit fees.
-- Scarcely populated: from no fees to incentives.
+- **Over-populated**: High deposit fees, up to 180 epochs worth of CKB interests.
+- **Average populated**: From minimal to no deposit fees.
+- **Scarcely populated**: From no fees to incentives.
 
 Of course this heuristic must take in account and shape appropriately big inflow periods of CKB such as the bootstrapping period or in general deposits of size comparable to the deposit pool.
 
@@ -220,9 +220,9 @@ An attack aimed at postponing indefinitely the deposit maturity would greatly re
 
 A good countermeasure is to add withdrawal fees that depends on how much is populated the epoch:
 
-- Scarcely populated: high withdrawal fees, up to 180 epochs worth of CKB interests.
-- Average populated: from minimal to no withdrawal fees.
-- Over-populated: from no fees to incentives.
+- **Scarcely populated**: High withdrawal fees, up to 180 epochs worth of CKB interests.
+- **Average populated**: From minimal to no withdrawal fees.
+- **Over-populated**: From no fees to incentives.
 
 Of course this heuristic must take in account and shape appropriately big outflow events of CKB such as a bank run or in general withdrawals of size comparable to the deposit pool.
 
