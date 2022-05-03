@@ -1,6 +1,6 @@
 # Proposal: Project CKB++
 
-## Problem
+## Background
 
 ### NervosDAO Illiquidity
 
@@ -10,17 +10,20 @@ The NervosDAO is possibly the most important smart-contract of Nervos Layer 1 (L
 
 There exists untapped potential in the Nervos ecosystem for a protocol that can liquify NervosDAO accrued interest and bridge it from L1 to L2. This protocol could enable CKB-based [Initial Stake Pool Offerings](https://www.meld.com/ispo) (ISPO), where users can lock CKB to support new early stage projects without losing their original CKB deposit. The protocol could also be used to enable a community voting mechanism with funds locked in the NervosDAO, as well as a multitude more L1 & L2 applications!
 
-## Solutions
-
 ### DCKB (Unmaintained)
 
 In the past there has been an effort to tackle this challenge by [NexisDAO with dCKB](https://docs.nexisdao.com/nexisdao/mint-dckb). Their approach is to tokenize the holder receipt, which in turn becomes tradeable and so the holder keeps being liquid. The issue with their approach is that only the original owner can unlock the deposit. Currently dCKB does not appear to be actively maintained.
+
+## Solution
 
 ### Enter CKB++
 
 CKB++ is the provisional name for a [sUDT token](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333) that represents deposits in the protocol. As with dCKB, CKB++'s approach is to tokenize NervosDAO receipts, but with a twist: the protocol owns all the CKB deposits and maintains a pool of them. This means that all the deposits and withdrawals are shared, so anyone can use anyone else's deposit to exit once it's mature.
 
-This solves two problems with NervosDAO. It allows CKB that is locked in the NervosDAO to remain liquid and truly be used as a normal currency, and it allows CKB++ to be converted back to CKB quickly at any time without having to wait for maturity.
+This protocol aims to solve two problems with NervosDAO:
+
+- CKB locked in the NervosDAO remains liquid and it can truly be used as a normal currency;
+- CKB++ can be converted back to CKB quickly at any time without having to wait for maturity.
 
 ### Water Mill Analogy
 
@@ -307,7 +310,7 @@ If time permits it I'll set-up these L1 scrips on Mainnet and add a basic stylin
 
 Once these layer are online I'll personally gain nothing from them, so I need to ask for additional 10000 USD-equivalent in incentives for the additional three months of work. This excludes external Core & Incentivization Layers audits or expenses to deploy them on Mainnet.
 
-### First Ten Months: Fully Working protocol
+### First Ten Months: Fully Working Protocol
 
 I'll need to simulate any adverse user interaction with the Periphery Layer and only then I'll create the L1 scripts for the Periphery Layer. As with Core & Incentivization L1 scripts this code will be released under BUSL-1.1.
 
