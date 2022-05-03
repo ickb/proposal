@@ -1,6 +1,6 @@
 # Proposal: Project CKB++
 
-## Background
+## Problem
 
 ### NervosDAO Illiquidity
 
