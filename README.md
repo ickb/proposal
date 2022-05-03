@@ -326,7 +326,9 @@ Moreover I'll set-up a L1 Testnet based basic website. This website will provide
 
 If time permits it I'll set-up these L1 scrips on Mainnet and add a basic styling on this website.
 
-Once these layer are online I'll personally gain nothing from them, so I need to ask for additional 10000 USD-equivalent in incentives for the additional three months of work. This excludes external Core & Incentivization Layers audits or expenses to deploy them on Mainnet.
+Once these layer are online I'll personally gain nothing from them, so I need to ask for additional 10000 USD-equivalent in incentives for the additional three months of work. This excludes external Core & Incentivization Layers audits and expenses to deploy them on Mainnet.
+
+About the deployment costs of the L1 scripts, the best way would be that an address controlled by Nervos Foundation deploys them, so that in case of protocol obsolescence Nervos Foundation can recover their locked CKB. I'm not saying tho that this will be possible, as this would imply some kind of internal protocol logic that ascertains its obsolescence.
 
 ### First Ten Months: Fully Working Protocol
 
@@ -347,7 +349,7 @@ Once everything is on Mainnet and audited, I **may** gain personally from this, 
 
 If we audit at the same time Core, Incentivization & Periphery Layer the audit expenses should be lower and so Nervos could fully sponsor them.
 
-About the cost of deploying the Periphery contracts on Mainnet, I need to understand the associated costs and possibly ask for a refund.
+As with the deployment of the internal layers, the best way to handle the deployment costs of the Periphery Layer would be that an address controlled by Nervos Foundation deploys them, so that in case of protocol obsolescence Nervos Foundation can recover their locked CKB. I'm not saying tho that this will be possible, as this would imply some kind of internal protocol logic that ascertains its obsolescence.
 
 ### Future Plans
 
