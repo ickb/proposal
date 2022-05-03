@@ -22,7 +22,7 @@ CKB++ is the provisional name for a [sUDT token](https://talk.nervos.org/t/rfc-s
 
 This protocol aims to solve two problems with NervosDAO:
 
-- CKB locked in the NervosDAO remains liquid and it can truly be used as a normal currency;
+- CKB locked in the NervosDAO remains liquid and it can truly be used as a normal currency.
 - CKB++ can be converted back to CKB quickly at any time without having to wait for maturity.
 
 ### Water Mill Analogy
@@ -92,9 +92,9 @@ Jordan Mack's comment on this method:
 
 The inflation rate of CKB is well defined by the [NervosDAO compensation rate](https://explorer.nervos.org/charts/nominal-apc) and only depends on:
 
-- [the block concept in L1](https://docs.nervos.org/docs/basics/glossary/#block)
-- [the epoch concept in L1](https://docs.nervos.org/docs/basics/glossary/#epoch)
-- [the formula itself](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation)
+- [The block concept in L1](https://docs.nervos.org/docs/basics/glossary/#block)
+- [The epoch concept in L1](https://docs.nervos.org/docs/basics/glossary/#epoch)
+- [The formula itself](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation)
 
 Therefore, the CKB/CKB++ exchange rate will always be precise as determined by the formula and the current epoch/block. The only risk to this deterministic peg would be a smart contract exploit to the deposit pool or minting contract. These kinds of attack vectors are greatly mitigated by external audits.
 
@@ -102,58 +102,58 @@ Therefore, the CKB/CKB++ exchange rate will always be precise as determined by t
 
 Let's **assume** we don't implement any requirement on deposit size, so as in NervosDAO users can choose the deposit size they prefer. Then an attacker who can borrow a big enough capital can simply:
 
-- exchange CKB++ for smaller CKB deposits;
-- deposit CKB for CKB++ in deposits as big as the entirety of his capital;
+- Exchange CKB++ for smaller CKB deposits.
+- Deposit CKB for CKB++ in deposits as big as the entirety of his capital.
 
 This would greatly reduce the quality of the service for everyone, as the only remaining deposits would be as big or bigger than the attacker capital and since it's impossible to withdraw partially from a NervosDAO deposit, this would greatly hamper the protocol fruition.
 
 Let's now instead **assume** we require deposits to be capped at certain size. Then as before an attacker who can borrow a capital as big as the maximum deposit size can simply:
 
-- exchange CKB++ for smaller CKB deposits;
-- deposit CKB for CKB++ in deposits as big as the maximum deposit size;
+- Exchange CKB++ for smaller CKB deposits.
+- Deposit CKB for CKB++ in deposits as big as the maximum deposit size.
 
 This would greatly reduce the quality of the service for users trying to withdraw smaller deposits, as the only remaining deposits would be as big as the maximum deposit size and since it's impossible to withdraw partially from a NervosDAO deposit, this would hamper the protocol fruition for a whole category of users.
 
 A good countermeasure is to fix a reasonably small standard deposit size. As in real life bricks can be used to build houses of any size, in the same way:
 
-- deposits too big should be split into standard deposits and possibly even spread over longer periods;
-- deposits too small are better served by secondary markets.
+- Deposits too big should be split into standard deposits and possibly even spread over longer periods.
+- Deposits too small are better served by secondary markets.
 
 This deposit standard size could be defined in CKB terms or in CBK++ terms:
 
-- a fixed CKB means that as deposit are made in time, every deposit would have a different size due to the NervosDAO interests, so it's not working as intended;
-- a fixed CKB++-equivalent deposit size means that at every block all the deposits would have the same size both in CKB and CKB++. Of course as time passes, the deposit size would be fixed CKB++-equivalent terms but gradually increasing in CKB terms.
+- A fixed CKB means that as deposit are made in time, every deposit would have a different size due to the NervosDAO interests, so it's not working as intended.
+- A fixed CKB++-equivalent deposit size means that at every block all the deposits would have the same size both in CKB and CKB++. Of course as time passes, the deposit size would be fixed CKB++-equivalent terms but gradually increasing in CKB terms.
 
 In this way a few goals are achieved:
 
-- big deposits now increase the overall protocol liquidity;
-- no size mismatch means anybody can use anybody else deposit freely to withdraw;
-- a fixed CKB++-equivalent deposit size simplifies code, so it minimizes the hacks attack surface.
+- Big deposits now increase the overall protocol liquidity.
+- No size mismatch means anybody can use anybody else deposit freely to withdraw.
+- A fixed CKB++-equivalent deposit size simplifies code, so it minimizes the hacks attack surface.
 
 ### Deposits from Core Layer Perspective
 
 In NervosDAO a CKB holder can lock his CKB in exchange for a receipt of that specific deposit, while in our case the protocol proceed by wrapping NervosDAO deposit transaction into CKB++. The protocol in one transaction:
 
-- requires a fixed CKB++-equivalent size deposit;
-- takes control of the deposit;
-- stakes it in NervosDAO;
-- adds the receipt to its pool of receipts;
-- mints to the depositor a fixed amount of CKB++;
+- Requires a fixed CKB++-equivalent size deposit.
+- Takes control of the deposit.
+- Stakes it in NervosDAO.
+- Adds the receipt to its pool of receipts.
+- Mints to the depositor a fixed amount of CKB++.
 
 ### Withdrawals from Core Layer Perspective
 
 Withdrawals are a bit more complicated in NervosDAO, time is slotted in batches of 180 epochs depending on the initial deposit timing, so a withdrawal goes like this:
 
-- with the first transaction the user request the withdrawal;
-- with the second transaction the user withdraw the deposit plus interests. Must be after the end of the 180 epoch batch in which the first transaction happened.
+- With the first transaction the user request the withdrawal.
+- With the second transaction the user withdraw the deposit plus interests. Must be after the end of the 180 epoch batch in which the first transaction happened.
 
 As seen with [calculations](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation) the actual withdrawn CKB amount depends on the timing of the request of withdrawal transaction in respect to the epoch batch.
 
 While in our case the protocol proceed by un-wrapping CKB++ transactions into base NervosDAO transactions:
 
-- the CKB++ holder **freely** chooses from the pool a deposit to withdraw from. All deposits are of a fixed CKB++-equivalent size, the only differentiating factor between them is the recurring maturity date;
-- with the first transaction the user sends to the protocol the fixed amount of CKB++ and chooses the specific deposit to withdraw from, while the protocol in turn assigns to the user that specific deposit and burns the received CKB++;
-- with the second transaction the user withdraws the equivalent CKB amount. Same constraints as with the second NervosDAO transaction.
+- The CKB++ holder **freely** chooses from the pool a deposit to withdraw from. All deposits are of a fixed CKB++-equivalent size, the only differentiating factor between them is the recurring maturity date.
+- With the first transaction the user sends to the protocol the fixed amount of CKB++ and chooses the specific deposit to withdraw from, while the protocol in turn assigns to the user that specific deposit and burns the received CKB++.
+- With the second transaction the user withdraws the equivalent CKB amount. Same constraints as with the second NervosDAO transaction.
 
 ## Incentivization Layer
 
@@ -165,14 +165,14 @@ As for the Core, the Incentivization Layer of the protocol lives completely on-c
 
 Any improvement aimed to incentivize a well time distributed deposit pool involves fees. In particular this entails a central entity with automated logic, so a L1 script, which with-in every user transaction:
 
-- sets disincentives in form of CKB++ fees;
-- accumulates them;
-- distributes incentives in form of CKB++ benefits;
+- Sets disincentives in form of CKB++ fees.
+- Accumulates them.
+- Distributes incentives in form of CKB++ benefits.
 
 There are two advantages of asking for CKB++ fees, such as either:
 
-- a slight lock-in, as the user needs to fetch from secondary markets these additional CKB++ for paying the fees;
-- a more liquid protocol, as the user prioritizes actions without fees, so actions that benefit everyone.
+- A slight lock-in, as the user needs to fetch from secondary markets these additional CKB++ for paying the fees.
+- A more liquid protocol, as the user prioritizes actions without fees, so actions that benefit everyone.
 
 Another approach would be to have strict rules, for example that clearly states when a deposit/withdrawal can happen or not, but usually it's easier for a determined attacker to abuse strict rules against everyone else.
 
@@ -184,8 +184,8 @@ Depositing means adding a shared resource, so any other user will be able to use
 
 Let's **assume** we don't implement the Incentivization Layer, so users have direct access to the Core Layer. Then a attacker with minimal expenditure of capital can simply:
 
-- exchange CKB++ for CKB deposits in sparsely populated epochs;
-- deposit CKB for CKB++ in already densely populated epochs;
+- Exchange CKB++ for CKB deposits in sparsely populated epochs.
+- Deposit CKB for CKB++ in already densely populated epochs.
 
 This would greatly reduce the quality of the service for everyone, as the protocol ability to exchange CKB++ into CKB would be halted outside the overpopulated epochs, hampering its fruition.
 
@@ -193,9 +193,9 @@ So the catch is that the utility of a deposit depends on how much already popula
 
 A good countermeasure is to add deposit fees that depends on how much is populated the epoch:
 
-- over-populated: high deposit fees, up to 180 epochs worth of CKB interests;
-- average populated: from minimal to no deposit fees;
-- scarcely populated: from no fees to incentives;
+- Over-populated: high deposit fees, up to 180 epochs worth of CKB interests.
+- Average populated: from minimal to no deposit fees.
+- Scarcely populated: from no fees to incentives.
 
 ### Withdrawals from Incentivization Layer Perspective
 
@@ -203,16 +203,16 @@ Withdrawing means consuming a shared resource, so any other user will not be abl
 
 Let's **assume** we don't implement the Incentivization Layer, so users have direct access to the Core Layer. Then a attacker with minimal expenditure of capital can simply:
 
-- exchange CKB++ for CKB deposits near maturity;
-- deposit CKB for CKB++, postponing the maturity;
+- Exchange CKB++ for CKB deposits near maturity.
+- Deposit CKB for CKB++, postponing the maturity.
 
 An attack aimed at postponing indefinitely the deposit maturity would greatly reduce the quality of the service for everyone, hampering its fruition.
 
 A good countermeasure is to add withdrawal fees that depends on how much is populated the epoch:
 
-- scarcely populated: high withdrawal fees, up to 180 epochs worth of CKB interests;
-- average populated: from minimal to no withdrawal fees;
-- over-populated: from no fees to incentives;
+- Scarcely populated: high withdrawal fees, up to 180 epochs worth of CKB interests.
+- Average populated: from minimal to no withdrawal fees.
+- Over-populated: from no fees to incentives.
 
 ## Periphery Layer
 
@@ -222,8 +222,8 @@ The Core Layer of the protocol defines a solid way to exchange between CKB and C
 
 The standard deposit size makes already very easy for most users to exchange back and forth between CKB and CKB++, but naturally there are two under-served categories of users:
 
-- big depositors, those with a capital more than hundred times the standard deposit size. These users would otherwise need to spend a lot of time manually choosing the timing for each standard deposit;
-- small depositors, those with a capital smaller than the standard deposit size. These users would otherwise need to rely on secondary markets.
+- Big depositors, those with a capital more than hundred times the standard deposit size. These users would otherwise need to spend a lot of time manually choosing the timing for each standard deposit.
+- Small depositors, those with a capital smaller than the standard deposit size. These users would otherwise need to rely on secondary markets.
 
 On one side we have defined a protocol essentially by excluding ideas not compatible with NervosDAO substrate, on the other we have these very legit user needs.
 
@@ -237,8 +237,8 @@ Theoretically any kind of technology that enables market price discovery could w
 
 Currently in the DeFi space there are two main techniques of price discovery:
 
-- [Geometric Mean Market Maker](https://arxiv.org/abs/1911.03380) such as Uniswap, a new and evolving solution;
-- [Limit Orders Book](https://www.investopedia.com/terms/o/order-book.asp) based markets, the traditional solution;
+- [Geometric Mean Market Maker](https://arxiv.org/abs/1911.03380) such as Uniswap, a new and evolving solution.
+- [Limit Orders Book](https://www.investopedia.com/terms/o/order-book.asp) based markets, the traditional solution.
 
 Geometric Mean Market Makers are a form of Automated Market Makers. On one side they are very successful in DeFi as they're relatively easy to implement, provide liquidity to and trade against. On the other side, trades of size comparable to the liquidity pool experience high slippage. While of course this behavior depends on the bonding curve and liquidity pool size, they don't seem to solve properly our problem.
 
@@ -246,33 +246,33 @@ Limit Orders Book based markets are the traditional solution, trades of any size
 
 So a variation of this technique could fit our high level requirements, which are:
 
-- CKB / CKB++ exchange rate is well defined, so any significant deviation must be easily arbitraged back;
-- Arbitraging should have no barrier to entry, being closer to triggering a method than arbitraging;
-- Limit orders are needed to interface, abstract and adequately prioritize deposits & withdrawals;
-- A form of Automated Market Maker is needed to minimize liquidity providers interactions;
-- Every stakeholder should be as liquid as possible;
+- CKB / CKB++ exchange rate is well defined, so any significant deviation must be easily arbitraged back.
+- Arbitraging should have no barrier to entry, being closer to triggering a method than arbitraging.
+- Limit orders are needed to interface, abstract and adequately prioritize deposits & withdrawals.
+- A form of Automated Market Maker is needed to minimize liquidity providers interactions.
+- Every stakeholder should be as liquid as possible.
 - Fair incentives for every stakeholder.
 
 In this protocol the stakeholders are:
 
-- traders;
-- liquidity providers;
-- price arbitrageurs;
-- service maintainers.
+- Traders.
+- Liquidity providers.
+- Price arbitrageurs.
+- Service maintainers.
 
 ### Deposits from Periphery Layer Perspective
 
 Deposits are basically limit orders seeking to convert CKB into CKB++. They can be matched partially or fully by:
 
-- an arbitrageur who creates in the Incentivization Layer a new deposit using one or more limit order funds, minting CKB++ tokens in the process and later distributing them correctly. No capital required from the arbitrageur;
-- a counterparty seeking to convert CKB++ into CKB.
+- An arbitrageur who creates in the Incentivization Layer a new deposit using one or more limit order funds, minting CKB++ tokens in the process and later distributing them correctly. No capital required from the arbitrageur.
+- A counterparty seeking to convert CKB++ into CKB.
 
 ### Withdrawals from Periphery Layer Perspective
 
 Withdrawals are basically limit orders seeking to convert CKB++ into CKB. They can be matched partially or fully by:
 
-- an arbitrageur who creates in the Incentivization Layer a new withdrawal request for a deposit near maturity using one or more limit order funds, burning those CKB++ in the process and later distributing the withdrawn CKB correctly. No capital required from the arbitrageur;
-- a counterparty seeking to convert CKB into CKB++.
+- An arbitrageur who creates in the Incentivization Layer a new withdrawal request for a deposit near maturity using one or more limit order funds, burning those CKB++ in the process and later distributing the withdrawn CKB correctly. No capital required from the arbitrageur.
+- A counterparty seeking to convert CKB into CKB++.
 
 ## Path to Sustainability
 
@@ -316,8 +316,8 @@ I'll need to simulate any adverse user interaction with the Periphery Layer and 
 
 I'll create a fully working Testnet and Mainnet well designed website which will provide users the ability to interact either:
 
-- with the Periphery Layer and its associated on-chain limit order utilities for gradually exchanging CKB and CKB++.
-- with the Incentivization Layer using its off-chain utilities as a fallback method;
+- With the Periphery Layer and its associated on-chain limit order utilities for gradually exchanging CKB and CKB++.
+- With the Incentivization Layer using its off-chain utilities as a fallback method.
 
 I'll create off-chain arbitraging bots, both integrated in the website and as stand-alone script, that requires no capital to operate, except for paying for the first block-chain transaction fee.
 
