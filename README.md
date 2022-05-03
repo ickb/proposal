@@ -290,6 +290,12 @@ In the beginning the service offered by the Periphery Layer will be directly man
 
 In the long term a DAO should take over the Periphery Layer and manage it, but this would carry a big development overhead, so it's something that can only happen at a later time.
 
+## 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇 WORK IN PROGRESS 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇
+
+After seeing [this Jan Xie's comment (reported by Alejandro)](https://discord.com/channels/657799690070523914/657799690552606745/970714873661128774) I need to understand better the time (and so the costs) associated with developing the L1 scripts, so I'm holding this section off until I complete the [Developer Training Course](https://nervos.gitbook.io/developer-training-course/):
+
+>If you compare the differences between Bitcoin and Ethereum, you might find that Ethereum developers are amazing as they can create dApps in a short time while Bitcoin developers can take two years to create an app. Nervos CKB is more similar to Bitcoin. Building applications directly in CKB is similar to system level programming, not front end programming. In a nutshell, Nervos CKB and Bitcoin have totally different designs than Ethereum.
+
 ## Road-Map & Incentives
 
 While I'm pretty independent, I'll go from learning L1 scripting to creating a complex L1 protocol, so in all likelihood I'll need substantial support from Nervos Team, Community & Foundation.
