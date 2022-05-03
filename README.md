@@ -101,7 +101,6 @@ Let's **assume** we don't implement any requirement on deposit size, so as in Ne
 
 - exchange CKB++ for smaller CKB deposits;
 - deposit CKB for CKB++ in deposits as big as the entirety of his capital;
-- ...
 
 This would greatly reduce the quality of the service for everyone, as the only remaining deposits would be as big or bigger than the attacker capital and since it's impossible to withdraw partially from a NervosDAO deposit, this would greatly hamper the protocol fruition.
 
@@ -109,7 +108,6 @@ Let's now instead **assume** we require deposits to be capped at certain size. T
 
 - exchange CKB++ for smaller CKB deposits;
 - deposit CKB for CKB++ in deposits as big as the maximum deposit size;
-- ...
 
 This would greatly reduce the quality of the service for users trying to withdraw smaller deposits, as the only remaining deposits would be as big as the maximum deposit size and since it's impossible to withdraw partially from a NervosDAO deposit, this would hamper the protocol fruition for a whole category of users.
 
@@ -185,7 +183,6 @@ Let's **assume** we don't implement the Incentivization Layer, so users have dir
 
 - exchange CKB++ for CKB deposits in sparsely populated epochs;
 - deposit CKB for CKB++ in already densely populated epochs;
-- ...
 
 This would greatly reduce the quality of the service for everyone, as the protocol ability to exchange CKB++ into CKB would be halted outside the overpopulated epochs, hampering its fruition.
 
@@ -205,7 +202,6 @@ Let's **assume** we don't implement the Incentivization Layer, so users have dir
 
 - exchange CKB++ for CKB deposits near maturity;
 - deposit CKB for CKB++, postponing the maturity;
-- ...
 
 An attack aimed at postponing indefinitely the deposit maturity would greatly reduce the quality of the service for everyone, hampering its fruition.
 
@@ -303,9 +299,9 @@ This is a risky period, there might exists some technical blocks long or impossi
 
 ### First Four Months: Core & Incentivization Layers
 
-I'll need to simulate any adverse user interaction with the protocol incentives and only then I'll create the definitive L1 scripts for Core & Incentivization Layers. This code will be released under a Business Source License 1.1 (BUSL-1.1 for short), the same kind license as [Uniswap v3 core](https://github.com/Uniswap/v3-core/blob/main/LICENSE).
+I'll need to simulate any adverse user interaction with the protocol incentives and only then I'll create the definitive L1 scripts for Core & Incentivization Layers. This code will be released under a Business Source License 1.1 (BUSL-1.1), the same kind license as [Uniswap v3 core](https://github.com/Uniswap/v3-core/blob/main/LICENSE).
 
-Moreover I'll set-up a L1 Testnet based basic website. This website will provide users the ability to directly interact with the Incentivization Layer, with the addition of off-chain utilities for gradually exchanging CKB and CKB++. This will happen both by keeping the browser tab open or by a stand-alone script. This code will be released under a GNU General Public License v3.0 or later (GPL-3.0-or-later for short), in this way anybody can do almost anything with the interface code, except distributing a closed source version.
+Moreover I'll set-up a L1 Testnet based basic website. This website will provide users the ability to directly interact with the Incentivization Layer, with the addition of off-chain utilities for gradually exchanging CKB and CKB++. This will happen both by keeping the browser tab open or by a stand-alone script. This code will be released under a GNU General Public License v3.0 or later (GPL-3.0-or-later), in this way anybody can do almost anything with the interface code, except distributing a closed source version.
 
 If time permits it I'll set-up these L1 scrips on Mainnet and add a basic styling on this website.
 
@@ -324,7 +320,7 @@ I'll create off-chain arbitraging bots, both integrated in the website and as st
 
 As with the Incentivization layer interface, the web interface and arbitraging bots code will be released under GPL-3.0-or-later.
 
-I'll create a GitBook-alike documenting all the concepts, the layers and the website. It will be released under Creative Commons Attribution Share Alike 4.0 International License (CC-BY-SA-4.0 for short).
+I'll create a GitBook-alike documenting all the concepts, the layers and the website. It will be released under Creative Commons Attribution Share Alike 4.0 International License (CC-BY-SA-4.0).
 
 Once everything is on Mainnet and audited, I **may** gain personally from this, so I'm open about discussing incentives for this phase, still it's a risky long shot. I estimate the cost for this stage as additional 20000 USD-equivalent in incentives for the additional six months of work. This could happen in two separate steps so that Nervos can evaluate the progress I make on the the Periphery Layers L1 scripts, arbitraging bots and website.
 
