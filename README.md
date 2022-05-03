@@ -197,6 +197,8 @@ A good countermeasure is to add deposit fees that depends on how much is populat
 - Average populated: from minimal to no deposit fees.
 - Scarcely populated: from no fees to incentives.
 
+Of course this heuristic must take in account and shape appropriately big inflow periods of CKB such as the bootstrapping period or in general deposits of size comparable to the deposit pool.
+
 ### Withdrawals from Incentivization Layer Perspective
 
 Withdrawing means consuming a shared resource, so any other user will not be able to use it.
@@ -213,6 +215,8 @@ A good countermeasure is to add withdrawal fees that depends on how much is popu
 - Scarcely populated: high withdrawal fees, up to 180 epochs worth of CKB interests.
 - Average populated: from minimal to no withdrawal fees.
 - Over-populated: from no fees to incentives.
+
+Of course this heuristic must take in account and shape appropriately big outflow events of CKB such as a bank run or in general withdrawals of size comparable to the deposit pool.
 
 ## Periphery Layer
 
