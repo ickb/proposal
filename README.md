@@ -4,43 +4,41 @@
 
 ### NervosDAO Illiquidity
 
-NervosDAO is possibly the most important smart-contract of Nervos Layer 1 (L1 for short). Briefly a CKB holder can lock his CKB in exchange for a receipt of that specific deposit. Every 180 epochs (~30 days) the holder can exchange back his receipt to unlock his deposit plus the accrued Interests. This creates an illiquidity for CKB depositor.
+The NervosDAO is possibly the most important smart-contract of Nervos Layer 1 (L1). A CKB holder can lock his CKB in the NervosDAO in exchange for a receipt of that specific deposit. Every 180 epochs (~30 days) the holder has the option of exchanging his receipt to unlock his initial deposit plus accrued interest. This creates an illiquidity for depositor while the CKB is locked.
 
 ### Untapped Potential
 
-In the Nervos ecosystem exists the untapped potential for a Protocol that liquefies and bridges NervosDAO interests from L1 to L2. This Protocol could enable CKB-based [Initial Stake Pool Offerings](https://www.meld.com/ispo) (ISPO for short), the official Nervos DAO community voting mechanism and a multitude more L1 & L2 applications!
+There exists untapped potential in the Nervos ecosystem for a protocol that can liquify NervosDAO accrued interest and bridge it from L1 to L2. This protocol could enable CKB-based [Initial Stake Pool Offerings](https://www.meld.com/ispo) (ISPO), where users can lock CKB to support new early stage projects without losing their original CKB deposit. The protocol could also be used to enable a community voting mechanism with funds locked in the NervosDAO, as well as a multitude more L1 & L2 applications!
 
-In particular this Protocol could enable the future Hexmate development of an ISPO, which I highly support and anticipate!
-
-## Solution Bird View
+## Solutions
 
 ### DCKB (Unmaintained)
 
-In the past there has been an effort to tackle this challenge by [NexisDAO with dCKB](https://docs.nexisdao.com/nexisdao/mint-dckb). Their approach is to tokenize the holder receipt, which in turn becomes tradeable and so the holder keeps being liquid. The issue with their approach is that only the original owner can unlock the deposit. Currently dCKB seems unmaintained.
+In the past there has been an effort to tackle this challenge by [NexisDAO with dCKB](https://docs.nexisdao.com/nexisdao/mint-dckb). Their approach is to tokenize the holder receipt, which in turn becomes tradeable and so the holder keeps being liquid. The issue with their approach is that only the original owner can unlock the deposit. Currently dCKB does not appear to be actively maintained.
 
 ### Enter CKB++
 
-CKB++ is provisional name for a [sUDT token](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333) that represents deposits in the Protocol. As with dCKB, CKB++'s approach is to tokenize NervosDAO receipts, but with a twist: the Protocol owns all the CKB deposits and maintains a pool of them. This means that all the deposits and withdrawals are shared, so anyone can use anyone else's deposit to exit once it's mature.
+CKB++ is the provisional name for a [sUDT token](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333) that represents deposits in the protocol. As with dCKB, CKB++'s approach is to tokenize NervosDAO receipts, but with a twist: the protocol owns all the CKB deposits and maintains a pool of them. This means that all the deposits and withdrawals are shared, so anyone can use anyone else's deposit to exit once it's mature.
+
+This solves two problems with NervosDAO. It allows CKB that is locked in the NervosDAO to remain liquid and truly be used as a normal currency, and it allows CKB++ to be converted back to CKB quickly at any time without having to wait for maturity.
 
 ### Water Mill Analogy
 
 As a [water mill](https://tenor.com/view/water-wheel-mill-gif-19806697) has many distinct buckets, each at different wheel positions, in which the water is:
 
-- collected;
-- kept and transported;
-- released;
-- ...
+- Collected
+- Maintained
+- Released
 
-In the same way, the Protocol can have many distinct liquidity buckets, each at different stages of maturity, in which CKB are:
+In the same way, the protocol can have many distinct liquidity buckets, each of them constantly moving at different stages of maturity:
 
-- collected: users deposit CKB and receive CKB++;
-- kept to accrue interests;
-- released: if a user wants to exchange CKB++ for CKB and there is a deposit at maturity, then he can release the locked CKB;
-- ...
+- Collected: Users deposit CKB into liquidity buckets and receive CKB++.
+- Maintained: Liquidity buckets accrue interest in the NervosDAO.
+- Released: If a user wants to exchange CKB++ for CKB, they can use any liquidity bucket that is at maturity.
 
 ### Feedback
 
-Jordan Mack words on Nervos L1 & CKB++:
+Jordan Mack's comments on Nervos L1 & CKB++:
 > In a more abstract sense, this doesn't violate any of intentions of the platform. The CKB that is staked is still out of circulation. CKB++ does not grant the holder the ability to store data on the blockchain. In the most pure sense, CKB++ is enabling the functionality that dCKB was trying to achieve. It better solves the problem because anyone can unlock the original CKB from the NervosDAO using CKB++ instead of requiring the original owner to unlock it as with dCKB.
 
 ## Team
@@ -71,29 +69,31 @@ In the meantime I embarked on a journey of all-round self-discovery and after a 
 
 While nobody is able to work in total isolation, with the right feedback, guidance and support from Nervos Team, Community & Foundation I can transform CKB++ into a reality in a less than year.
 
+This protocol could also enable the future development of Hexmate using a ISPO, which I highly support and anticipate!
+
 ## Core Layer
 
 ### Core Layer is On-Chain, Trust-Less & Decentralized
 
-This part of the Protocol lives completely on-chain, once deployed it's independent from any entity, so it's not upgradable. It fixes a CKB++-equivalent size deposit, so CKB capacity for any deposit is determined in fixed CKB++-equivalent terms. It wraps NervosDAO transactions, transforming them appropriately into CKB++.
+This part of the protocol lives completely on-chain. Once deployed it is independent and not upgradable. It wraps NervosDAO transactions by transforming them into CKB++ and does not require a receipt. It tracks all deposits by a fixed amount of CKB++, so CKB capacity for any deposit is determined by the current exchange rate of CKB for CKB++.
 
-### CKB / CKB++ Rate
+### CKB / CKB++ Exchange Rate
 
-Let's assume we fix an EPOCH-0 so a block when 1 CKB = 1 CKB++, then as time passes 1 CKB < 1 CKB++ = 1 CKB staked at EPOCH-0, so we can think:
+The CKB to CKB++ exchange rate is determined by epoch. If we could go back in time to epoch 0, then 1 CKB would be equal to 1 CKB++. As time passes 1 CKB is slowly worth less than 1 CKB++ at a rate that matches the issuance from the NervosDAO. This is because CKB++ is gaining value. An easier way to understand this is to think of:
 
 - CKB as inflationary
-- CKB++ as non inflationary
+- CKB++ as non-inflationary
 
-Jordan Mack comment on this particular:
+Jordan Mack's comment on this method:
 > That's a clever approach. Thinking of it as CKB++ being the base and CKB being what is moving makes it much easier to understand.
 
-Now this inflation rate is well defined by the [NervosDAO compensation rate](https://explorer.nervos.org/charts/nominal-apc) and only depends on:
+The inflation rate of CKB is well defined by the [NervosDAO compensation rate](https://explorer.nervos.org/charts/nominal-apc) and only depends on:
 
 - [the block concept in L1](https://docs.nervos.org/docs/basics/glossary/#block)
 - [the epoch concept in L1](https://docs.nervos.org/docs/basics/glossary/#epoch)
 - [the formula itself](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation)
 
-So the CKB / CKB++ Rate cannot be broken except in the case of an attacker being able to compromise the CKB++ minter or the pool of CKB deposits. This kind of attack vectors are greatly mitigated by external audits.
+Therefore, the CKB/CKB++ exchange rate will always be precise as determined by the formula and the current epoch/block. The only risk to this deterministic peg would be a smart contract exploit to the deposit pool or minting contract. These kinds of attack vectors are greatly mitigated by external audits.
 
 ### Fixed CKB++-Equivalent Deposit Size
 
@@ -103,7 +103,7 @@ Let's **assume** we don't implement any requirement on deposit size, so as in Ne
 - deposit CKB for CKB++ in deposits as big as the entirety of his capital;
 - ...
 
-This would greatly reduce the quality of the service for everyone, as the only remaining deposits would be as big or bigger than the attacker capital and since it's impossible to withdraw partially from a NervosDAO deposit, this would greatly hamper the Protocol fruition.
+This would greatly reduce the quality of the service for everyone, as the only remaining deposits would be as big or bigger than the attacker capital and since it's impossible to withdraw partially from a NervosDAO deposit, this would greatly hamper the protocol fruition.
 
 Let's now instead **assume** we require deposits to be capped at certain size. Then as before an attacker who can borrow a capital as big as the maximum deposit size can simply:
 
@@ -111,7 +111,7 @@ Let's now instead **assume** we require deposits to be capped at certain size. T
 - deposit CKB for CKB++ in deposits as big as the maximum deposit size;
 - ...
 
-This would greatly reduce the quality of the service for users trying to withdraw smaller deposits, as the only remaining deposits would be as big as the maximum deposit size and since it's impossible to withdraw partially from a NervosDAO deposit, this would hamper the Protocol fruition for a whole category of users.
+This would greatly reduce the quality of the service for users trying to withdraw smaller deposits, as the only remaining deposits would be as big as the maximum deposit size and since it's impossible to withdraw partially from a NervosDAO deposit, this would hamper the protocol fruition for a whole category of users.
 
 A good countermeasure is to fix a reasonably small standard deposit size. As in real life bricks can be used to build houses of any size, in the same way:
 
@@ -125,13 +125,13 @@ This deposit standard size could be defined in CKB terms or in CBK++ terms:
 
 In this way a few goals are achieved:
 
-- big deposits now increase the overall Protocol liquidity;
+- big deposits now increase the overall protocol liquidity;
 - no size mismatch means anybody can use anybody else deposit freely to withdraw;
 - a fixed CKB++-equivalent deposit size simplifies code, so it minimizes the hacks attack surface.
 
 ### Deposits from Core Layer Perspective
 
-In NervosDAO a CKB holder can lock his CKB in exchange for a receipt of that specific deposit, while in our case the Protocol proceed by wrapping NervosDAO deposit transaction into CKB++. The Protocol in one transaction:
+In NervosDAO a CKB holder can lock his CKB in exchange for a receipt of that specific deposit, while in our case the protocol proceed by wrapping NervosDAO deposit transaction into CKB++. The protocol in one transaction:
 
 - requires a fixed CKB++-equivalent size deposit;
 - takes control of the deposit;
@@ -148,17 +148,17 @@ Withdrawals are a bit more complicated in NervosDAO, time is slotted in batches 
 
 As seen with [calculations](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation) the actual withdrawn CKB amount depends on the timing of the request of withdrawal transaction in respect to the epoch batch.
 
-While in our case the Protocol proceed by un-wrapping CKB++ transactions into base NervosDAO transactions:
+While in our case the protocol proceed by un-wrapping CKB++ transactions into base NervosDAO transactions:
 
 - the CKB++ holder **freely** chooses from the pool a deposit to withdraw from. All deposits are of a fixed CKB++-equivalent size, the only differentiating factor between them is the recurring maturity date;
-- with the first transaction the user sends to the protocol the fixed amount of CKB++ and chooses the specific deposit to withdraw from, while the Protocol in turn assigns to the user that specific deposit and burns the received CKB++;
+- with the first transaction the user sends to the protocol the fixed amount of CKB++ and chooses the specific deposit to withdraw from, while the protocol in turn assigns to the user that specific deposit and burns the received CKB++;
 - with the second transaction the user withdraws the equivalent CKB amount. Same constraints as with the second NervosDAO transaction.
 
 ## Incentivization Layer
 
 ### Incentivization Layer is On-Chain, Trust-Less & Decentralized
 
-As for the Core, the Incentivization Layer of the Protocol lives completely on-chain, once deployed it's independent from any entity, so it's not upgradable. This Layer exist as the Protocol needs to incentivize a well time distributed deposit pool and needs to dis-incentivize actions that leads to the opposite. Since direct access to the Core Layer is disabled this layer cannot be bypassed.
+As for the Core, the Incentivization Layer of the protocol lives completely on-chain, once deployed it's independent from any entity, so it's not upgradable. This Layer exist as the protocol needs to incentivize a well time distributed deposit pool and needs to dis-incentivize actions that leads to the opposite. Since direct access to the Core Layer is disabled this layer cannot be bypassed.
 
 ### Adding Incentives and Disincentives
 
@@ -171,7 +171,7 @@ Any improvement aimed to incentivize a well time distributed deposit pool involv
 There are two advantages of asking for CKB++ fees, such as either:
 
 - a slight lock-in, as the user needs to fetch from secondary markets these additional CKB++ for paying the fees;
-- a more liquid Protocol, as the user prioritizes actions without fees, so actions that benefit everyone.
+- a more liquid protocol, as the user prioritizes actions without fees, so actions that benefit everyone.
 
 Another approach would be to have strict rules, for example that clearly states when a deposit/withdrawal can happen or not, but usually it's easier for a determined attacker to abuse strict rules against everyone else.
 
@@ -187,7 +187,7 @@ Let's **assume** we don't implement the Incentivization Layer, so users have dir
 - deposit CKB for CKB++ in already densely populated epochs;
 - ...
 
-This would greatly reduce the quality of the service for everyone, as the Protocol ability to exchange CKB++ into CKB would be halted outside the overpopulated epochs, hampering its fruition.
+This would greatly reduce the quality of the service for everyone, as the protocol ability to exchange CKB++ into CKB would be halted outside the overpopulated epochs, hampering its fruition.
 
 So the catch is that the utility of a deposit depends on how much already populated is that epoch.
 
@@ -219,22 +219,22 @@ A good countermeasure is to add withdrawal fees that depends on how much is popu
 
 ### Taking Care of User Needs
 
-The Core Layer of the Protocol defines a solid way to exchange between CKB and CKB++ in fixed blocks, while the Incentivization Layer takes care of making this exchange liquid.
+The Core Layer of the protocol defines a solid way to exchange between CKB and CKB++ in fixed blocks, while the Incentivization Layer takes care of making this exchange liquid.
 
 The standard deposit size makes already very easy for most users to exchange back and forth between CKB and CKB++, but naturally there are two under-served categories of users:
 
 - big depositors, those with a capital more than hundred times the standard deposit size. These users would otherwise need to spend a lot of time manually choosing the timing for each standard deposit;
 - small depositors, those with a capital smaller than the standard deposit size. These users would otherwise need to rely on secondary markets.
 
-On one side we have defined a Protocol essentially by excluding ideas not compatible with NervosDAO substrate, on the other we have these very legit user needs.
+On one side we have defined a protocol essentially by excluding ideas not compatible with NervosDAO substrate, on the other we have these very legit user needs.
 
-The Periphery Layer addresses these user needs, making the the Protocol handy to use irrespective of user capital size.
+The Periphery Layer addresses these user needs, making the the protocol handy to use irrespective of user capital size.
 
 ### Periphery Layer's Requirements
 
-We need a technology that can adequately prioritize variable user needs and interface them to the fixed blocks used by Protocol Internal layers, but actually in the wild already exists a more general solution to this problem: we are essentially approaching a CKB / CKB++ market!
+We need a technology that can adequately prioritize variable user needs and interface them to the fixed blocks used by protocol Internal layers, but actually in the wild already exists a more general solution to this problem: we are essentially approaching a CKB / CKB++ market!
 
-Theoretically any kind of technology that enables market price discovery could work. This is because we can develop an off-chain bot that every time the CKB / CKB++ price is unbalanced, it arbitrages the price difference between the CKB / CKB++ market and the Protocol, balancing it back again.
+Theoretically any kind of technology that enables market price discovery could work. This is because we can develop an off-chain bot that every time the CKB / CKB++ price is unbalanced, it arbitrages the price difference between the CKB / CKB++ market and the protocol, balancing it back again.
 
 Currently in the DeFi space there are two main techniques of price discovery:
 
@@ -254,7 +254,7 @@ So a variation of this technique could fit our high level requirements, which ar
 - Every stakeholder should be as liquid as possible;
 - Fair incentives for every stakeholder.
 
-In this Protocol the stakeholders are:
+In this protocol the stakeholders are:
 
 - traders;
 - liquidity providers;
@@ -287,13 +287,13 @@ Withdrawals are basically limit orders seeking to convert CKB++ into CKB. They c
 
 In the same way the Periphery Layer, both the arbitrage bot and the market platform, could include a hardcoded fee switch, turned off at the beginning. This is good as it leads to a future where service maintainers are incentivized to fulfill their role for the long run and upgrade it to a DAO.
 
-In the beginning the service offered by the Periphery Layer will be directly managed by me. This could even work in the long term as it's still decentralized as anyone can arbitrage between the Inner Protocol and Periphery Layer. To be even more decentralized a third party could design a totally independent system to interface users and the Inner Protocol, as the latter it's already totally decentralized.
+In the beginning the service offered by the Periphery Layer will be directly managed by me. This could even work in the long term as it's still decentralized as anyone can arbitrage between the Inner protocol and Periphery Layer. To be even more decentralized a third party could design a totally independent system to interface users and the Inner protocol, as the latter it's already totally decentralized.
 
 In the long term a DAO should take over the Periphery Layer and manage it, but this would carry a big development overhead, so it's something that can only happen at a later time.
 
 ## Road-Map & Incentives
 
-While I'm pretty independent, I'll go from learning L1 scripting to creating a complex L1 Protocol, so in all likelihood I'll need substantial support from Nervos Team, Community & Foundation.
+While I'm pretty independent, I'll go from learning L1 scripting to creating a complex L1 protocol, so in all likelihood I'll need substantial support from Nervos Team, Community & Foundation.
 
 ### First Month: Proof of Concept
 
@@ -303,7 +303,7 @@ This is a risky period, there might exists some technical blocks long or impossi
 
 ### First Four Months: Core & Incentivization Layers
 
-I'll need to simulate any adverse user interaction with the Protocol incentives and only then I'll create the definitive L1 scripts for Core & Incentivization Layers. This code will be released under a Business Source License 1.1 (BUSL-1.1 for short), the same kind license as [Uniswap v3 core](https://github.com/Uniswap/v3-core/blob/main/LICENSE).
+I'll need to simulate any adverse user interaction with the protocol incentives and only then I'll create the definitive L1 scripts for Core & Incentivization Layers. This code will be released under a Business Source License 1.1 (BUSL-1.1 for short), the same kind license as [Uniswap v3 core](https://github.com/Uniswap/v3-core/blob/main/LICENSE).
 
 Moreover I'll set-up a L1 Testnet based basic website. This website will provide users the ability to directly interact with the Incentivization Layer, with the addition of off-chain utilities for gradually exchanging CKB and CKB++. This will happen both by keeping the browser tab open or by a stand-alone script. This code will be released under a GNU General Public License v3.0 or later (GPL-3.0-or-later for short), in this way anybody can do almost anything with the interface code, except distributing a closed source version.
 
@@ -311,7 +311,7 @@ If time permits it I'll set-up these L1 scrips on Mainnet and add a basic stylin
 
 Once these layer are online I'll personally gain nothing from them, so I need to ask for additional 10000 USD-equivalent in incentives for the additional three months of work. This excludes external Core & Incentivization Layers audits or expenses to deploy them on Mainnet.
 
-### First Ten Months: Fully Working Protocol
+### First Ten Months: Fully Working protocol
 
 I'll need to simulate any adverse user interaction with the Periphery Layer and only then I'll create the L1 scripts for the Periphery Layer. As with Core & Incentivization L1 scripts this code will be released under BUSL-1.1.
 
@@ -334,7 +334,7 @@ About the cost of deploying the Periphery contracts on Mainnet, I need to unders
 
 ### Future Plans
 
-Once this Protocol is realized, I may develop a DAO, a token wrapping the generated fees and distributing the arbitrage bot responsibilities. Looking even more far away CKB++ will enable CKB-based Initial Stake Pool Offerings, the official Nervos DAO community voting mechanism and a multitude more L1 & L2 applications!
+Once this protocol is realized, I may develop a DAO, a token wrapping the generated fees and distributing the arbitrage bot responsibilities. Looking even more far away CKB++ will enable CKB-based Initial Stake Pool Offerings, the official Nervos DAO community voting mechanism and a multitude more L1 & L2 applications!
 
 ## License
 
