@@ -302,9 +302,16 @@ In the beginning the service offered by the Periphery Layer will be directly man
 
 In the long term a DAO should take over the Periphery Layer and manage it, but this would carry a big development overhead, so it's something that can only happen at a later time.
 
+## Faraway Future Protocol Obsolescence
+
+As decades pass by, this protocol may become obsolete and the locked CKB could be worth much more than the service it provides, so it could make sense to provide a functionality to reclaim the locked CKB. Still as this protocol is a public utility, this functionality would pose two difficult questions:
+
+- should any address even be able to claim ownership of the deployed contracts?
+- how can the internal protocol logic ascertain without doubt its obsolescence?
+
 ## 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇 WORK IN PROGRESS 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇
 
-After seeing [this Jan Xie's comment (reported by Alejandro)](https://discord.com/channels/657799690070523914/657799690552606745/970714873661128774) I need to understand better the time (and so the costs) associated with developing the L1 scripts, so I'm holding this section off until I complete the [Developer Training Course](https://nervos.gitbook.io/developer-training-course/):
+After seeing [this Jan Xie's comment (reported by Alejandro)](https://discord.com/channels/657799690070523914/657799690552606745/970714873661128774) I need to understand better the time (and so the costs) associated with developing the L1 scripts, so I'm holding this section off until I complete the [Developer Training Course](https://nervos.gitbook.io/developer-training-course/) and [Zero2ckb Tutorial](https://zero2ckb.ckbapp.dev/):
 
 >If you compare the differences between Bitcoin and Ethereum, you might find that Ethereum developers are amazing as they can create dApps in a short time while Bitcoin developers can take two years to create an app. Nervos CKB is more similar to Bitcoin. Building applications directly in CKB is similar to system level programming, not front end programming. In a nutshell, Nervos CKB and Bitcoin have totally different designs than Ethereum.
 
@@ -328,7 +335,7 @@ If time permits it I'll set-up these L1 scrips on Mainnet and add a basic stylin
 
 Once these layer are online I'll personally gain nothing from them, so I need to ask for additional 10000 USD-equivalent in incentives for the additional three months of work. This excludes external Core & Incentivization Layers audits and expenses to deploy them on Mainnet.
 
-About the deployment costs of the L1 scripts, the best way would be that an address controlled by Nervos Foundation deploys them, so that in case of protocol obsolescence Nervos Foundation can recover their locked CKB. I'm not saying tho that this will be possible, as this would imply some kind of internal protocol logic that ascertains its obsolescence.
+About the deployment costs of the L1 scripts, the best way would be that an address controlled by Nervos Foundation deploys them.
 
 ### First Ten Months: Fully Working Protocol
 
@@ -349,7 +356,7 @@ Once everything is on Mainnet and audited, I **may** gain personally from this, 
 
 If we audit at the same time Core, Incentivization & Periphery Layer the audit expenses should be lower and so Nervos could fully sponsor them.
 
-As with the deployment of the internal layers, the best way to handle the deployment costs of the Periphery Layer would be that an address controlled by Nervos Foundation deploys them, so that in case of protocol obsolescence Nervos Foundation can recover their locked CKB. I'm not saying tho that this will be possible, as this would imply some kind of internal protocol logic that ascertains its obsolescence.
+As with the deployment of the internal layers, the best way to handle the deployment costs of the Periphery Layer would be that an address controlled by Nervos Foundation deploys them.
 
 ### Future Plans
 
