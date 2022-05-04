@@ -179,8 +179,8 @@ Any improvement aimed to incentivize a well time distributed deposit pool involv
 
 There are two advantages of asking for CKB++ fees, such as either:
 
-- A slight lock-in, as the user needs to fetch from secondary markets these additional CKB++ for paying the fees.
-- A more liquid protocol, as the user prioritizes actions without fees, so actions that benefit everyone.
+- **A slight lock-in**: The user needs to fetch from secondary markets these additional CKB++ for paying the fees.
+- **A more liquid protocol**: The user prioritizes actions without fees, so actions that benefit everyone.
 
 Another approach would be to have strict rules, for example that clearly states when a deposit/withdrawal can happen or not, but usually it's easier for a determined attacker to abuse strict rules against everyone else.
 
@@ -234,8 +234,8 @@ The Core Layer of the protocol defines a solid way to exchange between CKB and C
 
 The standard deposit size makes already very easy for most users to exchange back and forth between CKB and CKB++, but naturally there are two under-served categories of users:
 
-- Big depositors, those with a capital more than hundred times the standard deposit size. These users would otherwise need to spend a lot of time manually choosing the timing for each standard deposit.
-- Small depositors, those with a capital smaller than the standard deposit size. These users would otherwise need to rely on secondary markets.
+- **Big depositors**: Users with a capital more than hundred times the standard deposit size, they would otherwise need to spend a lot of time manually choosing the timing for each standard deposit.
+- **Small depositors**: Users with a capital smaller than the standard deposit size, they would otherwise need to rely on secondary markets.
 
 On one side we have defined a protocol essentially by excluding ideas not compatible with NervosDAO substrate, on the other we have these very legit user needs.
 
@@ -267,24 +267,24 @@ So a variation of this technique could fit our high level requirements, which ar
 
 In this protocol the stakeholders are:
 
-- Traders.
-- Liquidity providers.
-- Price arbitrageurs.
-- Service maintainers.
+- Traders
+- Liquidity providers
+- Price arbitrageurs
+- Service maintainers
 
 ### Deposits from Periphery Layer Perspective
 
 Deposits are basically limit orders seeking to convert CKB into CKB++. They can be matched partially or fully by:
 
-- An arbitrageur who creates in the Incentivization Layer a new deposit using one or more limit order funds, minting CKB++ tokens in the process and later distributing them correctly. No capital required from the arbitrageur.
-- A counterparty seeking to convert CKB++ into CKB.
+- **An arbitrageur**: A user who creates in the Incentivization Layer a new deposit using one or more limit order funds, minting CKB++ tokens in the process and later distributing them correctly. No capital required from the arbitrageur.
+- **A counterparty**: A user seeking to convert CKB++ into CKB.
 
 ### Withdrawals from Periphery Layer Perspective
 
 Withdrawals are basically limit orders seeking to convert CKB++ into CKB. They can be matched partially or fully by:
 
-- An arbitrageur who creates in the Incentivization Layer a new withdrawal request for a deposit near maturity using one or more limit order funds, burning those CKB++ in the process and later distributing the withdrawn CKB correctly. No capital required from the arbitrageur.
-- A counterparty seeking to convert CKB into CKB++.
+- **An arbitrageur**: A user who creates in the Incentivization Layer a new withdrawal request for a deposit near maturity using one or more limit order funds, burning those CKB++ in the process and later distributing the withdrawn CKB correctly. No capital required from the arbitrageur.
+- **A counterparty**: A user seeking to convert CKB into CKB++.
 
 ## Path to Sustainability
 
