@@ -226,6 +226,23 @@ A good countermeasure is to add withdrawal fees that depends on how much is popu
 
 Of course this heuristic must take in account and shape appropriately big outflow events of CKB such as a bank run or in general withdrawals of size comparable to the deposit pool.
 
+### Incentivization Layer's Interface
+
+Strictly speaking the Incentivization Layer is considered an internal layer, as it cannot meet the needs of some categories of users. For this reason exists the Periphery Layer, but some users may still want to interact directly with it.
+
+As a smart contract it will offer these views:
+
+- **Base Exchange Rate**: A view of the CKB/CKB++ Exchange Rate as defined by Core Layer, as derived from the [the formula itself](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation).
+- **CKB to CKB++ Exchange Rate**: A view of the current CKB to CKB++ exchange rate for a certain amount of CKB as defined by Incentivization Layer, so inclusive of current incentives and disincentives.
+- **CKB++ to CKB Exchange Rate**: A view of the current CKB++ to CKB exchange rate for a certain amount of CKB++ as defined by Incentivization Layer.
+
+Moreover it will offer these methods:
+
+- **Exchange CKB into CKB++**: A method to exchange CKB into CKB++. It specifies the worst exchange rate the user is willing to accept, basically a [fill or kill limit order](https://www.investopedia.com/terms/f/fok.asp). This method wraps the Core Layer's deposit.
+- **Exchange CKB++ into CKB**: A method to exchange CKB++ back into CKB, as before it specifies the worst exchange rate the user is willing to accept. This method wraps the Core Layer's withdrawal request. For the second step the user should be able to perform in autonomy the withdrawal itself.
+
+To enable the user accessibility of these functionalities there will be both a user friendly webpage and a stand-alone script. Both of these will provide off-chain utilities for gradually exchanging CKB and CKB++, this will happen by keeping the browser tab open or the stand-alone script running.
+
 ## Periphery Layer
 
 ### Taking Care of User Needs
@@ -329,7 +346,7 @@ This is a risky period, there might exists some technical blocks long or impossi
 
 I'll need to simulate any adverse user interaction with the protocol incentives and only then I'll create the definitive L1 scripts for Core & Incentivization Layers. This code will be released under a Business Source License 1.1 (BUSL-1.1), the same kind license as [Uniswap v3 core](https://github.com/Uniswap/v3-core/blob/main/LICENSE).
 
-Moreover I'll set-up a L1 Testnet based basic website. This website will provide users the ability to directly interact with the Incentivization Layer, with the addition of off-chain utilities for gradually exchanging CKB and CKB++. This will happen both by keeping the browser tab open or by a stand-alone script. This code will be released under a GNU General Public License v3.0 or later (GPL-3.0-or-later), in this way anybody can do almost anything with the interface code, except distributing a closed source version.
+Moreover I'll set-up a L1 Testnet based basic website. This website will provide users the ability to directly interact with the Incentivization Layer. This code will be released under a GNU General Public License v3.0 or later (GPL-3.0-or-later), in this way anybody can do almost anything with the interface code, except distributing a closed source version.
 
 If time permits it I'll set-up these L1 scrips on Mainnet and add a basic styling on this website.
 
