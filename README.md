@@ -334,13 +334,11 @@ After seeing [this Jan Xie's comment (reported by Alejandro)](https://discord.co
 
 ## Road-Map & Incentives
 
-While I'm pretty independent, I'll go from learning L1 scripting to creating a complex L1 protocol, so in all likelihood I'll need substantial support from Nervos Team, Community & Foundation.
-
 ### First Month: Proof of Concept
 
 I'll create a Proof of Concept L1 script, showing the basic functionalities of the core layer from command line. Possibly not safe to use in production, but with a clear path to a safe resolution.
 
-This is a risky period, there might exists some technical blocks long or impossible to work around. While I designed CKB++ from the bottom-up and I love everything about it, I need to ask Nervos Foundation for a starting 1000 USD-equivalent in incentives for the first month of work, so both parties are taking a small risk.
+This is a risky period, there might exists some technical blocks long or impossible to work around. While I designed CKB++ from the bottom-up and I love everything about it, I need to ask Nervos Foundation for a starting 1,000 USD-equivalent (**to be reviewed at a later time, see note**) in incentives for the first month of work, so both parties are taking a small risk.
 
 ### First Four Months: Core & Incentivization Layers
 
@@ -350,7 +348,7 @@ Moreover I'll set-up a L1 Testnet based basic website. This website will provide
 
 If time permits it I'll set-up these L1 scrips on Mainnet and add a basic styling on this website.
 
-Once these layer are online I'll personally gain nothing from them, so I need to ask for additional 10000 USD-equivalent in incentives for the additional three months of work. This excludes external Core & Incentivization Layers audits and expenses to deploy them on Mainnet.
+Once these layer are online I'll personally gain nothing from them, so I need to ask for additional 10,000 USD-equivalent (**to be reviewed at a later time, see note**) in incentives for the additional three months of work. This excludes external Core & Incentivization Layers audits and expenses to deploy them on Mainnet.
 
 About the deployment costs of the L1 scripts, the best way would be that an address controlled by Nervos Foundation deploys them.
 
@@ -369,11 +367,21 @@ As with the Incentivization layer interface, the web interface and arbitraging b
 
 I'll create a GitBook-alike documenting all the concepts, the layers and the website. It will be released under Creative Commons Attribution Share Alike 4.0 International License (CC-BY-SA-4.0).
 
-Once everything is on Mainnet and audited, I **may** gain personally from this, so I'm open about discussing incentives for this phase, still it's a risky long shot. I estimate the cost for this stage as additional 20000 USD-equivalent in incentives for the additional six months of work. This could happen in two separate steps so that Nervos can evaluate the progress I make on the the Periphery Layers L1 scripts, arbitraging bots and website.
+Once everything is on Mainnet and audited, I **may** gain personally from this, so I'm open about discussing incentives for this phase, still it's a risky long shot. I estimate the cost for this stage as additional 20,000 USD-equivalent (**to be reviewed at a later time, see note**) in incentives for the additional six months of work. This could happen in two separate steps so that Nervos can evaluate the progress I make on the the Periphery Layers L1 scripts, arbitraging bots and website.
 
 If we audit at the same time Core, Incentivization & Periphery Layer the audit expenses should be lower and so Nervos could fully sponsor them.
 
 As with the deployment of the internal layers, the best way to handle the deployment costs of the Periphery Layer would be that an address controlled by Nervos Foundation deploys them.
+
+### Considerations
+
+A total 31,000 USD-equivalent (**to be reviewed at a later time, see note**) in incentives for building CKB++ it's severely under-priced, still my targets are multiple:
+
+- I want to build something that people will happily use now and 100 years from now!
+- This idea has legs, so the Periphery Layer fees or DAO creation will give me a long term economical incentive, which is way better than a quick buck now!
+- I'm not taking any risks. I'm clearly asking for the Nervos Foundation to fund both the Audits and Mainnet deployment costs. Just by taking in account the Audits the cost is easily reaching a 60,000 - 80,000 USD-equivalent. While adding the deployment costs in locked CKB, it could raise to orders of magnitude more!
+- I want to go from learning L1 scripting to being able to create a complex L1 protocol. While I'm pretty independent I'll need substantial support in this journey. CKB++ is the perfect opportunity, a win-win situation!
+- I want to build a long term trust relationship with Nervos Team, Community & Foundation!
 
 ### Future Plans
 
