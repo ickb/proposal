@@ -1,4 +1,4 @@
-# Proposal: iCKB
+# iCKB
 
 ## Problem
 
@@ -64,7 +64,7 @@ This part of the protocol lives completely on Nervos Layer 1. Once deployed it i
 
 ### CKB / iCKB Exchange Rate
 
-The CKB to iCKB exchange rate is determined by epoch. If we could go back in time to epoch 0, then 1 CKB would be equal to 1 iCKB. As time passes 1 CKB is slowly worth less than 1 iCKB at a rate that matches the issuance from the NervosDAO. This is because iCKB is gaining value. An easier way to understand this is to think of:
+The CKB to iCKB exchange rate is determined by block number. If we could go back in time to block 0, then 1 CKB would be equal to 1 iCKB. As time passes 1 CKB is slowly worth less than 1 iCKB at a rate that matches the issuance from the NervosDAO. This is because iCKB is gaining value. An easier way to understand this is to think of:
 
 - CKB as inflationary
 - iCKB as non-inflationary
@@ -78,7 +78,7 @@ The inflation rate of CKB is well defined by the [NervosDAO compensation rate](h
 - [The epoch concept in L1](https://docs.nervos.org/docs/basics/glossary/#epoch)
 - [The formula itself](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation)
 
-Therefore, the CKB/iCKB exchange rate will always be precise as determined by the formula and the current epoch/block. The only risk to this deterministic peg would be a smart contract exploit to the deposit pool or minting contract. These kinds of attack vectors are greatly mitigated by external audits.
+Therefore, the CKB/iCKB exchange rate will always be precise as determined by the formula and the current block. The only risk to this deterministic peg would be a smart contract exploit to the deposit pool or minting contract. These kinds of attack vectors are greatly mitigated by external audits.
 
 ### Fixed iCKB-Equivalent Deposit Size
 
