@@ -60,7 +60,7 @@ During February 2022, while [testing the ground for a NervosDAO based ISPO](http
 
 Core Layer defines a solid way to exchange between CKB and iCKB in fixed blocks. The design aim is to make iCKB as simple, robust and neutral as possible.
 
-This part of the protocol lives completely on Nervos Layer 1. Once deployed it is independent and not upgradable. It wraps NervosDAO transactions by transforming them into iCKB and does not require a receipt. It tracks all deposits by a fixed amount of iCKB, so CKB capacity for any deposit is determined by the current exchange rate of CKB for iCKB.
+This part of the protocol lives completely on Nervos Layer 1. Once deployed it is independent and not upgradable. It wraps NervosDAO transactions by transforming them into iCKB and does not require a receipt. It tracks all deposits by a fixed amount of iCKB, so CKB capacity for any deposit is determined by the current exchange rate of CKB for iCKB. For reference the iCKB mechanism for wrapping interest is similar to [Compound's cTokens](https://compound.finance/docs/ctokens).
 
 ### CKB / iCKB Exchange Rate
 
@@ -82,26 +82,12 @@ Therefore, the CKB/iCKB exchange rate will always be precise as determined by th
 
 ### Fixed iCKB-Equivalent Deposit Size
 
-Let's **assume** we don't implement any requirement on deposit size, so as in NervosDAO users can choose the deposit size they prefer. Then an attacker who can borrow a big enough capital can simply:
+As in real life bricks can be used to build houses of any size, in the same way seems natural to fix a reasonably small standard deposit size, so that:
 
-- Exchange iCKB for smaller CKB deposits.
-- Deposit CKB for iCKB in deposits as big as the entirety of his capital.
-
-This would greatly reduce the quality of the service for everyone, as the only remaining deposits would be as big or bigger than the attacker capital and since it's impossible to withdraw partially from a NervosDAO deposit, this would greatly hamper the protocol fruition.
-
-Let's now instead **assume** we require deposits to be capped at certain size. Then as before an attacker who can borrow a capital as big as the maximum deposit size can simply:
-
-- Exchange iCKB for smaller CKB deposits.
-- Deposit CKB for iCKB in deposits as big as the maximum deposit size.
-
-This would greatly reduce the quality of the service for users trying to withdraw smaller deposits, as the only remaining deposits would be as big as the maximum deposit size and since it's impossible to withdraw partially from a NervosDAO deposit, this would hamper the protocol fruition for a whole category of users.
-
-A good countermeasure is to fix a reasonably small standard deposit size. As in real life bricks can be used to build houses of any size, in the same way:
-
-- Deposits too big should be split into standard deposits and possibly even spread over longer periods.
+- Deposits too big are split into standard deposits and possibly even spread over longer periods.
 - Deposits too small are better served by secondary markets.
 
-This deposit standard size could be defined in CKB terms or in CBK++ terms:
+This deposit standard size could be defined in CKB terms or in iCBK terms:
 
 - A fixed CKB means that as deposit are made in time, every deposit would have a different size due to the NervosDAO interests, so it's not working as intended.
 - A fixed iCKB-equivalent deposit size means that at every block all the deposits would have the same size both in CKB and iCKB. Of course as time passes, the deposit size would be fixed iCKB-equivalent terms but gradually increasing in CKB terms.
@@ -111,6 +97,27 @@ In this way a few goals are achieved:
 - Big deposits now increase the overall protocol liquidity.
 - No size mismatch means anybody can use anybody else deposit freely to withdraw.
 - A fixed iCKB-equivalent deposit size simplifies code, so it minimizes the hacks attack surface.
+
+### Practical Exchange Rate CKB / iCKB Calculation
+
+Let's define 10000 iCKB as 10000 CKB staked in NervosDAO at block 0.
+
+Here 10000 represents the standard deposit size or brick size. It's a made up number, but possibly not too far from the real one.
+
+From the last formula from [NervosDAO RFC Calculation](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation):
+> Nervos DAO compensation can be calculated for any deposited cell. Assuming a Nervos DAO cell is deposited at block m, i.e. the deposit cell is included at block m. One initiates withdrawal and gets phase 1 withdrawing cell included at block n. The total capacity of the deposit cell is c_t, the occupied capacity for the deposit cell is c_o. [...] The maximum withdrawable capacity one can get from this Nervos DAO input cell is:
+>
+> `( c_t - c_o ) * AR_n / AR_m + c_o`
+
+Let's fix a few constants:
+
+- `c_t = 10000 CKB` (brick size, deposit cell capacity)
+- `c_o = 100CKB` (occupied deposit cell capacity)
+- `m = 0` (deposit block is block 0)
+- `AR_m = AR_0 = 10 ^ 16` (block 0 accumulated rate)
+
+So at block `n`:
+`10000 iCKB  = 9900 * AR_n / 10 ^ 16 + 100 CKB`
 
 ### Deposits from Core Layer Perspective
 
