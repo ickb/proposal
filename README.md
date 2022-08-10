@@ -105,7 +105,7 @@ Let's define 10000 iCKB as 10000 CKB staked in NervosDAO at block 0.
 Here 10000 represents the standard deposit size or brick size. It's a made up number, but possibly not too far from the real one.
 
 From the last formula from [NervosDAO RFC Calculation](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation):
-> Nervos DAO compensation can be calculated for any deposited cell. Assuming a Nervos DAO cell is deposited at block m, i.e. the deposit cell is included at block m. One initiates withdrawal and gets phase 1 withdrawing cell included at block n. The total capacity of the deposit cell is c_t, the occupied capacity for the deposit cell is c_o. [...] The maximum withdrawable capacity one can get from this Nervos DAO input cell is:
+> Nervos DAO compensation can be calculated for any deposited cell. Assuming a Nervos DAO cell is deposited at block `m`, i.e. the `deposit cell` is included at block `m`. One initiates withdrawal and gets phase 1 `withdrawing cell` included at block `n`. The total capacity of the `deposit cell` is `c_t`, the occupied capacity for the `deposit cell` is `c_o`. [...] The maximum withdrawable capacity one can get from this Nervos DAO input cell is:
 >
 > `( c_t - c_o ) * AR_n / AR_m + c_o`
 
