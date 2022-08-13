@@ -1,5 +1,9 @@
 # iCKB
 
+## Listenable Introduction
+
+If you would like to listen to an introduction of the project before diving in, Jordan Mack explains iCKB in less than 7 minutes during an episode of [Hashing it Out](https://www.youtube.com/watch?v=CcFFuenup38&t=781s).
+
 ## Problem
 
 ### NervosDAO Illiquidity
