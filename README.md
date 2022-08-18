@@ -68,7 +68,7 @@ During February 2022, while [testing the ground for a NervosDAO based ISPO](http
 
 This protocol defines a solid way to exchange between CKB and iCKB in fixed blocks. The design aim is to make iCKB as simple, robust and neutral as possible.
 
-This part of the protocol lives completely on Nervos Layer 1. Once deployed it is independent and not upgradable. It wraps NervosDAO transactions by transforming them into iCKB and it does not require a receipt. It tracks all deposits by a fixed amount of iCKB, so CKB capacity for any deposit is determined by the current exchange rate of CKB for iCKB.
+This protocol lives completely on Nervos Layer 1. Once deployed it is independent and not upgradable. It wraps NervosDAO transactions by transforming them into iCKB and it does not require a receipt. It tracks all deposits by a fixed amount of iCKB, so CKB capacity for any deposit is determined by the current exchange rate of CKB for iCKB.
 
 ### CKB / iCKB Exchange Rate
 
