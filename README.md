@@ -16,7 +16,7 @@ There exists untapped potential in the Nervos ecosystem for a protocol that can 
 
 The protocol could also be used to enable a community voting mechanism with funds locked in the NervosDAO, as well as a multitude more L1 & L2 applications!
 
-Another mind blowing idea is to switch Godwoken native token from pCKB to iCKB, this protocol new native token, so that every Godwoken user is now protected from CKB issuance.
+Lookig far away, this protocol could also enable Godwoken switch from pCKB to a new native token that protects every Godwoken user from CKB issuance.
 
 ### dCKB (Unmaintained)
 
@@ -60,13 +60,13 @@ I'm the the ideas baker and solidity developer behind Opthy, 3° among peers at 
 
 ### Discovering iCKB
 
-During February 2022, while [testing the ground for a NervosDAO based ISPO](https://discord.com/channels/657799690070523914/657799690552606745/943306112889933864), I discovered the untapped need for a token that liquefies and bridges interests from L1 to L2 and so I started researching its feasibility.
+During February 2022, while [testing the ground for a NervosDAO based ISPO](https://discord.com/channels/657799690070523914/657799690552606745/943306112889933864), I discovered the untapped need for a token that liquefies and bridges interests from L1 to L2 and so with Jordan Macks's help I started researching its feasibility.
 
-## Core Layer
+## Diving Into The Protocol
 
-### Core Layer is On-Chain, Trust-Less & Decentralized
+### On-Chain, Trust-Less & Decentralized
 
-Core Layer defines a solid way to exchange between CKB and iCKB in fixed blocks. The design aim is to make iCKB as simple, robust and neutral as possible.
+This protocol defines a solid way to exchange between CKB and iCKB in fixed blocks. The design aim is to make iCKB as simple, robust and neutral as possible.
 
 This part of the protocol lives completely on Nervos Layer 1. Once deployed it is independent and not upgradable. It wraps NervosDAO transactions by transforming them into iCKB and it does not require a receipt. It tracks all deposits by a fixed amount of iCKB, so CKB capacity for any deposit is determined by the current exchange rate of CKB for iCKB.
 
@@ -133,7 +133,7 @@ So at block `n`:
 
 This shows that the iCKB / CKB exchange rate only depends on a few constants and `AR_n`, the block `n` accumulated rate.
 
-### Deposits from Core Layer Perspective
+### Deposits
 
 In NervosDAO a CKB holder can lock his CKB in exchange for a receipt of that specific deposit, while in our case the protocol proceed by wrapping NervosDAO deposit transaction into iCKB. The protocol in one transaction:
 
@@ -145,7 +145,7 @@ In NervosDAO a CKB holder can lock his CKB in exchange for a receipt of that spe
 
 Naturally the user can choose to deposit an integer multiple of the standard deposit, the protocol takes care of splitting it in many fixed NervosDAO deposits and mints the correct iCKB amount.
 
-### Withdrawals from Core Layer Perspective
+### Withdrawals
 
 Withdrawals are a bit more complicated in NervosDAO, time is slotted in batches of 180 epochs depending on the initial deposit timing, so a withdrawal goes like this:
 
@@ -160,18 +160,11 @@ While in our case the protocol proceed by un-wrapping iCKB transactions into bas
 - With the first transaction the user sends to the protocol the equivalent amount of iCKB and chooses the specific deposits to withdraw from, while the protocol in turn requests to NervosDAO the withdrawal of these specific deposits, assigns them to the user and burns the received iCKB.
 - With the second transaction the user withdraws the equivalent CKB amount. Same constraints as with the second NervosDAO transaction.
 
-## Future Plans
-
-Currently the protocol logic lives completely on Layer 1 and it is comprised of only of the Core Layer. As iCKB research progresses, iCKB will naturally expand to Layer 2:
-
-- **Periphery Layer**: it makes exchanging between CKB and iCKB handy even for Layer 2 users.
-- **iCKB based ISPO**: a launchpad platform for staking iCKB to fund projects and charities.
-
 ## Status
 
 While iCKB is stable, it is still an on-going research project:
 
-- There exists an always up to date [reference proposal](https://github.com/ickb/proposal).
+- There exists a [reference proposal](https://github.com/ickb/proposal).
 - There exists a [public discord thread](https://discord.com/channels/657799690070523914/980237827122032730) for the discussion of iCKB development.
 
 ## License
