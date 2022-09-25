@@ -8,7 +8,7 @@ If you would like to listen to an introduction of the project before diving in, 
 
 ### NervosDAO Illiquidity
 
-The NervosDAO is possibly the most important smart-contract of Nervos Layer 1 (L1). A CKB holder can lock his CKB in the NervosDAO in exchange for a receipt of that specific deposit. Every 180 epochs (~30 days) the holder has the option of exchanging his receipt to unlock his initial deposit plus accrued interest. This creates an illiquidity for depositor while the CKB is locked.
+The NervosDAO is possibly the most important smart-contract of Nervos Layer 1 (L1). A CKB holder can lock his CKB in the NervosDAO in exchange for a receipt of that specific deposit. Every 180 epochs (~30 days) the depositor has the option of exchanging his receipt to unlock his initial deposit plus accrued interest. This creates an illiquidity for the depositor while the CKB is locked.
 
 ### Untapped Potential
 
@@ -20,17 +20,17 @@ Lookig far away, this protocol could also enable Godwoken switch from pCKB to a 
 
 ### dCKB (Unmaintained)
 
-In the past there has been an effort to tackle this challenge by [NexisDAO with dCKB](https://docs.nexisdao.com/nexisdao/mint-dckb). Their approach is to tokenize the holder receipt, which in turn becomes tradeable and so the holder keeps being liquid. The issue with their approach is that only the original owner can unlock the deposit. Currently dCKB does not appear to be actively maintained.
+In the past there has been an effort to tackle this challenge by [NexisDAO with dCKB](https://docs.nexisdao.com/nexisdao/mint-dckb). Their approach is to tokenize the holder receipt, which in turn becomes tradeable and so the holder keeps being liquid. The issue with their approach is that only the original owner can unlock the deposit. Judging from their [GitHub repository's issues](https://github.com/NexisDao/NexisDao-core/issues), dCKB does not appear to be actively maintained.
 
 ## Solution
 
 ### Enter iCKB
 
-iCKB is the name for a [sUDT token](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0025-simple-udt/0025-simple-udt.md) that represents deposits in the protocol. As with dCKB, iCKB's approach is to tokenize NervosDAO receipts, but with a twist: the protocol owns all the CKB deposits and maintains a pool of them. This means that all the deposits and withdrawals are shared, so anyone can use anyone else's deposit to exit once it's mature.
+iCKB is the name for a [SUDT token](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0025-simple-udt/0025-simple-udt.md) that represents deposits in the protocol. As with dCKB, iCKB's approach is to tokenize NervosDAO receipts, but with a twist: the protocol owns all the CKB deposits and maintains a pool of them. This means that all the deposits and withdrawals are shared, so anyone can use anyone else's deposit to exit once it's mature.
 
 This protocol aims to solve two problems with NervosDAO:
 
-- CKB locked in the NervosDAO remains liquid and it can truly be used as a normal currency.
+- CKB locked in the NervosDAO remains liquid as iCKB can truly be used as a normal currency.
 - iCKB can be converted back to CKB quickly at any time without having to wait for maturity.
 
 ### Water Mill Analogy
@@ -41,11 +41,11 @@ As a [water mill](https://tenor.com/view/water-wheel-mill-gif-19806697) has many
 - Maintained
 - Released
 
-In the same way, the protocol can have many distinct standard deposits, each of them constantly moving at different stages of maturity:
+In the same way, the protocol can have many distinct deposits, each of them constantly moving at different stages of maturity:
 
-- **Collected**: Users deposit CKB into standard deposits and receive iCKB.
-- **Maintained**: Standard deposits accrue interest in the NervosDAO.
-- **Released**: If a user wants to exchange iCKB for CKB, they can use any standard deposit that is at maturity.
+- **Collected**: Users deposit CKB and receive iCKB.
+- **Maintained**: Deposits accrue interest in the NervosDAO.
+- **Released**: If a user wants to exchange iCKB for CKB, they can use any deposit that is at maturity.
 
 ### Feedback
 
