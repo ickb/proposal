@@ -16,11 +16,11 @@ There exists untapped potential in the Nervos ecosystem for a protocol that can 
 
 The protocol could also be used to enable a community voting mechanism with funds locked in the NervosDAO, as well as a multitude more L1 & L2 applications!
 
-Lookig far away, this protocol could also enable Godwoken switch from pCKB to a new native token that protects every Godwoken user from CKB issuance.
+Looking far away, this protocol could also enable Godwoken switch from pCKB to a new native token that protects every Godwoken user from CKB issuance.
 
 ### dCKB (Unmaintained)
 
-In the past there has been an effort to tackle this challenge by [NexisDAO with dCKB](https://docs.nexisdao.com/nexisdao/mint-dckb). Their approach is to tokenize the holder receipt, which in turn becomes tradeable and so the holder keeps being liquid. The issue with their approach is that only the original owner can unlock the deposit. Judging from their [GitHub repository's issues](https://github.com/NexisDao/NexisDao-core/issues), dCKB does not appear to be actively maintained.
+In the past there has been an effort to tackle this challenge by [NexisDAO with dCKB](https://docs.nexisdao.com/nexisdao/mint-dckb). Their approach is to tokenize the holder receipt, which in turn becomes tradeable and so the holder keeps being liquid. The issue with their approach is that only the original owner can unlock the deposit. Judging by their [GitHub repository's issues](https://github.com/NexisDao/NexisDao-core/issues), dCKB does not appear to be actively maintained.
 
 ## Solution
 
@@ -66,9 +66,9 @@ During February 2022, while [testing the ground for a NervosDAO based ISPO](http
 
 ### On-Chain, Trust-Less & Decentralized
 
-This protocol defines a solid way to exchange between CKB and iCKB in fixed blocks. The design aim is to make iCKB as simple, robust and neutral as possible.
+This protocol defines a solid way to exchange between CKB and iCKB. The design aim is to make iCKB as simple and robust as possible, while keeping it sustainable in the long term.
 
-This protocol lives completely on Nervos Layer 1. Once deployed it is independent and not upgradable. It wraps NervosDAO transactions by transforming them into iCKB and it does not require a receipt. It tracks all deposits by a fixed amount of iCKB, so CKB capacity for any deposit is determined by the current exchange rate of CKB for iCKB.
+This protocol lives completely on Nervos Layer 1. Once deployed no entity have control over it, so it's not upgradable. It works by wrapping NervosDAO transactions: a deposit is first tracked by a receipt and later on it's converted in its equivalent amount of iCKB, which is determined by the exchange rate of CKB for iCKB at the time of the deposit.
 
 ### CKB / iCKB Exchange Rate
 
@@ -87,6 +87,8 @@ The inflation rate of CKB is well defined by the [NervosDAO compensation rate](h
 - [The formula itself](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation)
 
 Therefore, the CKB/iCKB exchange rate will always be precise as determined by the formula and the current block. The only risk to this deterministic peg would be a smart contract exploit to the deposit pool or minting contract. These kinds of attack vectors are greatly mitigated by external audits.
+
+## 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇 WORK IN PROGRESS 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇
 
 ### Fixed iCKB-Equivalent Deposit Size
 
