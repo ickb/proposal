@@ -68,7 +68,7 @@ During February 2022, while [testing the ground for a NervosDAO based ISPO](http
 
 This protocol defines a solid way to exchange between CKB and iCKB. The design aim is to make iCKB as simple and robust as possible, while keeping it sustainable in the long term.
 
-This protocol lives completely on Nervos Layer 1. Once deployed no entity have control over it, so it's not upgradable. It works by wrapping NervosDAO transactions: a deposit is first tracked by a receipt and later on it's converted in its equivalent amount of iCKB, which is determined by the exchange rate of CKB for iCKB at the time of the deposit.
+This protocol lives completely on Nervos Layer 1. Once deployed no entity have control over it, so it's not upgradable. It works by wrapping NervosDAO transactions: a deposit is first tracked by its receipt and later on it's converted in its equivalent amount of iCKB, which is determined by the exchange rate of CKB for iCKB at the time of the deposit.
 
 ### CKB / iCKB Exchange Rate
 
@@ -88,25 +88,24 @@ The inflation rate of CKB is well defined by the [NervosDAO compensation rate](h
 
 Therefore, the CKB/iCKB exchange rate will always be precise as determined by the formula and the current block. The only risk to this deterministic peg would be a smart contract exploit to the deposit pool or minting contract. These kinds of attack vectors are greatly mitigated by external audits.
 
-## 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇 WORK IN PROGRESS 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇
+### iCKB-Equivalent Deposit Size
 
-### Fixed iCKB-Equivalent Deposit Size
+As in real life bricks can be used to build houses of any size, in the same way seems natural to establish a common reasonably small standard deposit size, so that:
 
-As in real life bricks can be used to build houses of any size, in the same way seems natural to fix a reasonably small standard deposit size, so that:
-
-- Deposits too big are split into standard deposits and possibly even spread over longer periods.
-- Deposits too small are better served by secondary markets.
+- Bigger deposits are strongly disincentivized, so they are nudged into being split into multiple standard deposits.
+- Smaller deposits are valid but disincentivized by CKB intrinsic dynamics.
 
 This deposit standard size could be defined in CKB terms or in iCBK terms:
 
-- A fixed CKB means that as deposit are made in time, every deposit would have a different size due to the NervosDAO interests, so it's not working as intended.
-- A fixed iCKB-equivalent deposit size means that at every block all the deposits would have the same size both in CKB and iCKB. Of course as time passes, the deposit size would be fixed iCKB-equivalent terms but gradually increasing in CKB terms.
+- defining it in CKB terms means that as deposits are made in time, every deposit would have a different size due to the NervosDAO interests, so it's not working as intended.
+- defining it in iCKB terms means that at every block the standard deposit would have the same size both in CKB and iCKB. Of course as time passes, the deposit size would be fixed in iCKB-equivalent terms but gradually increasing in CKB terms.
 
 In this way a few goals are achieved:
 
-- Big deposits now increase the overall protocol liquidity.
-- No size mismatch means anybody can use anybody else deposit freely to withdraw.
-- A fixed iCKB-equivalent deposit size simplifies code, so it minimizes the hacks attack surface.
+- Big deposits are incentivized to increase the overall protocol liquidity.
+- Small to no size mismatch means anybody can use anybody else deposit to withdraw.
+
+## 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇 WORK IN PROGRESS 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇
 
 ### Practical Exchange Rate CKB / iCKB Calculation
 
