@@ -70,7 +70,7 @@ This protocol defines a solid way to exchange between CKB and iCKB. The design a
 
 This protocol lives completely on Nervos Layer 1. Once deployed no entity have control over it, so it's not upgradable. It works by wrapping NervosDAO transactions: a deposit is first tracked by its receipt and later on it's converted in its equivalent amount of iCKB, which is determined by the exchange rate of CKB for iCKB at the time of the deposit.
 
-### CKB / iCKB Exchange Rate
+### CKB / iCKB Exchange Rate Idea
 
 The iCKB mechanism for wrapping interest is similar to [Compound's cTokens](https://compound.finance/docs/ctokens). The CKB to iCKB exchange rate is determined by block number. If we could go back in time to block 0, then 1 CKB would be equal to 1 iCKB. As time passes 1 CKB is slowly worth less than 1 iCKB at a rate that matches the issuance from the NervosDAO. This is because iCKB is gaining value. An easier way to understand this is to think of:
 
@@ -88,30 +88,7 @@ The inflation rate of CKB is well defined by the [NervosDAO compensation rate](h
 
 Therefore, the CKB/iCKB exchange rate will always be precise as determined by the formula and the current block. The only risk to this deterministic peg would be a smart contract exploit to the deposit pool or minting contract. These kinds of attack vectors are greatly mitigated by external audits.
 
-### iCKB-Equivalent Deposit Size
-
-As in real life bricks can be used to build houses of any size, in the same way seems natural to establish a common reasonably small standard deposit size, so that:
-
-- Bigger deposits are strongly disincentivized, so they are nudged into being split into multiple standard deposits.
-- Smaller deposits are valid but disincentivized by CKB intrinsic dynamics.
-
-This deposit standard size could be defined in CKB terms or in iCBK terms:
-
-- defining it in CKB terms means that as deposits are made in time, every deposit would have a different size due to the NervosDAO interests, so it's not working as intended.
-- defining it in iCKB terms means that at every block the standard deposit would have the same size both in CKB and iCKB. Of course as time passes, the deposit size would be fixed in iCKB-equivalent terms but gradually increasing in CKB terms.
-
-In this way a few goals are achieved:
-
-- Big deposits are incentivized to increase the overall protocol liquidity.
-- Small to no size mismatch means anybody can use anybody else deposit to withdraw.
-
-## 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇 WORK IN PROGRESS 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇
-
-### Practical Exchange Rate CKB / iCKB Calculation
-
-Let's define 10000 iCKB as the standard deposit size. This is a made up number, but possibly not too far from the real one.
-
-As per definition 10000 iCKB is equal to 10000 CKB staked in NervosDAO at block 0, let's calculate what this means.
+### CKB / iCKB Exchange Rate Calculation
 
 From the last formula from [NervosDAO RFC Calculation section](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation):
 > Nervos DAO compensation can be calculated for any deposited cell. Assuming a Nervos DAO cell is deposited at block `m`, i.e. the `deposit cell` is included at block `m`. One initiates withdrawal and gets phase 1 `withdrawing cell` included at block `n`. The total capacity of the `deposit cell` is `c_t`, the occupied capacity for the `deposit cell` is `c_o`. [...] The maximum withdrawable capacity one can get from this Nervos DAO input cell is:
@@ -124,15 +101,31 @@ From the last formula from [NervosDAO RFC Calculation section](https://github.co
 
 Let's fix a few constants:
 
-- `c_t = 10000 CKB` (deposit cell capacity, the standard deposit size)
-- `c_o = 110 CKB` (occupied deposit cell capacity)
+- `c_t = 10110 CKB` (deposit cell capacity, made up number)
+- `c_o = 110 CKB` (occupied deposit cell capacity, made up number)
 - `m = 0` (deposit block is block 0)
 - `AR_m = AR_0 = 10 ^ 16` (block 0 accumulated rate)
 
 So at block `n`:
-`10000 iCKB  = 9890 CKB * AR_n / 10 ^ 16 + 110 CKB`
+`10000 iCKB  = 10000 CKB * AR_n / 10 ^ 16` (plus `110 CKB` of occupied cell capacity)
 
 This shows that the iCKB / CKB exchange rate only depends on a few constants and `AR_n`, the block `n` accumulated rate.
+
+### iCKB-Equivalent Deposit Size
+
+As in real life bricks can be used to build houses of any size, in the same way seems natural to establish a reasonably small standard deposit size that can be used to construct deposits of any size.
+
+In this way a few goals are achieved:
+
+- Big deposits increase the overall protocol liquidity.
+- No size mismatch means anybody can use anybody else deposit to withdraw.
+
+This deposit standard size could be defined in CKB terms or in iCKB terms:
+
+- Defining it in CKB terms means that as deposits are made in time, every deposit would have a different size due to the NervosDAO interests, so it's not working as intended.
+- Defining it in iCKB terms means that at every block the standard deposit would have the same size both in CKB and iCKB. Of course as time passes, the deposit size would be fixed in iCKB-equivalent terms but gradually increasing in CKB terms.
+
+## 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇 WORK IN PROGRESS 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇
 
 ### Deposits
 
