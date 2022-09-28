@@ -72,7 +72,7 @@ This protocol lives completely on Nervos Layer 1. Once deployed no entity have c
 
 ### CKB / iCKB Exchange Rate Idea
 
-The iCKB mechanism for wrapping interest is similar to [Compound's cTokens](https://compound.finance/docs/ctokens). The CKB to iCKB exchange rate is determined by block number. At block 0 `1 CKB` was equal to `1 iCKB`. As time passes `1 CKB` is slowly worth less than `1 iCKB` at a rate that matches the issuance from the NervosDAO. This is because iCKB is gaining value. An easier way to understand this is to think of:
+The iCKB mechanism for wrapping interest is similar to [Compound's cTokens](https://compound.finance/docs/ctokens). The CKB to iCKB exchange rate is determined by block number. At block 0 `1 CKB` is equal to `1 iCKB`. As time passes `1 CKB` is slowly worth less than `1 iCKB` at a rate that matches the issuance from the NervosDAO. This is because iCKB is gaining value. An easier way to understand this is to think of:
 
 - CKB as inflationary
 - iCKB as non-inflationary
@@ -107,7 +107,7 @@ Let's fix a few constants:
 - `AR_m = AR_0 = 10 ^ 16` (block 0 accumulated rate)
 
 So at block `n`:
-`10000 iCKB  = 10000 CKB * AR_n / 10 ^ 16` (plus `110 CKB` of occupied cell capacity)
+`10000 iCKB  = 10000 CKB * AR_n / 10 ^ 16` (plus `110 CKB` of unaccounted occupied cell capacity)
 
 This shows that the iCKB / CKB exchange rate only depends on a few constants and `AR_n`, the block `n` accumulated rate.
 
@@ -129,9 +129,9 @@ This deposit standard size could be defined in CKB terms or in iCKB terms:
 
 In NervosDAO a CKB holder can lock his CKB in exchange for a NervosDAO receipt of that specific deposit in a single transaction.
 
-In the proposed protocol a user cannot deposit to NervosDAO and mint iCKB in a single transaction due Nervos technical constraints: to mint the iCKB equivalent for a deposit the protocol needs to access the current [`accumulated rate`](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation), which is defined in the block header, but [the current block header cannot be accessed while validating a transaction](https://github.com/nervosnetwork/ckb/blob/f93b498379173353b5804818b33227cc302ffd6a/script/src/syscalls/load_header.rs#L72).
+In the proposed protocol a user cannot deposit to NervosDAO and mint iCKB in a single transaction due to a Nervos L1 technical choice: to mint the iCKB equivalent for a deposit the protocol needs to access the current [`accumulated rate`](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation), which is defined in the block header, but [the current block header cannot be accessed while validating a transaction](https://github.com/nervosnetwork/ckb/blob/f93b498379173353b5804818b33227cc302ffd6a/script/src/syscalls/load_header.rs#L72).
 
-Thus the protocol is forced to divide a deposit into two transactions:
+Thus the protocol is forced to split a deposit in two transactions:
 
 1. In the first transaction one or more CKB cells are transformed into NervosDAO standard deposit cells, locked by a protocol lock script. Each cell is followed by a protocol-defined receipt cell, which just reports the deposit exact unused CKB capacity.
 2. In the second transaction receipts cells are transformed in iCKB. This is now possible because the header of the first transaction is now available.
