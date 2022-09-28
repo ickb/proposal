@@ -64,7 +64,7 @@ During February 2022, while [testing the ground for a NervosDAO based ISPO](http
 
 ## Diving Into The Protocol
 
-### On-Chain, Trust-Less & Decentralized
+### On-Chain, Trust-Less and Robust
 
 This protocol defines a solid way to exchange between CKB and iCKB. The design aim is to make iCKB as simple and robust as possible, while keeping it sustainable in the long term.
 
@@ -72,7 +72,7 @@ This protocol lives completely on Nervos Layer 1. Once deployed no entity have c
 
 ### CKB / iCKB Exchange Rate Idea
 
-The iCKB mechanism for wrapping interest is similar to [Compound's cTokens](https://compound.finance/docs/ctokens). The CKB to iCKB exchange rate is determined by block number. If we could go back in time to block 0, then 1 CKB would be equal to 1 iCKB. As time passes 1 CKB is slowly worth less than 1 iCKB at a rate that matches the issuance from the NervosDAO. This is because iCKB is gaining value. An easier way to understand this is to think of:
+The iCKB mechanism for wrapping interest is similar to [Compound's cTokens](https://compound.finance/docs/ctokens). The CKB to iCKB exchange rate is determined by block number. At block 0 `1 CKB` was equal to `1 iCKB`. As time passes `1 CKB` is slowly worth less than `1 iCKB` at a rate that matches the issuance from the NervosDAO. This is because iCKB is gaining value. An easier way to understand this is to think of:
 
 - CKB as inflationary
 - iCKB as non-inflationary
@@ -125,34 +125,41 @@ This deposit standard size could be defined in CKB terms or in iCKB terms:
 - Defining it in CKB terms means that as deposits are made in time, every deposit would have a different size due to the NervosDAO interests, so it's not working as intended.
 - Defining it in iCKB terms means that at every block the standard deposit would have the same size both in CKB and iCKB. Of course as time passes, the deposit size would be fixed in iCKB-equivalent terms but gradually increasing in CKB terms.
 
-## 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇 WORK IN PROGRESS 👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇⚠️👇
-
 ### Deposits
 
-In NervosDAO a CKB holder can lock his CKB in exchange for a receipt of that specific deposit, while in our case the protocol proceed by wrapping NervosDAO deposit transaction into iCKB. The protocol in one transaction:
+In NervosDAO a CKB holder can lock his CKB in exchange for a NervosDAO receipt of that specific deposit in a single transaction.
 
-- Requires a fixed iCKB-equivalent size deposit.
-- Takes control of the deposit.
-- Stakes it in NervosDAO.
-- Adds the receipt to its pool of receipts.
-- Mints to the depositor a fixed amount of iCKB.
+In the proposed protocol a user cannot deposit to NervosDAO and mint iCKB in a single transaction due Nervos technical constraints: to mint the iCKB equivalent for a deposit the protocol needs to access the current [`accumulated rate`](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation), which is defined in the block header, but [the current block header cannot be accessed while validating a transaction](https://github.com/nervosnetwork/ckb/blob/f93b498379173353b5804818b33227cc302ffd6a/script/src/syscalls/load_header.rs#L72).
 
-Naturally the user can choose to deposit an integer multiple of the standard deposit, the protocol takes care of splitting it in many fixed NervosDAO deposits and mints the correct iCKB amount.
+Thus the protocol is forced to divide a deposit into two transactions:
+
+1. In the first transaction one or more CKB cells are transformed into NervosDAO standard deposit cells, locked by a protocol lock script. Each cell is followed by a protocol-defined receipt cell, which just reports the deposit exact unused CKB capacity.
+2. In the second transaction receipts cells are transformed in iCKB. This is now possible because the header of the first transaction is now available.
+
+This two step approach works around the header technical hurdle, but opens a Pandora Box: in the first transaction the protocol can't invalidate non-standard deposits because it has no way to calculate their iCKB equivalent size.
+
+On one side, even in an ideal world the original definition had a subtle flaw: the amount of CKB withdrawable from two standard deposit cells made at different blocks would likely never be the same down to the last bit, as the user making a deposit cannot forecast the actual inclusion block of the deposit transaction.
+
+On the other, defining a standard deposit improves protocol liquidity and prevents a certain type of DoS.
+
+The solution is to add an incentivization structure:
+
+- Smaller deposits are disincentivized by CKB intrinsic dynamics: as the occupied cell capacity per deposit is unaccounted in the iCKB conversion, smaller deposits incur in bigger relative CKB expenses for cell creation.
+- Bigger deposits on the other side must be actively disincentivized by the protocol proportionally to the amount of iCKB per receipt exceeding a standard deposit.
 
 ### Withdrawals
 
 Withdrawals are a bit more complicated in NervosDAO, time is slotted in batches of 180 epochs depending on the initial deposit timing, so a withdrawal goes like this:
 
-- With the first transaction the user requests the withdrawal.
-- With the second transaction the user withdraws the deposit plus interests. Must be after the end of the 180 epoch batch in which the first transaction happened.
+1. With the first transaction the user requests the withdrawal.
+2. With the second transaction the user withdraws the deposit plus interests. Must be after the end of the 180 epoch batch in which the first transaction happened.
 
-As seen in [NervosDAO RFC Calculation section](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation) the actual withdrawn CKB amount depends on the timing of the request of withdrawal transaction in respect to the epoch batch.
+As seen in [NervosDAO RFC Calculation section](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation) the actual withdrawn CKB amount depends on the deposit block and on the withdrawal request block.
 
-While in our case the protocol proceed by un-wrapping iCKB transactions into base NervosDAO transactions:
+While the proposed protocol proceed by un-wrapping iCKB transactions into base NervosDAO transactions:
 
-- The iCKB holder **freely** chooses from the pool one or more deposits to withdraw from. All deposits are of a fixed iCKB-equivalent size, the only differentiating factor between them is the recurring maturity date.
-- With the first transaction the user sends to the protocol the equivalent amount of iCKB and chooses the specific deposits to withdraw from, while the protocol in turn requests to NervosDAO the withdrawal of these specific deposits, assigns them to the user and burns the received iCKB.
-- With the second transaction the user withdraws the equivalent CKB amount. Same constraints as with the second NervosDAO transaction.
+1. With the first transaction the user sends to the protocol the equivalent amount of iCKB and chooses the specific deposits to withdraw from, while the protocol in turn requests to NervosDAO the withdrawal of these specific deposits, assigns them to the user and burns the received iCKB.
+2. With the second transaction the user withdraws the equivalent CKB amount. Same constraints as with the second NervosDAO transaction.
 
 ## Status
 
