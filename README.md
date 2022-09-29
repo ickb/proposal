@@ -147,6 +147,10 @@ The solution is to add an incentivization structure:
 - Smaller deposits are disincentivized by CKB intrinsic dynamics: as the occupied cell capacity per deposit is unaccounted in the iCKB conversion, smaller deposits incur in bigger relative CKB expenses for cell creation.
 - Bigger deposits on the other side must be actively disincentivized by the protocol proportionally to the amount of iCKB per receipt exceeding a standard deposit.
 
+A good way to disincentivize deposits bigger than the standard deposit size is to apply a fee: the user receives only 90% of the iCKB amount exceeding a standard deposit. The remaining 10% is offered as a discount to whoever is willing to withdraw from the oversized deposit.
+
+Using this incentivization, only close approximations of Standard Deposits ultimately remain in the protocol deposit pool.
+
 ### Withdrawals
 
 Withdrawals are a bit more complicated in NervosDAO, time is slotted in batches of 180 epochs depending on the initial deposit timing, so a withdrawal goes like this:
