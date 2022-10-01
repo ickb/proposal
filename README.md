@@ -133,7 +133,9 @@ In the proposed protocol a user cannot deposit to NervosDAO and mint iCKB in a s
 
 Thus the protocol is forced to split a deposit in two transactions:
 
-1. In the first transaction one or more CKB cells are transformed into NervosDAO standard deposit cells, locked by a protocol lock script. Each cell is followed by a protocol-defined receipt cell, which just reports the deposit exact unused CKB capacity.
+1. In the first transaction one or more CKB cells are transformed into NervosDAO standard deposit cells, locked by a protocol lock script. Each deposit cell is followed by either:
+    - Another deposit cell with its exact same unoccupied CKB capacity.
+    - A protocol receipt, which respectfully to the preceding contiguous deposits, just contains their count and single deposit unoccupied CKB capacity.
 2. In the second transaction receipts cells are transformed in iCKB. This is now possible because the header of the first transaction is now available.
 
 This two step approach works around the header technical hurdle, but opens a Pandora Box: in the first transaction the protocol can't invalidate non-standard deposits because it has no way to calculate their iCKB equivalent size.
