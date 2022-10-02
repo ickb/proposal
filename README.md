@@ -74,7 +74,7 @@ It works by wrapping NervosDAO transactions: a deposit is first tracked by its p
 
 ### iCKB/CKB Exchange Rate Idea
 
-The iCKB mechanism for wrapping interest is similar to [Compound's cTokens](https://compound.finance/docs/ctokens). The CKB to iCKB exchange rate is determined by block number. At block 0 `1 CKB` is equal to `1 iCKB`. As time passes `1 CKB` is slowly worth less than `1 iCKB` at a rate that matches the issuance from the NervosDAO. This is because iCKB is gaining value. An easier way to understand this is to think of:
+The iCKB mechanism for wrapping interest is similar to [Compound's cTokens](https://compound.finance/docs/ctokens). The CKB to iCKB exchange rate is determined by block number. At the genesis block `1 CKB` is equal to `1 iCKB`. As time passes `1 CKB` is slowly worth less than `1 iCKB` at a rate that matches the issuance from the NervosDAO. This is because iCKB is gaining value. An easier way to understand this is to think of:
 
 - CKB as inflationary
 - iCKB as non-inflationary
@@ -90,29 +90,6 @@ The inflation rate of CKB is well defined by the [NervosDAO compensation rate](h
 
 Therefore, the iCKB/CKB exchange rate will always be precise as determined by the formula and the current block. The only risk to this deterministic peg would be a smart contract exploit to the deposit pool or minting contract. These kinds of attack vectors are greatly mitigated by external audits.
 
-### iCKB/CKB Exchange Rate Calculation
-
-From the last formula from [NervosDAO RFC Calculation section](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation):
-> Nervos DAO compensation can be calculated for any deposited cell. Assuming a Nervos DAO cell is deposited at block `m`, i.e. the `deposit cell` is included at block `m`. One initiates withdrawal and gets phase 1 `withdrawing cell` included at block `n`. The total capacity of the `deposit cell` is `c_t`, the occupied capacity for the `deposit cell` is `c_o`. [...] The maximum withdrawable capacity one can get from this Nervos DAO input cell is:
->
-> `( c_t - c_o ) * AR_n / AR_m + c_o`
-
-`AR_n` is defined in the [NervosDAO RFC Calculation section](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation):
-
-> CKB's block header has a particular field named `dao` containing auxiliary information for Nervos DAO's use. Specifically [...] `AR_i`: the current `accumulated rate` at block `i`. `AR_j / AR_i` reflects the CKByte amount if one deposit 1 CKB to Nervos DAO at block `i`, and withdraw at block `j`.
-
-Let's fix a few constants:
-
-- `c_t = 10110 CKB` (deposit cell capacity, made up number)
-- `c_o = 110 CKB` (occupied deposit cell capacity, made up number)
-- `m = 0` (deposit block is block 0)
-- `AR_m = AR_0 = 10 ^ 16` (block 0 accumulated rate)
-
-So at block `n`:
-`10000 iCKB  = 10000 CKB * AR_n / 10 ^ 16` (plus `110 CKB` of unaccounted occupied cell capacity)
-
-This shows that the iCKB/CKB exchange rate only depends on a few constants and `AR_n`, the block `n` accumulated rate.
-
 ### iCKB-Equivalent Deposit Size
 
 As in real life bricks can be used to build houses of any size, in the same way seems natural to establish a reasonably small standard deposit size that can be used to construct deposits of any size.
@@ -126,6 +103,33 @@ This deposit standard size could be defined in CKB terms or in iCKB terms:
 
 - Defining it in CKB terms means that as deposits are made in time, every deposit would have a different size due to the NervosDAO interests, so it's not working as intended.
 - Defining it in iCKB terms means that at every block the standard deposit would have the same size both in CKB and iCKB. Of course as time passes, the deposit size would be fixed in iCKB-equivalent terms but gradually increasing in CKB terms.
+
+Let's define `10000 iCKB` as the standard deposit size.
+
+### iCKB/CKB Exchange Rate Calculation
+
+Excluding deposit cell occupied capacity, per definition `10000 iCKB` are equal to `10000 CKB` staked in NervosDAO at the genesis block, let's calculate what this means.
+
+From the last formula from [NervosDAO RFC Calculation section](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation):
+> Nervos DAO compensation can be calculated for any deposited cell. Assuming a Nervos DAO cell is deposited at block `m`, i.e. the `deposit cell` is included at block `m`. One initiates withdrawal and gets phase 1 `withdrawing cell` included at block `n`. The total capacity of the `deposit cell` is `c_t`, the occupied capacity for the `deposit cell` is `c_o`. [...] The maximum withdrawable capacity one can get from this Nervos DAO input cell is:
+>
+> `( c_t - c_o ) * AR_n / AR_m + c_o`
+
+`AR_n` is defined in the [NervosDAO RFC Calculation section](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation):
+
+> CKB's block header has a particular field named `dao` containing auxiliary information for Nervos DAO's use. Specifically [...] `AR_i`: the current `accumulated rate` at block `i`. `AR_j / AR_i` reflects the CKByte amount if one deposit 1 CKB to Nervos DAO at block `i`, and withdraw at block `j`.
+
+Let's fix a few constants:
+
+- `c_o = 82 CKB` (occupied cell capacity of a standard deposit cell)
+- `c_t = 10082 CKB` (total cell capacity equals the iCKB-equivalent deposit size plus its occupied capacity)
+- `m = 0` (deposit block is the genesis block)
+- `AR_m = AR_0 = 10 ^ 16` (genesis accumulated rate)
+
+So at block `n`:
+`10000 iCKB  = 10000 CKB * AR_n / 10 ^ 16 + 82 CKB`
+
+This shows that the iCKB/CKB exchange rate only depends on a few constants and `AR_n`, the block `n` accumulated rate.
 
 ### Deposits
 
@@ -148,7 +152,7 @@ On the other, defining a standard deposit improves protocol liquidity and preven
 
 The solution is to add an incentivization structure:
 
-- Smaller deposits are disincentivized by CKB intrinsic dynamics: as the occupied cell capacity per deposit is unaccounted in the iCKB conversion, smaller deposits incur in bigger relative CKB expenses for cell creation.
+- Smaller deposits are disincentivized by CKB intrinsic dynamics: smaller deposits incur in bigger relative CKB expenses for cell creation.
 - Bigger deposits on the other side must be actively disincentivized by the protocol proportionally to the amount of iCKB per receipt exceeding a standard deposit.
 
 A good way to disincentivize deposits bigger than the standard deposit size is to apply a fee: the user receives only 90% of the iCKB amount exceeding a standard deposit. The remaining 10% is offered as a discount to whoever is willing to withdraw from the oversized deposit.
@@ -164,7 +168,7 @@ Withdrawals are a bit more complicated in NervosDAO, time is slotted in batches 
 
 As seen in [NervosDAO RFC Calculation section](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation) the actual withdrawn CKB amount depends on the deposit block and on the withdrawal request block.
 
-While the proposed protocol proceed by un-wrapping iCKB transactions into base NervosDAO transactions:
+The proposed protocol instead proceed by un-wrapping iCKB transactions into base NervosDAO transactions:
 
 1. With the first transaction the user sends to the protocol the equivalent amount of iCKB and chooses the specific deposits to withdraw from, while the protocol in turn requests to NervosDAO the withdrawal of these specific deposits, assigns them to the user and burns the received iCKB.
 2. With the second transaction the user withdraws the equivalent CKB amount. Same constraints as with the second NervosDAO transaction.
