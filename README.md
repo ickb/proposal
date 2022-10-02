@@ -167,12 +167,12 @@ While the proposed protocol proceed by un-wrapping iCKB transactions into base N
 1. With the first transaction the user sends to the protocol the equivalent amount of iCKB and chooses the specific deposits to withdraw from, while the protocol in turn requests to NervosDAO the withdrawal of these specific deposits, assigns them to the user and burns the received iCKB.
 2. With the second transaction the user withdraws the equivalent CKB amount. Same constraints as with the second NervosDAO transaction.
 
-## Status
+## Useful Resources
 
-While iCKB is stable, it is still an on-going research project:
-
-- There exists a [reference proposal](https://github.com/ickb/proposal).
-- There exists a [public discord thread](https://discord.com/channels/657799690070523914/980237827122032730) for the discussion of iCKB development.
+- [Hashing it Out introduction to iCKB](https://www.youtube.com/watch?v=CcFFuenup38&t=781s).
+- [Thread for iCKB development](https://discord.com/channels/657799690070523914/980237827122032730).
+- [Reference implementation](https://github.com/ickb/v1-core).
+- [Reference proposal](https://github.com/ickb/proposal).
 
 ## License
 
