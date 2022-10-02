@@ -66,11 +66,13 @@ During February 2022, while [testing the ground for a NervosDAO based ISPO](http
 
 ### On-Chain, Trust-Less and Robust
 
-This protocol defines a solid way to exchange between CKB and iCKB. The design aim is to make iCKB as simple and robust as possible, while keeping it sustainable in the long term.
+This protocol defines a solid way to exchange between CKB and iCKB. The design aim is to make iCKB as simple and robust as possible, making it capable of meeting the needs of users for the foreseeable future.
 
-This protocol lives completely on Nervos Layer 1. Once deployed no entity have control over it, so it's not upgradable. It works by wrapping NervosDAO transactions: a deposit is first tracked by its receipt and later on it's converted in its equivalent amount of iCKB, which is determined by the exchange rate of CKB for iCKB at the time of the deposit.
+This protocol lives completely on Nervos Layer 1. Once deployed no entity have control over it, so it's not upgradable.
 
-### CKB / iCKB Exchange Rate Idea
+It works by wrapping NervosDAO transactions: a deposit is first tracked by its protocol receipt and later on it's converted in its equivalent amount of iCKB.
+
+### iCKB/CKB Exchange Rate Idea
 
 The iCKB mechanism for wrapping interest is similar to [Compound's cTokens](https://compound.finance/docs/ctokens). The CKB to iCKB exchange rate is determined by block number. At block 0 `1 CKB` is equal to `1 iCKB`. As time passes `1 CKB` is slowly worth less than `1 iCKB` at a rate that matches the issuance from the NervosDAO. This is because iCKB is gaining value. An easier way to understand this is to think of:
 
@@ -86,9 +88,9 @@ The inflation rate of CKB is well defined by the [NervosDAO compensation rate](h
 - [The epoch concept in L1](https://docs.nervos.org/docs/basics/glossary/#epoch)
 - [The formula itself](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation)
 
-Therefore, the CKB/iCKB exchange rate will always be precise as determined by the formula and the current block. The only risk to this deterministic peg would be a smart contract exploit to the deposit pool or minting contract. These kinds of attack vectors are greatly mitigated by external audits.
+Therefore, the iCKB/CKB exchange rate will always be precise as determined by the formula and the current block. The only risk to this deterministic peg would be a smart contract exploit to the deposit pool or minting contract. These kinds of attack vectors are greatly mitigated by external audits.
 
-### CKB / iCKB Exchange Rate Calculation
+### iCKB/CKB Exchange Rate Calculation
 
 From the last formula from [NervosDAO RFC Calculation section](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation):
 > Nervos DAO compensation can be calculated for any deposited cell. Assuming a Nervos DAO cell is deposited at block `m`, i.e. the `deposit cell` is included at block `m`. One initiates withdrawal and gets phase 1 `withdrawing cell` included at block `n`. The total capacity of the `deposit cell` is `c_t`, the occupied capacity for the `deposit cell` is `c_o`. [...] The maximum withdrawable capacity one can get from this Nervos DAO input cell is:
@@ -109,7 +111,7 @@ Let's fix a few constants:
 So at block `n`:
 `10000 iCKB  = 10000 CKB * AR_n / 10 ^ 16` (plus `110 CKB` of unaccounted occupied cell capacity)
 
-This shows that the iCKB / CKB exchange rate only depends on a few constants and `AR_n`, the block `n` accumulated rate.
+This shows that the iCKB/CKB exchange rate only depends on a few constants and `AR_n`, the block `n` accumulated rate.
 
 ### iCKB-Equivalent Deposit Size
 
@@ -142,7 +144,7 @@ This two step approach works around the header technical hurdle, but opens a Pan
 
 On one side, even in an ideal world the original definition had a subtle flaw: the amount of CKB withdrawable from two standard deposit cells made at different blocks would likely never be the same down to the last bit, as the user making a deposit cannot forecast the actual inclusion block of the deposit transaction.
 
-On the other, defining a standard deposit improves protocol liquidity and prevents a certain type of DoS.
+On the other, defining a standard deposit improves protocol liquidity and prevents a certain type of DoS, so this concept cannot be eliminated.
 
 The solution is to add an incentivization structure:
 
@@ -169,10 +171,10 @@ While the proposed protocol proceed by un-wrapping iCKB transactions into base N
 
 ## Useful Resources
 
-- [Hashing it Out introduction to iCKB](https://www.youtube.com/watch?v=CcFFuenup38&t=781s).
-- [Thread for iCKB development](https://discord.com/channels/657799690070523914/980237827122032730).
-- [Reference implementation](https://github.com/ickb/v1-core).
-- [Reference proposal](https://github.com/ickb/proposal).
+- [Hashing it Out introduction to iCKB](https://www.youtube.com/watch?v=CcFFuenup38&t=781s)
+- [Thread for iCKB development](https://discord.com/channels/657799690070523914/980237827122032730)
+- [Reference implementation](https://github.com/ickb/v1-core)
+- [Reference proposal](https://github.com/ickb/proposal)
 
 ## License
 
