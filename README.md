@@ -173,6 +173,15 @@ The proposed protocol instead proceed by un-wrapping iCKB transactions into base
 1. With the first transaction the user sends to the protocol the equivalent amount of iCKB and chooses the specific deposits to withdraw from, while the protocol in turn requests to NervosDAO the withdrawal of these specific deposits, assigns them to the user and burns the received iCKB.
 2. With the second transaction the user withdraws the equivalent CKB amount. Same constraints as with the second NervosDAO transaction.
 
+## Future
+
+Once iCKB is realized, it will enable:
+
+- CKB-based Initial Stake Pool Offerings.
+- The official Nervos DAO community voting mechanism.
+- Godwoken switch from pCKB to iCKB.
+- A multitude more L1 & L2 applications!
+
 ## Useful Resources
 
 - [Hashing it Out introduction to iCKB](https://www.youtube.com/watch?v=CcFFuenup38&t=781s)
