@@ -175,11 +175,11 @@ The proposed protocol instead proceed by un-wrapping iCKB transactions into base
 
 ## Future
 
-Once iCKB is realized, it will enable:
+Once iCKB is deployed, it will enable:
 
 - CKB-based Initial Stake Pool Offerings.
 - The official Nervos DAO community voting mechanism.
-- Godwoken switch from pCKB to iCKB.
+- Godwoken switch from pCKB to iCKB, protecting users from CKB issuance.
 - A multitude more L1 & L2 applications!
 
 ## Useful Resources
