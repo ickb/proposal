@@ -64,9 +64,9 @@ During February 2022, while [testing the ground for a NervosDAO based ISPO](http
 
 ## Diving Into The Protocol
 
-### On-Chain, Trust-Less and Robust
+### On-Chain, Trust-Less and Decentralized
 
-This protocol defines a solid way to exchange between CKB and iCKB. The design aim is to make iCKB as simple and robust as possible, making it capable of meeting the needs of users for the foreseeable future.
+This protocol defines a solid way to exchange between CKB and iCKB. The design aim is to make iCKB as simple, robust and neutral as possible, making it capable of meeting the current and future needs of Nervos users.
 
 This protocol lives completely on Nervos Layer 1. Once deployed no entity have control over it, so it's not upgradable.
 
