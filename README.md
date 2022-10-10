@@ -135,7 +135,7 @@ This shows that the iCKB/CKB exchange rate only depends on a few constants and `
 
 In NervosDAO a CKB holder can lock his CKB in exchange for a NervosDAO receipt of that specific deposit in a single transaction.
 
-In the proposed protocol a user cannot deposit to NervosDAO and mint iCKB in a single transaction due to a Nervos L1 technical choice: to mint the iCKB equivalent for a deposit the protocol needs to access the current [`accumulated rate`](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation), which is defined in the block header, but [the current block header cannot be accessed while validating a transaction](https://github.com/nervosnetwork/ckb/blob/f93b498379173353b5804818b33227cc302ffd6a/script/src/syscalls/load_header.rs#L72).
+In the proposed protocol a user cannot deposit to NervosDAO and mint iCKB in a single transaction due to a Nervos L1 technical choice: to mint the iCKB equivalent for a deposit the protocol needs to access the current [`accumulated rate`](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation), which is defined in the block header, then again Nervos L1 is [off-chain deterministic](https://justjjy.com/Offchain-determinism), so [the current block header cannot be accessed while validating a transaction](https://github.com/nervosnetwork/ckb/blob/f93b498379173353b5804818b33227cc302ffd6a/script/src/syscalls/load_header.rs#L72).
 
 Thus the protocol is forced to split a deposit in two transactions:
 
