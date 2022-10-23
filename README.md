@@ -131,47 +131,138 @@ So at block `n`:
 
 This shows that the iCKB/CKB exchange rate only depends on a few constants and `AR_n`, the block `n` accumulated rate.
 
-### Deposits
+### Deposit
 
 In NervosDAO a CKB holder can lock his CKB in exchange for a NervosDAO receipt of that specific deposit in a single transaction.
 
-In the proposed protocol a user cannot deposit to NervosDAO and mint iCKB in a single transaction due to a Nervos L1 technical choice: to mint the iCKB equivalent for a deposit the protocol needs to access the current [`accumulated rate`](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation), which is defined in the block header, then again Nervos L1 is [off-chain deterministic](https://justjjy.com/Offchain-determinism), so [the current block header cannot be accessed while validating a transaction](https://github.com/nervosnetwork/ckb/blob/f93b498379173353b5804818b33227cc302ffd6a/script/src/syscalls/load_header.rs#L72).
+In the proposed protocol, as in NervosDAO, deposits can be of any size, but deposits bigger than the standard deposit size are actively disincentivized: the user will receive only 90% of the iCKB amount exceeding a standard deposit. The remaining 10% is offered as a discount to whoever is willing to withdraw from the oversized deposits.
 
-Thus the protocol is forced to split a deposit in two transactions:
-
-1. In the first transaction one or more CKB cells are transformed into NervosDAO standard deposit cells, locked by a protocol lock script. Each deposit cell is followed by either:
+The optimal strategy for a CKB holder is to split his CKB into NervosDAO standard deposit cells. Each deposit cell is then locked by the protocol lock script and it is followed by either:
     - Another deposit cell with its exact same unoccupied CKB capacity.
-    - A protocol receipt, which respectfully to the preceding contiguous deposits, just contains their count and single deposit unoccupied CKB capacity.
-2. In the second transaction receipts cells are transformed in iCKB. This is now possible because the header of the first transaction is now available.
+    - A protocol receipt, which respectfully to the immediately preceding deposit cells, just contains their count and single deposit unoccupied CKB capacity.
 
-This two step approach works around the header technical hurdle, but opens a Pandora Box: in the first transaction the protocol can't invalidate non-standard deposits because it has no way to calculate their iCKB equivalent size.
+```yaml
+CellDeps:
+    - iCKB script cell
+    - Nervos DAO script cell
+    - ...
+Inputs:
+    - ...
+Outputs:
+    - Nervos DAO deposit cell with iCKB protocol lock:
+        Data: 8 bytes filled with zeros
+        Type: Nervos DAO
+        Lock:
+            CodeHash: iCKB script
+            HashType: Data1
+            Args: Empty
+    - ... # From none to 254 exact clones of the preceding Deposit cell
+    - Token and Receipt:
+        Data:
+            token_amount: 0 (8 bytes)
+            receipt_amount: Single deposit unoccupied capacity (7 bytes)
+            receipt_count: Quantity of immediately preceding deposits (1 byte)
+        Type:
+            CodeHash: iCKB script
+            HashType: Data1
+            Args: Empty
+        Lock: ...
+```
 
-On one side, even in an ideal world the original definition had a subtle flaw: the amount of CKB withdrawable from two standard deposit cells made at different blocks would likely never be the same down to the last bit, as the user making a deposit cannot forecast the actual inclusion block of the deposit transaction.
+### Transfer
 
-On the other, defining a standard deposit improves protocol liquidity and prevents a certain type of DoS, so this concept cannot be eliminated.
+While a receipt it's an valid deposit, so it's accruing interests and it can be used to withdraw, it's not transferrable as it is.
 
-The solution is to add an incentivization structure:
+A receipt must be converted in its equivalent iCKB token amount in order to transfer it. This conversion is now possible because the header of the receipt block is available.
 
-- Smaller deposits are disincentivized by CKB intrinsic dynamics: smaller deposits incur in bigger relative CKB expenses for cell creation.
-- Bigger deposits on the other side must be actively disincentivized by the protocol proportionally to the amount of iCKB per receipt exceeding a standard deposit.
+As seen in [iCKB/CKB Exchange Rate Calculation](#ickbckb-exchange-rate-calculation) for each receipt the equivalent amount of iCKB is well defined. The only difference being the incentivization: oversized receipts are subject to a 10% fee on the amount exceeding a standard deposit.
 
-A good way to disincentivize deposits bigger than the standard deposit size is to apply a fee: the user receives only 90% of the iCKB amount exceeding a standard deposit. The remaining 10% is offered as a discount to whoever is willing to withdraw from the oversized deposit.
+```yaml
+CellDeps:
+    - iCKB script cell
+    - ...
+HeaderDeps: 
+    - Deposit block
+    - ...
+Inputs:
+    - Token and Receipt:
+        Data: [token_amount, receipt_amount, receipt_count]
+        Type:
+            CodeHash: iCKB script
+            HashType: Data1
+            Args: Empty
+        Lock: ...
+    - ...
+    - Nervos DAO deposit cell with iCKB protocol lock:
+        Data: 8 bytes filled with zeros
+        Type: Nervos DAO
+        Lock:
+            CodeHash: iCKB script
+            HashType: Data1
+            Args: Empty
+    - ...
+Outputs:
+    - Token and Receipt:
+        Data:
+            token_amount: Input token amount + receipts iCKB value
+            receipt_amount: Empty
+            receipt_count: Empty
+        Type:
+            CodeHash: iCKB script
+            HashType: Data1
+            Args: Empty
+        Lock: ...
+```
 
-Using this incentivization, only close approximations of Standard Deposits ultimately remain in the protocol deposit pool.
+### Withdrawal
 
-### Withdrawals
+In NervosDAO time is slotted in batches of 180 epochs depending on the initial deposit timing, a withdrawal is split in two steps:
 
-Withdrawals are a bit more complicated in NervosDAO, time is slotted in batches of 180 epochs depending on the initial deposit timing, so a withdrawal goes like this:
-
-1. With the first transaction the user requests the withdrawal.
-2. With the second transaction the user withdraws the deposit plus interests. Must be after the end of the 180 epoch batch in which the first transaction happened.
+1. In the first transaction the user requests the withdrawal.
+2. In the second transaction the user withdraws the deposit plus interests. Must be after the end of the 180 epoch batch in which the first transaction happened.
 
 As seen in [NervosDAO RFC Calculation section](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#calculation) the actual withdrawn CKB amount depends on the deposit block and on the withdrawal request block.
 
-The proposed protocol instead proceed by un-wrapping iCKB transactions into base NervosDAO transactions:
+The proposed protocol instead proceed by un-wrapping iCKB tokens into regular NervosDAO withdrawal cells:
 
-1. With the first transaction the user sends to the protocol the equivalent amount of iCKB and chooses the specific deposits to withdraw from, while the protocol in turn requests to NervosDAO the withdrawal of these specific deposits, assigns them to the user and burns the received iCKB.
-2. With the second transaction the user withdraws the equivalent CKB amount. Same constraints as with the second NervosDAO transaction.
+1. In the first transaction the user:
+    - Requests the withdrawal from some protocol controlled deposits.
+    - Burns an exactly equivalent total amount of iCKB tokens and receipts.
+2. The second transaction is just a regular Nervos DAO second withdrawal step transaction.
+
+As seen in [iCKB/CKB Exchange Rate Calculation](#ickbckb-exchange-rate-calculation) for each deposit and receipt the equivalent amount of iCKB is well defined. The only difference being the incentivization: requesting the withdrawal from an oversized deposit is incentivized by a 10% discount on the amount exceeding a standard deposit.
+
+```yaml
+CellDeps:
+    - iCKB script cell
+    - Nervos DAO script cell
+    - ...
+HeaderDeps: 
+    - Deposit block
+    - ...
+Inputs:
+    - Nervos DAO deposit cell with iCKB protocol lock:
+        Data: 8 bytes filled with zeros
+        Type: Nervos DAO
+        Lock:
+            CodeHash: iCKB script
+            HashType: Data1
+            Args: Empty
+    - Token and Receipt:
+        Data: [token_amount, receipt_amount, receipt_count]
+        Type:
+            CodeHash: iCKB script
+            HashType: Data1
+            Args: Empty
+        Lock: ...
+    - ...
+Outputs:
+    - Nervos DAO phase 1 withdrawal cell:
+        Data: Deposit cell's including block number
+        Type: Nervos DAO
+        Lock: ...
+    - ...
+```
 
 ## Future
 
