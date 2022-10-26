@@ -123,13 +123,13 @@ Let's fix a few constants:
 
 - `c_o = 82 CKB` (occupied cell capacity of a standard deposit cell)
 - `c_t = 10082 CKB` (total cell capacity equals the iCKB-equivalent deposit size plus its occupied capacity)
-- `m = 0` (deposit block is the genesis block)
-- `AR_m = AR_0 = 10 ^ 16` (genesis accumulated rate)
+- `AR_0 = 10 ^ 16` (genesis accumulated rate)
 
-So at block `n`:
-`10000 iCKB  = 10000 CKB * AR_n / 10 ^ 16 + 82 CKB`
+So by depositing `10082` CKB at block `0`, iCKB/CKB exchange ratio at block `n` is defined as:
+`10000 iCKB  := 10000 CKB * AR_n / 10 ^ 16` (excluding `82 CKB` of occupied cell capacity)
 
-This shows that the iCKB/CKB exchange rate only depends on a few constants and `AR_n`, the block `n` accumulated rate.
+Conversely, deposing `10082` CKB at block `m` its CKB value at block `0`, so its iCKB value, is:
+`10000 CKB * 10 ^ 16 / AR_m` (excluding `82 CKB` of occupied cell capacity)
 
 ### Deposit
 
@@ -140,6 +140,18 @@ In the proposed protocol, as in NervosDAO, deposits can be of any size, but depo
 The optimal strategy for a CKB holder is to split his CKB into NervosDAO standard deposit cells. Each deposit cell is then locked by the protocol lock script and it is followed by either:
     - Another deposit cell with its exact same unoccupied CKB capacity.
     - A protocol receipt, which respectfully to the immediately preceding deposit cells, just contains their count and single deposit unoccupied CKB capacity.
+
+Summing up, when depositing into the protocol, so when creating these new output cells, these rules must be followed:
+
+- A protocol deposit is defined as Nervos DAO deposit with Lock `{CodeHash: iCKB script, HashType: Data1, Args: Empty}`.
+- Two contiguous protocol deposits, for example output cell n and n + 1, must be exactly clones of each other.
+- No more than 255 contiguous protocol deposits are allowed.
+- A group of contiguous protocol deposits must always be followed contiguously by its receipt.
+- A receipt must be always be contiguously preceded by its protocol deposits.
+- Given a group of contiguous protocol deposits, the receipt_count is the quantity of immediately preceding deposits, while the receipt_amount is the single deposit unoccupied capacity.
+- CellDeps must contain both iCKB script cell and Nervos DAO script cell.
+
+**Example:**
 
 ```yaml
 CellDeps:
@@ -177,6 +189,31 @@ A receipt must be converted in its equivalent iCKB token amount in order to tran
 
 As seen in [iCKB/CKB Exchange Rate Calculation](#ickbckb-exchange-rate-calculation) for each receipt the equivalent amount of iCKB is well defined. The only difference being the incentivization: oversized receipts are subject to a 10% fee on the amount exceeding a standard deposit.
 
+Summing up, when transferring, these rules must be followed:
+
+- The iCKB value of a receipt is calculated as
+
+```pseudocode
+iCKB_value(unoccupied_capacity, AR_m) {
+    let s = unoccupied_capacity * AR_0 / AR_m;
+    if s > standard_deposit_size {
+        s = s - (s - standard_deposit_size) / 10
+    }
+    return s;
+}
+
+receipt_iCKB_value(receipt_amount, receipt_count, AR_m) {
+    return receipt_count * iCKB_value(receipt_amount, AR_m);
+}
+```
+
+- in_ickb + in_receipts_ickb = out_ickb
+- output receipt fields, so receipt_amount and receipt_count, must be empty.
+- HeaderDeps must contain the transaction hash of the deposit block for each receipt being transferred.
+- CellDeps must contain the iCKB script cell.
+
+**Example:**
+
 ```yaml
 CellDeps:
     - iCKB script cell
@@ -192,14 +229,6 @@ Inputs:
             HashType: Data1
             Args: Empty
         Lock: ...
-    - ...
-    - Nervos DAO deposit cell with iCKB protocol lock:
-        Data: 8 bytes filled with zeros
-        Type: Nervos DAO
-        Lock:
-            CodeHash: iCKB script
-            HashType: Data1
-            Args: Empty
     - ...
 Outputs:
     - Token and Receipt:
@@ -231,6 +260,34 @@ The proposed protocol instead proceed by un-wrapping iCKB tokens into regular Ne
 2. The second transaction is just a regular Nervos DAO second withdrawal step transaction.
 
 As seen in [iCKB/CKB Exchange Rate Calculation](#ickbckb-exchange-rate-calculation) for each deposit and receipt the equivalent amount of iCKB is well defined. The only difference being the incentivization: requesting the withdrawal from an oversized deposit is incentivized by a 10% discount on the amount exceeding a standard deposit.
+
+Summing up, when withdrawing, these rules must be followed:
+
+- The iCKB value of a receipt is calculated as
+
+```pseudocode
+iCKB_value(unoccupied_capacity, AR_m) {
+    let s = unoccupied_capacity * AR_0 / AR_m;
+    if s > standard_deposit_size {
+        s = s - (s - standard_deposit_size) / 10
+    }
+    return s;
+}
+
+receipt_iCKB_value(receipt_amount, receipt_count, AR_m) {
+    return receipt_count * iCKB_value(receipt_amount, AR_m);
+}
+
+deposit_iCKB_value(capacity, occupied_capacity, AR_m) {
+    return iCKB_value(capacity - occupied_capacity, AR_m);
+}
+```
+
+- in_ickb + in_receipts_ickb = out_ickb + in_deposits_ickb
+- HeaderDeps must contain the transaction hash of the deposit block for each deposit being used to withdraw and each receipt cashed out.
+- CellDeps must contain both iCKB script cell and Nervos DAO script cell.
+
+**Example:**
 
 ```yaml
 CellDeps:
