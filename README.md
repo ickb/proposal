@@ -189,14 +189,13 @@ Summing up, in the first deposit phase, these rules must be followed:
 - Given a group of adjacent deposits, the receipt_count is the quantity of immediately preceding deposits, while the receipt_amount is the single deposit unoccupied capacity.
 - A transaction containing a deposit and a receipt must also include at least one cell in input with iCKB Owner Lock.
 - A transaction can consume at most one Public Owner Cell, consuming one requires re-creating a new one in the outputs.
-- CellDeps must contain Nervos DAO script cell and iCKB Dep Group comprising of: iCKB Owner Lock, iCKB Receipt and standard SUDT.
+- CellDeps must contain iCKB Dep Group comprising of: iCKB Owner Lock, iCKB Receipt, standard SUDT and Nervos DAO script.
 
 **Example of deposit phase 1:**
 
 ```yaml
 CellDeps:
     - iCKB Dep Group cell
-    - Nervos DAO script cell
     - ...
 Inputs:
     - Public iCKB Owner Cell:
@@ -269,7 +268,7 @@ receipt_iCKB_value(receipt_amount, receipt_count, AR_m) {
 - A transaction containing a receipt must also include at least one cell in input with iCKB Owner Lock
 - A transaction can consume at most one Public Owner Cell, consuming one requires re-creating a new one in the outputs.
 - HeaderDeps must contain the transaction hash of the deposit block for each receipt.
-- CellDeps must contain iCKB Dep Group comprising of: iCKB Owner Lock, iCKB Receipt and standard SUDT.
+- CellDeps must contain iCKB Dep Group comprising of: iCKB Owner Lock, iCKB Receipt, standard SUDT and Nervos DAO script.
 
 **Example of deposit phase 2:**
 
@@ -358,14 +357,13 @@ deposit_iCKB_value(capacity, occupied_capacity, AR_m) {
 - The total iCKB value of input tokens and input receipts must be bigger or equal to the total iCKB value of output tokens and input deposits, the deposits being withdrawn.
 - A transaction containing a deposit must also include at least one cell in input with iCKB Owner Lock
 - HeaderDeps must contain the transaction hash of the deposit block for each deposit being used to withdraw and each receipt cashed out.
-- CellDeps must contain Nervos DAO script cell and iCKB Dep Group comprising of: iCKB Owner Lock, iCKB Receipt and standard SUDT.
+- CellDeps must contain iCKB Dep Group comprising of: iCKB Owner Lock, iCKB Receipt, standard SUDT and Nervos DAO script.
 
 **Example of withdrawal phase 1:**
 
 ```yaml
 CellDeps:
     - iCKB Dep Group cell
-    - Nervos DAO script cell
     - ...
 HeaderDeps: 
     - Deposit block
