@@ -174,6 +174,10 @@ Since having a separate receipt per deposit cell would be capital inefficient, t
 - Another deposit cell with its exact same unoccupied CKB capacity.
 - A protocol receipt, which respectfully to the immediately preceding deposit cells, just contains their count and single deposit unoccupied CKB capacity.
 
+So far a phase 1 deposit transaction contains deposits and receipts, but a valid transaction must also include at least one cell in input with iCKB Owner Lock, as this lock contains the protocol logic. For this purpose any cell with iCKB Owner Lock can be used.
+
+For user convenience the protocol offers an easy way to include an iCKB Owner Lock in input by using a Public Owner Cell. It's defined as a cell with iCKB Owner Lock and no type lock. As there is no way to identify the owner, these cells are considered publicly owned and anyone creating one forfeits ownership. As such a transaction can consume at most one Public Owner Cell and consuming one requires re-creating a new one in the outputs.
+
 Summing up, in the first deposit phase, these rules must be followed:
 
 - A **deposit** is defined as Nervos DAO deposit with an iCKB Owner Lock `{CodeHash: iCKB Owner Lock, HashType: Data1, Args: Empty}`.
@@ -183,7 +187,7 @@ Summing up, in the first deposit phase, these rules must be followed:
 - A group of adjacent deposits must always be followed adjacently by its receipt.
 - A receipt must be always be adjacently preceded by its deposits.
 - Given a group of adjacent deposits, the receipt_count is the quantity of immediately preceding deposits, while the receipt_amount is the single deposit unoccupied capacity.
-- A transaction containing a deposit and a receipt must also include exactly one cell in input containing an iCKB Owner Lock.
+- A transaction containing a deposit and a receipt must also include at least one cell in input with iCKB Owner Lock.
 - A transaction can consume at most one Public Owner Cell, consuming one requires re-creating a new one in the outputs.
 - CellDeps must contain Nervos DAO script cell and iCKB Dep Group comprising of: iCKB Owner Lock, iCKB Receipt and standard SUDT.
 
@@ -238,6 +242,10 @@ The second phase of the deposit transforms a receipt into its equivalent amount 
 
 As seen in [iCKB/CKB Exchange Rate Calculation](#ickbckb-exchange-rate-calculation) for each receipt the equivalent amount of iCKB is well defined. The only difference being the incentivization: oversized receipts are subject to a 10% fee on the amount exceeding a standard deposit.
 
+So far a phase 2 deposit transaction contains receipts and tokens, but a valid transaction must also include at least one cell in input with iCKB Owner Lock, as this lock contains the protocol logic. For this purpose any cell with iCKB Owner Lock can be used.
+
+For user convenience the protocol offers an easy way to include an iCKB Owner Lock in input by using a Public Owner Cell. It's defined as a cell with iCKB Owner Lock and no type lock. As there is no way to identify the owner, these cells are considered publicly owned and anyone creating one forfeits ownership. As such a transaction can consume at most one Public Owner Cell and consuming one requires re-creating a new one in the outputs.
+
 Summing up, in the second deposit phase, these rules must be followed:
 
 - The iCKB value of a receipt is calculated as
@@ -258,7 +266,7 @@ receipt_iCKB_value(receipt_amount, receipt_count, AR_m) {
 
 - The total iCKB value of input tokens and input receipts must be bigger or equal to the total iCKB value of output tokens.
 - Output receipt fields, so receipt_amount and receipt_count, must be empty.
-- A transaction containing a receipt must also include exactly one cell in input with iCKB Owner Lock
+- A transaction containing a receipt must also include at least one cell in input with iCKB Owner Lock
 - A transaction can consume at most one Public Owner Cell, consuming one requires re-creating a new one in the outputs.
 - HeaderDeps must contain the transaction hash of the deposit block for each receipt.
 - CellDeps must contain iCKB Dep Group comprising of: iCKB Owner Lock, iCKB Receipt and standard SUDT.
@@ -323,6 +331,8 @@ The proposed protocol instead proceed by un-wrapping iCKB tokens into regular Ne
 
 As seen in [iCKB/CKB Exchange Rate Calculation](#ickbckb-exchange-rate-calculation) for each deposit and receipt the equivalent amount of iCKB is well defined. The only difference being the incentivization: requesting the withdrawal from an oversized deposit is incentivized by a 10% discount on the amount exceeding a standard deposit.
 
+As usual, a valid transaction must also include at least one cell in input with iCKB Owner Lock, still this requirement is trivially satisfied as the input deposits, the ones being withdrawed from, are locked with an iCKB Owner Lock.
+
 Summing up, when withdrawing, these rules must be followed:
 
 - The iCKB value of receipts and deposits is calculated as
@@ -346,7 +356,7 @@ deposit_iCKB_value(capacity, occupied_capacity, AR_m) {
 ```
 
 - The total iCKB value of input tokens and input receipts must be bigger or equal to the total iCKB value of output tokens and input deposits, the deposits being withdrawn.
-- A transaction containing a deposit must also include exactly one cell in input with iCKB Owner Lock
+- A transaction containing a deposit must also include at least one cell in input with iCKB Owner Lock
 - HeaderDeps must contain the transaction hash of the deposit block for each deposit being used to withdraw and each receipt cashed out.
 - CellDeps must contain Nervos DAO script cell and iCKB Dep Group comprising of: iCKB Owner Lock, iCKB Receipt and standard SUDT.
 
