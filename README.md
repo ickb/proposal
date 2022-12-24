@@ -174,7 +174,7 @@ On the other side, deposit smaller than the standard deposit size they are intri
 
 Taking in consideration the incentives, the optimal strategy for a depositor is then to split his CKB into standard deposits.
 
-Since having a separate receipt per deposit cell would be capital inefficient, the protocol allows to account multiple deposit with a single receipt. In particular each deposit cell is followed by either:
+Since having a separate receipt per deposit cell would be capital inefficient, the protocol allows to account multiple deposit with a single receipt. In particular each deposit cell in output is followed by either:
 
 - Another deposit cell with its exact same unoccupied CKB capacity.
 - A protocol receipt, which respectfully to the immediately preceding deposit cells, just contains their count and single deposit unoccupied CKB capacity.
