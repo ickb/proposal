@@ -167,6 +167,11 @@ Given the impossibility to access the header in this phase, it cannot exist a st
 
 In particular, deposits bigger than the standard deposit size are actively disincentivized: the user will receive only 90% of the iCKB amount exceeding a standard deposit. The remaining 10% is offered as a discount to whoever is willing to withdraw from the oversized deposits.
 
+On the other side, deposit smaller than the standard deposit size they are intrinsically disincentivized by L1 dynamics, as deposits gets smaller they incur a bigger penalty in form of unaccounted occupied capacity, up to a minimum deposit of 164 CKB:
+
+- 82 CKB of fixed occupied capacity, used for state rent of the deposit cell with iCKB owner lock
+- 82 CKB of minimum unoccupied capacity, to be converted in receipt and later on in iCKB
+
 Taking in consideration the incentives, the optimal strategy for a depositor is then to split his CKB into standard deposits.
 
 Since having a separate receipt per deposit cell would be capital inefficient, the protocol allows to account multiple deposit with a single receipt. In particular each deposit cell is followed by either:
