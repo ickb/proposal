@@ -269,7 +269,6 @@ receipt_iCKB_value(receipt_amount, receipt_count, AR_m) {
 ```
 
 - The total iCKB value of input tokens and input receipts must be bigger or equal to the total iCKB value of output tokens.
-- Output receipt fields, so receipt_amount and receipt_count, must be empty.
 - A transaction containing a receipt must also include at least one cell in input with iCKB Owner Lock
 - A transaction can consume at most one Public Owner Cell, consuming one requires re-creating a new one in the outputs.
 - HeaderDeps must contain the transaction hash of the deposit block for each receipt.
