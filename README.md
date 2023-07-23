@@ -193,8 +193,8 @@ Summing up, in the first deposit phase, these rules must be followed:
 - No more than 63 adjacent deposits are allowed.
 - A group of adjacent deposits must always be followed adjacently by its receipt.
 - A **receipt** is defined as a cell with type script iCKB Script `{CodeHash: iCKB Script, HashType: Data1, Args: Empty}`, the first 8 bytes of cell data are reserved for:
-  - `receipt_amount` keeps track of the single deposit unoccupied capacity (6 bytes)
   - `receipt_count` keeps track of the quantity of immediately preceding deposits (2 bytes)
+  - `receipt_amount` keeps track of the single deposit unoccupied capacity (6 bytes)
 
 - A receipt must be always be adjacently preceded by its deposits.
 - CellDeps must contain iCKB Dep Group comprising of: iCKB Script, Standard SUDT Script and Nervos DAO Script.
@@ -218,8 +218,8 @@ Outputs:
     - ... # From none to 62 exact clones of the preceding Deposit cell
     - Receipt:
         Data:
-            receipt_amount: Single deposit unoccupied capacity (6 bytes)
             receipt_count: Quantity of immediately preceding deposits (2 bytes)
+            receipt_amount: Single deposit unoccupied capacity (6 bytes)
         Type:
             CodeHash: iCKB Script
             HashType: Data1
@@ -257,7 +257,7 @@ iCKB_value(unoccupied_capacity, AR_m) {
     return s;
 }
 
-receipt_iCKB_value(receipt_amount, receipt_count, AR_m) {
+receipt_iCKB_value(receipt_count, receipt_amount, AR_m) {
     return receipt_count * iCKB_value(receipt_amount, AR_m);
 }
 ```
@@ -285,7 +285,7 @@ Inputs:
             HashType: Data1
             Args: Empty
     - Receipt:
-        Data: [receipt_amount, receipt_count]
+        Data: [receipt_count, receipt_amount]
         Type:
             CodeHash: iCKB Script
             HashType: Data1
@@ -333,7 +333,7 @@ iCKB_value(unoccupied_capacity, AR_m) {
     return s;
 }
 
-receipt_iCKB_value(receipt_amount, receipt_count, AR_m) {
+receipt_iCKB_value(receipt_count, receipt_amount, AR_m) {
     return receipt_count * iCKB_value(receipt_amount, AR_m);
 }
 
