@@ -190,7 +190,7 @@ Summing up, in the first deposit phase, these rules must be followed:
 - A **deposit** is defined as Nervos DAO deposit with an iCKB Script `{CodeHash: iCKB Script, HashType: Data1, Args: Empty}`.
 - Two output cells are defined **adjacent** when they have consecutive serial number to each other, so for example one is output cell `n` and the other is output cell `n + 1`.
 - Two adjacent deposits must be exactly clones of each other.
-- No more than 63 adjacent deposits are allowed.
+- No more than 63 adjacent deposits are allowed, due to a current NervosDAO restriction.
 - A group of adjacent deposits must always be followed adjacently by its receipt.
 - A **receipt** is defined as a cell with type script iCKB Script `{CodeHash: iCKB Script, HashType: Data1, Args: Empty}`, the first 8 bytes of cell data are reserved for:
   - `receipt_count` keeps track of the quantity of immediately preceding deposits (2 bytes)
