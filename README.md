@@ -294,7 +294,7 @@ Inputs:
     - ...
 Outputs:
     - Token:
-        Data: [amount (16 bytes), xudt data]
+        Data: amount (16 bytes)
         Type:
             CodeHash: Standard xUDT Script
             HashType: Type
@@ -379,7 +379,7 @@ Inputs:
             HashType: Type
             Args: Empty
     - Token:
-        Data: [amount (16 bytes), xudt data]
+        Data: amount (16 bytes)
         Type:
             CodeHash: Standard xUDT Script
             HashType: Type
