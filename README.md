@@ -172,30 +172,23 @@ On the other side, deposits smaller than the standard deposit size are intrinsic
 
 Taking in consideration these incentives, at least 90% of the deposit amount is always converted, of course the optimal strategy for a depositor is to split his CKB into standard deposits.
 
-Since having a separate receipt per deposit cell would be capital inefficient, the protocol allows to account multiple deposit with a single receipt. In particular each deposit cell in output is followed by either:
+Since having a separate receipt per deposit cell would be capital inefficient, the protocol allows to account multiple deposit with a single receipt. An iCKB receipt accounts for a group of deposits with the same size, it just contains the single deposit unoccupied CKB capacity and the quantity of the accounted deposits. In a transaction output there can be many receipt cells and possibly more than one receipt for the same deposit size.
 
-- Another deposit cell with its exact same unoccupied CKB capacity.
-- A protocol receipt, which respectfully to the immediately preceding deposit cells, just contains the single deposit unoccupied CKB capacity and the quantity of immediately preceding deposits.
+In a receipt cell data:
 
-The single deposit unoccupied CKB capacity is stored in `6 bytes`, this poses an hard-cap of `~2.8M CKB` per single deposit. This hard-cap prevents [a certain form of DoS](#standard-deposit), while still leaving enough slack for the standard deposit CKB size to grow for well over a hundred of years.
-
-The quantity of immediately preceding deposits is stored in `2 bytes`, this poses an hard-cap of `65535` deposits per receipt. On the other side for simplicity [a transaction containing NervosDAO script is currently limited to `64` output cells](https://github.com/nervosnetwork/ckb-system-scripts/blob/814eb82c44f560dbdad2be97eb85464062920237/c/dao.c#L38-L41) so that processing is simplified. This limitation may be relaxed later on in a future NervosDAO script update.
-
-Additionally `4 bytes`, currently zeroed, are reserved as unionID in case of future iCKB updates.
+- The first `4 bytes`, currently zeroed, are reserved as unionID in case of future iCKB updates.
+- The single deposit unoccupied CKB capacity is stored in `6 bytes`, this poses an hard-cap of `~2.8M CKB` per single deposit. This hard-cap prevents [a certain form of DoS](#standard-deposit), while still leaving enough slack for the standard deposit CKB size to grow for well over a hundred of years.
+- The quantity of immediately preceding deposits is stored in `2 bytes`, this poses an hard-cap of `65535` deposits per receipt. On the other side for simplicity [a transaction containing NervosDAO script is currently limited to `64` output cells](https://github.com/nervosnetwork/ckb-system-scripts/blob/814eb82c44f560dbdad2be97eb85464062920237/c/dao.c#L38-L41) so that processing is simplified. This limitation may be relaxed later on in a future NervosDAO script update.
 
 Summing up, in the first deposit phase, these rules must be followed:
 
 - A **deposit** is defined as Nervos DAO deposit with an iCKB Logic Lock `{CodeHash: iCKB Logic Type ID, HashType: Type, Args: Empty}`.
-- Two output cells are defined **adjacent** when they have consecutive index to each other, so for example one is output cell `n` and the other is output cell `n + 1`.
-- Two adjacent deposits must be exactly clones of each other.
-- No more than 63 adjacent deposits are allowed, due to the current NervosDAO restriction.
-- A group of adjacent deposits must always be followed adjacently by its receipt.
+- A group of same size deposits must be accounted by a receipt.
 - A **receipt** is defined as a cell with iCKB Logic Type `{CodeHash: iCKB Logic Type ID, HashType: Type, Args: Empty}`, the first 12 bytes of cell data are reserved for:
   - `union_id` all zero, it's reserved for future updates to data encoding (4 bytes)
   - `receipt_count` keeps track of the quantity of immediately preceding deposits (2 bytes)
   - `receipt_amount` keeps track of the single deposit unoccupied capacity (6 bytes)
-
-- A receipt must be always be adjacently preceded by its deposits.
+- No more than 64 output cells are allowed, due to the current NervosDAO restriction.
 - CellDeps must contain iCKB Dep Group comprising of: iCKB Logic Script and Nervos DAO Script.
 
 **Receipt data molecule encoding:**
@@ -230,11 +223,11 @@ Outputs:
             CodeHash: iCKB Logic Type ID
             HashType: Type
             Args: Empty
-    - ... # From none to 63 exact clones of the preceding Deposit cell
+    - ...
     - Receipt:
         Data: ReceiptData
-            union_id: all zero, reserved for future updates (4 bytes)
-            receipt_count: Quantity of immediately preceding deposits (2 bytes)
+            union_id: All zero, reserved for future updates (4 bytes)
+            receipt_count: Quantity of deposits (2 bytes)
             receipt_amount: Single deposit unoccupied capacity (6 bytes)
         Type:
             CodeHash: iCKB Logic Type ID
