@@ -158,7 +158,7 @@ Thus the protocol is forced to split a deposit in two phases:
 
 In this first phase the protocol:
 
-- Transforms input CKB into NervosDAO deposit cells locked by iCKB Script, in short a deposit.
+- Transforms input CKB into NervosDAO deposit cells locked by iCKB Logic Script, in short a deposit.
 - Awards to the user a protocol receipt of the deposits, effectively wrapping them.
 
 Given the impossibility to access the header in this phase, it cannot exist a strict requirement on deposits iCKB-equivalent size. On the other hand, to achieve higher deposits fungibility and to prevent a certain form of DoS, the protocol needs to incentivize [standard deposits](#standard-deposit).
@@ -167,8 +167,8 @@ In particular, deposits bigger than the standard deposit size are actively disin
 
 On the other side, deposit smaller than the standard deposit size they are intrinsically disincentivized by L1 dynamics, as deposits gets smaller they incur a bigger penalty in form of unaccounted occupied capacity, up to a minimum deposit of `164 CKB`:
 
-- `82 CKB` of fixed occupied capacity, used for state rent of the deposit cell with iCKB Script
-- `82 CKB` of minimum unoccupied capacity, to be converted in receipt and later on in iCKB
+- `82 CKB` of fixed occupied capacity, used for state rent of the deposit cell with iCKB Logic Script.
+- `82 CKB` of minimum unoccupied capacity, to be converted in receipt and later on in iCKB.
 
 Taking in consideration the incentives, the optimal strategy for a depositor is then to split his CKB into standard deposits.
 
@@ -185,18 +185,18 @@ Additionally `4 bytes`, currently zeroed, are reserved as unionID in case of fut
 
 Summing up, in the first deposit phase, these rules must be followed:
 
-- A **deposit** is defined as Nervos DAO deposit with an iCKB Script `{CodeHash: iCKB Script, HashType: Type, Args: Empty}`.
+- A **deposit** is defined as Nervos DAO deposit with an iCKB Logic Lock `{CodeHash: iCKB Logic Type ID, HashType: Type, Args: Empty}`.
 - Two output cells are defined **adjacent** when they have consecutive index to each other, so for example one is output cell `n` and the other is output cell `n + 1`.
 - Two adjacent deposits must be exactly clones of each other.
 - No more than 63 adjacent deposits are allowed, due to the current NervosDAO restriction.
 - A group of adjacent deposits must always be followed adjacently by its receipt.
-- A **receipt** is defined as a cell with type script iCKB Script `{CodeHash: iCKB Script, HashType: Type, Args: Empty}`, the first 12 bytes of cell data are reserved for:
+- A **receipt** is defined as a cell with iCKB Logic Type `{CodeHash: iCKB Logic Type ID, HashType: Type, Args: Empty}`, the first 12 bytes of cell data are reserved for:
   - `union_id` all zero, it's reserved for future updates to data encoding (4 bytes)
   - `receipt_count` keeps track of the quantity of immediately preceding deposits (2 bytes)
   - `receipt_amount` keeps track of the single deposit unoccupied capacity (6 bytes)
 
 - A receipt must be always be adjacently preceded by its deposits.
-- CellDeps must contain iCKB Dep Group comprising of: iCKB Script, Standard xUDT Script and Nervos DAO Script.
+- CellDeps must contain iCKB Dep Group comprising of: iCKB Logic Script and Nervos DAO Script.
 
 **Receipt data molecule encoding:**
 
@@ -223,11 +223,11 @@ CellDeps:
 Inputs:
     - ...
 Outputs:
-    - Nervos DAO deposit cell with iCKB Script:
+    - Nervos DAO deposit cell with iCKB Logic Lock:
         Data: 8 bytes filled with zeros
         Type: Nervos DAO
         Lock:
-            CodeHash: iCKB Script
+            CodeHash: iCKB Logic Type ID
             HashType: Type
             Args: Empty
     - ... # From none to 63 exact clones of the preceding Deposit cell
@@ -237,7 +237,7 @@ Outputs:
             receipt_count: Quantity of immediately preceding deposits (2 bytes)
             receipt_amount: Single deposit unoccupied capacity (6 bytes)
         Type:
-            CodeHash: iCKB Script
+            CodeHash: iCKB Logic Type ID
             HashType: Type
             Args: Empty
         Lock: A lock that identifies the user
@@ -270,9 +270,9 @@ receipt_iCKB_value(receipt_count, receipt_amount, AR_m) {
 ```
 
 - The total iCKB value of input tokens and input receipts must be bigger or equal to the total iCKB value of output tokens.
-- iCKB `xUDT flags` are set to `0x80000000` to enable `xUDT` owner mode by input type.
+- iCKB xUDT flags are set to `0x80000000` to enable xUDT owner mode by input type.
 - HeaderDeps must contain the transaction hash of the deposit block for each receipt.
-- CellDeps must contain iCKB Dep Group comprising of: iCKB Script, Standard xUDT Script and Nervos DAO Script.
+- CellDeps must contain iCKB Dep Group comprising of: iCKB Logic Script, Standard xUDT Script and Nervos DAO Script.
 
 **Example of deposit phase 2:**
 
@@ -287,7 +287,7 @@ Inputs:
     - Receipt:
         Data: ReceiptData
         Type:
-            CodeHash: iCKB Script
+            CodeHash: iCKB Logic Type ID
             HashType: Type
             Args: Empty
         Lock: A lock that identifies the user
@@ -297,8 +297,8 @@ Outputs:
         Data: amount (16 bytes)
         Type:
             CodeHash: Standard xUDT Script
-            HashType: Type
-            Args: [iCKB Script Hash, 0x80000000]
+            HashType: Data1
+            Args: [iCKB Logic Type ID, 0x80000000]
         Lock: A lock that identifies the user
 ```
 
@@ -359,7 +359,7 @@ deposit_iCKB_value(capacity, occupied_capacity, AR_m) {
 
 - The total iCKB value of input tokens and input receipts must be bigger or equal to the total iCKB value of output tokens and input deposits, the deposits being withdrawn.
 - HeaderDeps must contain the transaction hash of the deposit block for each deposit being used to withdraw and each receipt cashed out.
-- CellDeps must contain iCKB Dep Group comprising of: iCKB Script, OwnedOwner Script, Standard xUDT Script and Nervos DAO Script.
+- CellDeps must contain iCKB Dep Group comprising of: iCKB Logic Script, OwnedOwner Script, Standard xUDT Script and Nervos DAO Script.
 
 **Example of withdrawal phase 1:**
 
@@ -371,19 +371,19 @@ HeaderDeps:
     - Deposit block
     - ...
 Inputs:
-    - Nervos DAO deposit cell with iCKB Script:
+    - Nervos DAO deposit cell with iCKB Logic Script:
         Data: 8 bytes filled with zeros
         Type: Nervos DAO
         Lock:
-            CodeHash: iCKB Script
+            CodeHash: iCKB Logic Type ID
             HashType: Type
             Args: Empty
     - Token:
         Data: amount (16 bytes)
         Type:
             CodeHash: Standard xUDT Script
-            HashType: Type
-            Args: [iCKB Script Hash, 0x80000000]
+            HashType: Data1
+            Args: [iCKB Logic Type ID, 0x80000000]
         Lock: A lock that identifies the user
     - ...
 Outputs:
@@ -391,14 +391,14 @@ Outputs:
         Data: Deposit cell's including block number
         Type: Nervos DAO
         Lock: Owned role
-            CodeHash: OwnedOwner Script
-            HashType: Data1
+            CodeHash: OwnedOwner Type ID
+            HashType: Type
             Args: Empty
     - Owner cell:
         Data: Signed distance from Owned cell (4 bytes)
         Type: Owner role
-            CodeHash: OwnedOwner Script
-            HashType: Data1
+            CodeHash: OwnedOwner Type ID
+            HashType: Type
             Args: Empty
         Lock: A lock that identifies the user
     - ...
@@ -418,14 +418,14 @@ Inputs:
         Data: Deposit cell's including block number
         Type: Nervos DAO
         Lock: Owned role
-            CodeHash: OwnedOwner Script
-            HashType: Data1
+            CodeHash: OwnedOwner Type ID
+            HashType: Type
             Args: Empty
     - Owner cell:
         Data: Signed distance from Owned cell (4 bytes)
         Type: Owner role
-            CodeHash: OwnedOwner Script
-            HashType: Data1
+            CodeHash: OwnedOwner Type ID
+            HashType: Type
             Args: Empty
         Lock: A lock that identifies the user
     - ...
