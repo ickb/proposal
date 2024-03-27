@@ -465,12 +465,19 @@ Outputs:
 
 ## Future
 
-Once iCKB is deployed, it will enable:
+At the inception of iCKB, the following were the intended possible use cases:
 
 - CKB-based Initial Stake Pool Offerings.
 - The official Nervos DAO community voting mechanism.
 - Godwoken switch from pCKB to iCKB, protecting users from CKB issuance.
 - A multitude more L1 & L2 applications!
+
+A few things changed since the inception, these are the updated use cases:
+
+- ISPO is a well thought model, but currently Nervos has already a Community Fund. So the need has already been addressed. Developing an ISPO now may provide different paths & rules for accessing funding.
+- Switching from pCKB to iCKB would give free interests to any CKB holder on Godwoken, then again feels like Godwoken never really found its use case.
+- In the short term the most impactful iCKB result will be that more users will feel comfortable in stacking into NervosDAO by using iCKB. So more and more CKB will be locked into NervosDAO, which is an achievement in itself.
+- In the long term more and more decentralized finance protocols will integrate iCKB. So users will be able to enjoy the interests payed out by both these protocols and NervosDAO.
 
 ## Useful Resources
 
