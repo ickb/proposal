@@ -313,22 +313,9 @@ The proposed protocol instead proceed by un-wrapping iCKB tokens into NervosDAO 
 
 As seen in [iCKB/CKB Exchange Rate Calculation](#ickbckb-exchange-rate-calculation) for each deposit and receipt the equivalent amount of iCKB is well defined. The only difference being the incentivization: requesting the withdrawal from an oversized deposit is incentivized by a 10% discount on the amount exceeding a standard deposit.
 
-An additional NervosDAO constraint is that if deposit lock and withdrawal request lock differs, as in iCKB case, then NervosDAO requires the deposit lock and withdrawal request lock to have the same size.
+An additional NervosDAO constraint is that if deposit lock and withdrawal request lock differs, as in iCKB case, then NervosDAO requires the deposit lock and withdrawal request lock to have the same size. A non solution would be to use a lock with zero padded args in the deposit, then again different user locks would have different sizes, so it wouldn't solve the problem at hand. While iCKB Logic script is independent to the withdrawal request lock choice, this lock has some pretty restrictive constraints, as no information can be stored in its lock args nor in its cell data. For this reason has been developed [OwnedOwner Script](#ownedowner-script).
 
-A non solution would be to use a lock with zero padded args in the deposit, then again different user locks would have different sizes, so it wouldn't solve the problem at hand.
-
-Any lock with zero args length could be used and iCKB itself is independent on the lock choice. Here it's proposed one possible solution with a new script, let's call it `OwnedOwner`. This script never memorizes any information in its args. It's used in two transactions. In the first transaction, the output contains:
-
-1. A cell, owned, with this script as lock.
-2. A cell, owner, with this script as type. This cell memorizes in data the signed relative index distance between the owned cell and itself as a signed 32 bit integer encoded in little-endian.
-
-Validation rule: `owned_index == owner_index + signed_distance`
-
-In the second transaction, the input contains both the owned cell and the owner cell. If one of the two is missing the script do not validate.
-
-Validation rule: `owned_index == owner_index + signed_distance` and `owned_tx == owner_tx`
-
-When withdrawing, these rules must be followed:
+Summing up,  when withdrawing, these rules must be followed:
 
 - The iCKB value of receipts and deposits is calculated as
 
@@ -351,10 +338,60 @@ deposit_iCKB_value(capacity, occupied_capacity, AR_m) {
 ```
 
 - The total iCKB value of input tokens and input receipts must be bigger or equal to the total iCKB value of output tokens and input deposits, the deposits being withdrawn.
+- Withdrawal Request lock must have zero args length and no information stored in the data cell.
+- No more than 64 output cells are allowed, due to the current NervosDAO restriction.
 - HeaderDeps must contain the transaction hash of the deposit block for each deposit being used to withdraw and each receipt cashed out.
-- CellDeps must contain iCKB Dep Group comprising of: iCKB Logic Script, OwnedOwner Script, Standard xUDT Script and Nervos DAO Script.
+- CellDeps must contain iCKB Dep Group comprising of: iCKB Logic Script, Standard xUDT Script and Nervos DAO Script.
 
 **Example of withdrawal phase 1:**
+
+```yaml
+CellDeps:
+    - iCKB Dep Group cell
+    - ...
+HeaderDeps: 
+    - Deposit block
+    - ...
+Inputs:
+    - Nervos DAO deposit cell with iCKB Logic Script:
+        Data: 8 bytes filled with zeros
+        Type: Nervos DAO
+        Lock:
+            CodeHash: iCKB Logic Type ID
+            HashType: Type
+            Args: Empty
+    - Token:
+        Data: amount (16 bytes)
+        Type:
+            CodeHash: Standard xUDT Script
+            HashType: Data1
+            Args: [iCKB Logic Type ID, 0x80000000]
+        Lock: A lock that identifies the user
+    - ...
+Outputs:
+    - Nervos DAO phase 1 withdrawal cell:
+        Data: Deposit cell's including block number
+        Type: Nervos DAO
+        Lock: A lock that identifies the user
+    - ...
+```
+
+## Ancillary Scripts
+
+The iCKB protocol without additional scripts would be difficult to use, this section describes the L1 scripts that have been developed to address iCKB user needs.
+
+### OwnedOwner Script
+
+While iCKB Logic script is independent to the withdrawal request lock choice, this lock has some pretty restrictive constraints, as no information can be stored in its lock args nor in its cell data. For this reason has been developed OwnedOwner Script. This script satisfies the constraints and it's used in two transactions. In the first transaction, the output contains:
+
+1. A cell, owned, with this script as lock.
+2. A cell, owner, with this script as type. This cell memorizes in data the signed relative index distance between the owned cell and itself as a signed 32 bit integer encoded in little-endian.
+
+Validation rule: `owned_index == owner_index + signed_distance`
+
+In the second transaction, the input contains both the owned cell and the owner cell. If one of the two is missing the script do not validate.
+
+**Example of withdrawal phase 1 using OwnedOwner:**
 
 ```yaml
 CellDeps:
@@ -397,7 +434,7 @@ Outputs:
     - ...
 ```
 
-**Example of withdrawal phase 2:**
+**Example of withdrawal phase 2 using OwnedOwner:**
 
 ```yaml
 CellDeps:
