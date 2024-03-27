@@ -475,9 +475,12 @@ Once iCKB is deployed, it will enable:
 ## Useful Resources
 
 - [Hashing it Out introduction to iCKB](https://www.youtube.com/watch?v=CcFFuenup38&t=781s)
-- [Thread for iCKB development](https://discord.com/channels/657799690070523914/980237827122032730)
+- [iCKB journey into CoBuild on Nervos Talk](https://talk.nervos.org/t/ickb-journey-into-cobuild/7918)
+- [\[AMA\] Everything iCKB on Nervos Talk](https://talk.nervos.org/t/ama-everything-ickb/7871)
+- [Thread for iCKB development on Discord](https://discord.com/channels/657799690070523914/980237827122032730)
 - [Reference implementation](https://github.com/ickb/v1-core)
 - [Reference proposal](https://github.com/ickb/proposal)
+- [Initial proposal on Nervos Talk](https://talk.nervos.org/t/looking-for-feedback-ickb-a-tokenization-of-nervosdao-deposits/6772)
 
 ## License
 
