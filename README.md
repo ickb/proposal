@@ -313,7 +313,7 @@ The proposed protocol instead proceed by un-wrapping iCKB tokens into NervosDAO 
 
 As seen in [iCKB/CKB Exchange Rate Calculation](#ickbckb-exchange-rate-calculation) for each deposit and receipt the equivalent amount of iCKB is well defined. The only difference being the incentivization: requesting the withdrawal from an oversized deposit is incentivized by a 10% discount on the amount exceeding a standard deposit.
 
-An additional NervosDAO constraint is that if deposit lock and withdrawal request lock differs, as in iCKB case, then NervosDAO requires the deposit lock and withdrawal request lock to have the same size. A non solution would be to use a lock with zero padded args in the deposit, then again different user locks would have different sizes, so it wouldn't solve the problem at hand. While iCKB Logic script is independent to the withdrawal request lock choice, this lock has some pretty restrictive constraints, as no information can be stored in its lock args nor in its cell data. For this reason has been developed [OwnedOwner Script](#ownedowner-script).
+An additional NervosDAO constraint is that if deposit lock and withdrawal request lock differs, as in iCKB case, then NervosDAO requires the deposit lock and withdrawal request lock to have the same size. A non solution would be to use a lock with zero padded args in the deposit, then again different user locks would have different sizes, so it wouldn't solve the problem at hand. While iCKB Logic script is independent to the withdrawal request lock choice, this lock has some pretty restrictive constraints, as no information can be stored in its lock args nor in its cell data. For this reason has been developed [Owned Owner Script](#owned-owner-script).
 
 Summing up,  when withdrawing, these rules must be followed:
 
@@ -404,11 +404,11 @@ This is the reason why these scripts are instead designed around a similar but s
 - The controller cell can have any lock that identifies the user.
 - Melting both cells in the same transaction is the only way to consume both cells.
 
-### OwnedOwner Script
+### Owned Owner Script
 
-While iCKB Logic script is independent to the withdrawal request lock choice, this lock has some pretty restrictive constraints, as no information can be stored in its lock args nor in its cell data. For this reason has been developed OwnedOwner Script. This script lifecycle consists of two transactions: Mint and Melt.
+While iCKB Logic script is independent to the withdrawal request lock choice, this lock has some pretty restrictive constraints, as no information can be stored in its lock args nor in its cell data. For this reason has been developed Owned Owner Script. This script lifecycle consists of two transactions: Mint and Melt.
 
-#### Mint
+#### Mint Owned Owner
 
 In the first transaction, the output contains:
 
@@ -417,7 +417,7 @@ In the first transaction, the output contains:
 
 Validation rule: `owned_index == owner_index + signed_distance`
 
-**Example of withdrawal phase 1 using OwnedOwner:**
+**Example of withdrawal phase 1 using Owned Owner:**
 
 ```yaml
 CellDeps:
@@ -447,24 +447,24 @@ Outputs:
         Data: Deposit cell's including block number
         Type: Nervos DAO
         Lock: Owned role
-            CodeHash: OwnedOwner Hash
+            CodeHash: Owned Owner Hash
             HashType: Data1
             Args: Empty
     - Owner cell:
         Data: Signed distance from Owned cell (4 bytes)
         Type: Owner role
-            CodeHash: OwnedOwner Hash
+            CodeHash: Owned Owner Hash
             HashType: Data1
             Args: Empty
         Lock: A lock that identifies the user
     - ...
 ```
 
-#### Melt
+#### Melt Owned Owner
 
 In the second transaction, the input contains both the owned cell and the owner cell. If one of the two is missing the script does't validate.
 
-**Example of withdrawal phase 2 using OwnedOwner:**
+**Example of withdrawal phase 2 using Owned Owner:**
 
 ```yaml
 CellDeps:
@@ -478,13 +478,13 @@ Inputs:
         Data: Deposit cell's including block number
         Type: Nervos DAO
         Lock: Owned role
-            CodeHash: OwnedOwner Hash
+            CodeHash: Owned Owner Hash
             HashType: Data1
             Args: Empty
     - Owner cell:
         Data: Signed distance from Owned cell (4 bytes)
         Type: Owner role
-            CodeHash: OwnedOwner Hash
+            CodeHash: Owned Owner Hash
             HashType: Data1
             Args: Empty
         Lock: A lock that identifies the user
@@ -504,6 +504,12 @@ Interacting directly with the iCKB protocol has some limitations:
 - There is no easy way to merge multiple user intentions within a single deposit or withdrawal.
 
 To abstract over NervosDAO and iCKB protocol limitations, it has been created a lock that implements limit order logic, abstracting user intentions, and that anyone can partially fulfill, similarly to an ACP lock. This lock aims to be compatible with all types that follows the sUDT convention of storing the amount in the first 16 bytes of cell data, at the moment sUDT and xUDT. This script lifecycle consists of three transactions: Mint, Match and Melt.
+
+#### Mint Limit Order
+
+#### Match Limit Order
+
+#### Melt Limit Order
 
 ## Future
 
