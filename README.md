@@ -380,6 +380,30 @@ Outputs:
 
 The iCKB protocol without additional scripts would be difficult to use, this section describes the L1 scripts that have been developed to address iCKB user needs.
 
+These scripts offers solutions to specific lock needs, while supporting all users locks. The natural choice to prove user ownership would be to use the delegated signature validation pattern, then again given the incumbent OTX era this pattern has some specific OTX pitfalls. Let's assume that:
+
+- The user lock is OTX signature based.
+- The user unlocks some cells with signature in an OTX transaction, first OTX.
+
+An attacker could do the following:
+
+- Attacker includes all other cells locked with delegated user signature in a second OTX.
+- Attacker packs this second OTX together with the first OTX in the same transaction.
+- These second cells will unlock thanks to delegated signature validation.
+- Attacker gains control of this second group of cells.
+
+This is the reason why these scripts are instead designed around a similar but safer pattern:
+
+- A single transaction mint both a controlled cell and controller cell.
+- At minting time one of the cells reference the other one using the signed relative index distance between each other.
+- The controlled cell satisfies specific user needs.
+- The controlled cell uses the new script as lock
+- The controlled cell may have an updating method using the new script logic.
+- The controller cell has ownership of the controlled cell.
+- The controller cell uses the new script as type.
+- The controller cell can have any lock that identifies the user.
+- Melting both cells in the same transaction is the only way to consume both cells.
+
 ### OwnedOwner Script
 
 While iCKB Logic script is independent to the withdrawal request lock choice, this lock has some pretty restrictive constraints, as no information can be stored in its lock args nor in its cell data. For this reason has been developed OwnedOwner Script. This script satisfies the constraints and it's used in two transactions. In the first transaction, the output contains:
