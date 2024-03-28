@@ -133,7 +133,7 @@ Let's fix a few constants:
 
 So by depositing `100082` CKB at block `0`, **iCKB/CKB exchange ratio** at block `n` is defined as:
 
-- `100000 iCKB  := 100000 CKB * AR_n / 10 ^ 16` (excluding `82 CKB` of occupied cell capacity)
+- `100000 iCKB := 100000 CKB * AR_n / 10 ^ 16` (excluding `82 CKB` of occupied cell capacity)
 
 Conversely, by plugging block `m` as deposit block and block `0` as withdrawal block in NervosDAO's formula, it's possible to calculate how many iCKB are worth `100082` CKB deposited at block `m`:
 
@@ -315,7 +315,7 @@ As seen in [iCKB/CKB Exchange Rate Calculation](#ickbckb-exchange-rate-calculati
 
 An additional NervosDAO constraint is that if deposit lock and withdrawal request lock differs, as in iCKB case, then NervosDAO requires the deposit lock and withdrawal request lock to have the same size. A non solution would be to use a lock with zero padded args in the deposit, then again different user locks would have different sizes, so it wouldn't solve the problem at hand. While iCKB Logic script is independent to the withdrawal request lock choice, this lock has some pretty restrictive constraints, as no information can be stored in its lock args nor in its cell data. For this reason has been developed [Owned Owner Script](#owned-owner-script).
 
-Summing up,  when withdrawing, these rules must be followed:
+Summing up, when withdrawing, these rules must be followed:
 
 - The iCKB value of receipts and deposits is calculated as
 
@@ -401,7 +401,7 @@ This is the reason why these scripts are instead designed around a similar but s
 - The controlled cell may have an updating method using the new script logic.
 - The controller cell has ownership of the controlled cell.
 - The controller cell uses the new script as type.
-- The controller cell can have any lock that identifies the user.
+- The controller cell has a lock that identifies the user.
 - Melting both cells in the same transaction is the only way to consume both cells.
 
 ### Owned Owner Script
@@ -412,8 +412,8 @@ While iCKB Logic script is independent to the withdrawal request lock choice, th
 
 In the first transaction, the output contains:
 
-1. A cell, owned, with this script as lock.
-2. A cell, owner, with this script as type. This cell memorizes in data the signed relative index distance between the owned cell and itself as a signed 32 bit integer encoded in little-endian.
+1. The owned cell with this script as lock.
+2. The owner cell with this script as type and a lock that identifies the user. This cell memorizes in data the signed relative index distance between the owned cell and itself as a signed 32 bit integer encoded in little-endian.
 
 Validation rule: `owned_index == owner_index + signed_distance`
 
@@ -422,6 +422,7 @@ Validation rule: `owned_index == owner_index + signed_distance`
 ```yaml
 CellDeps:
     - iCKB Dep Group cell
+    - Owned Owner data cell
     - ...
 HeaderDeps: 
     - Deposit block
@@ -469,6 +470,7 @@ In the second transaction, the input contains both the owned cell and the owner 
 ```yaml
 CellDeps:
     - iCKB Dep Group cell
+    - Owned Owner data cell
     - ...
 HeaderDeps: 
     - Deposit block
@@ -503,9 +505,85 @@ Interacting directly with the iCKB protocol has some limitations:
 - NervosDAO doesn't allow to partially withdraw from a deposit.
 - There is no easy way to merge multiple user intentions within a single deposit or withdrawal.
 
-To abstract over NervosDAO and iCKB protocol limitations, it has been created a lock that implements limit order logic, abstracting user intentions, and that anyone can partially fulfill, similarly to an ACP lock. This lock aims to be compatible with all types that follows the sUDT convention of storing the amount in the first 16 bytes of cell data, at the moment sUDT and xUDT. This script lifecycle consists of three transactions: Mint, Match and Melt.
+To abstract over NervosDAO and iCKB protocol limitations, it has been created a lock that implements limit order logic, abstracting user intentions, and that anyone can partially match, similarly to an ACP lock. This lock aims to be compatible with all types that follows the sUDT convention of storing the amount in the first 16 bytes of cell data, at the moment sUDT and xUDT. This script lifecycle consists of three transactions: Mint, Match and Melt.
+
+**Limit Order Args molecule encoding:**
+
+```molecule
+array Hash <byte; 32>;
+array Uint64 <byte; 8>;
+array Uint32 <byte; 4>;
+array Int32 <byte; 4>;
+
+struct OutPoint {
+    tx_hash : Hash,
+    index : Uint32,
+}
+
+struct OrderInfo {
+    is_udt_to _ckb: byte,
+    ckb_multiplier: Uint64,
+    udt_multiplier: Uint64,
+    log_min_match: byte,
+}
+
+struct MintOrderArgs {
+    orderInfo: OrderInfo,
+    distance: Int32,
+}
+
+struct MatchOrderArgs {
+    order_info: OrderInfo,
+    master_outpoint: OutPoint,
+}
+
+union OrderArgs {
+    MintOrderArgs,
+    MatchOrderArgs,
+}
+```
 
 #### Mint Limit Order
+
+In the first transaction, the output contains:
+
+1. The limit orders itself with this script as lock. This lock memorizes in its args:
+    - The order direction with `isUdtToCkb`.
+    - The order ratio with `ckbMultiplier` and `udtMultiplier`.
+    - The logarithm in base 2 of the minimum partial match with `logMinMatch`.
+    - The signed relative index distance between this cell and the master cell with `distance`.
+
+2. The master cell with this script as type and a lock that identifies the user.
+
+Validation rules:
+
+- `orders_index + signed_distance == master_index`
+- Order cell data length must be at least 16 bytes.
+
+**Example of Limit Order mint:**
+
+```yaml
+CellDeps:
+    - Limit Order data cell
+    - ...
+Inputs:
+    - ...
+Outputs:
+    - Limit Order cell:
+        Data: [amount (16 bytes), ...]
+        Type: UDT
+        Lock: Limit Order role
+            CodeHash: Limit Order Type ID
+            HashType: Type
+            Args: MintOrderArgs variant of OrderArgs
+    - Master cell:
+        Data: ...
+        Lock: Master role
+            CodeHash: Limit Order Type ID
+            HashType: Type
+            Args: Empty
+        Lock: A lock that identifies the user
+```
 
 #### Match Limit Order
 
