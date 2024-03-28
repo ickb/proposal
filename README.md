@@ -493,6 +493,18 @@ Outputs:
     - ...
 ```
 
+### Limit Order Script
+
+Interacting directly with the iCKB protocol has some limitations:
+
+- In transactions containing NervosDAO script, no more than 64 output cells are allowed.
+- iCKB Logic discourages deposits bigger or smaller than the standard deposit size.
+- There is a mismatch from the amount the user wants to withdraw and the deposits available in the iCKB pool.
+- NervosDAO doesn't allow to partially withdraw from a deposit.
+- There is no easy way to merge multiple user intentions within a single deposit or withdrawal.
+
+To abstract over NervosDAO and iCKB protocol limitations, it has been created a lock that implements limit order logic, abstracting user intentions, and that anyone can partially fulfill, similarly to an ACP lock. This lock aims to be compatible with all types that follows the sUDT convention of storing the amount in the first 16 bytes of cell data, at the moment sUDT and xUDT. This script lifecycle consists of three transactions: Mint, Match and Melt.
+
 ## Future
 
 At the inception of iCKB, the following were the intended possible use cases:
