@@ -406,14 +406,16 @@ This is the reason why these scripts are instead designed around a similar but s
 
 ### OwnedOwner Script
 
-While iCKB Logic script is independent to the withdrawal request lock choice, this lock has some pretty restrictive constraints, as no information can be stored in its lock args nor in its cell data. For this reason has been developed OwnedOwner Script. This script satisfies the constraints and it's used in two transactions. In the first transaction, the output contains:
+While iCKB Logic script is independent to the withdrawal request lock choice, this lock has some pretty restrictive constraints, as no information can be stored in its lock args nor in its cell data. For this reason has been developed OwnedOwner Script. This script lifecycle consists of two transactions: Mint and Melt.
+
+#### Mint
+
+In the first transaction, the output contains:
 
 1. A cell, owned, with this script as lock.
 2. A cell, owner, with this script as type. This cell memorizes in data the signed relative index distance between the owned cell and itself as a signed 32 bit integer encoded in little-endian.
 
 Validation rule: `owned_index == owner_index + signed_distance`
-
-In the second transaction, the input contains both the owned cell and the owner cell. If one of the two is missing the script do not validate.
 
 **Example of withdrawal phase 1 using OwnedOwner:**
 
@@ -445,18 +447,22 @@ Outputs:
         Data: Deposit cell's including block number
         Type: Nervos DAO
         Lock: Owned role
-            CodeHash: OwnedOwner Type ID
-            HashType: Type
+            CodeHash: OwnedOwner Hash
+            HashType: Data1
             Args: Empty
     - Owner cell:
         Data: Signed distance from Owned cell (4 bytes)
         Type: Owner role
-            CodeHash: OwnedOwner Type ID
-            HashType: Type
+            CodeHash: OwnedOwner Hash
+            HashType: Data1
             Args: Empty
         Lock: A lock that identifies the user
     - ...
 ```
+
+#### Melt
+
+In the second transaction, the input contains both the owned cell and the owner cell. If one of the two is missing the script does't validate.
 
 **Example of withdrawal phase 2 using OwnedOwner:**
 
@@ -472,14 +478,14 @@ Inputs:
         Data: Deposit cell's including block number
         Type: Nervos DAO
         Lock: Owned role
-            CodeHash: OwnedOwner Type ID
-            HashType: Type
+            CodeHash: OwnedOwner Hash
+            HashType: Data1
             Args: Empty
     - Owner cell:
         Data: Signed distance from Owned cell (4 bytes)
         Type: Owner role
-            CodeHash: OwnedOwner Type ID
-            HashType: Type
+            CodeHash: OwnedOwner Hash
+            HashType: Data1
             Args: Empty
         Lock: A lock that identifies the user
     - ...
