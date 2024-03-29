@@ -411,7 +411,7 @@ While iCKB Logic script is independent to the withdrawal request lock choice, th
 
 #### Mint Owned Owner
 
-In the first transaction, the output contains:
+In the Mint transaction, the output contains:
 
 1. The owned cell with this script as lock.
 2. The owner cell with this script as type and a lock that identifies the user. This cell memorizes in data the signed relative index distance between the owned cell and itself as a signed 32 bit integer encoded in little-endian.
@@ -464,7 +464,7 @@ Outputs:
 
 #### Melt Owned Owner
 
-In the second transaction, the input contains both the owned cell and the owner cell. If one of the two is missing the script does't validate.
+In the Melt transaction, the input contains both the owned cell and the owner cell. If one of the two is missing the script does't validate.
 
 **Example of withdrawal phase 2 using Owned Owner:**
 
@@ -628,6 +628,33 @@ Outputs:
 ```
 
 #### Melt Limit Order
+
+In the Melt transaction, the input contains both the order cell and the master cell. If one of the two is missing the script does't validate. Any limit OrderArgs variant is allowed as input.
+
+**Example of Limit Order melt:**
+
+```yaml
+CellDeps:
+    - Limit Order data cell
+    - ...
+Inputs:
+    - Limit Order cell:
+        Data: [amount (16 bytes), ...]
+        Type: UDT
+        Lock: Limit Order role
+            CodeHash: Limit Order Type ID
+            HashType: Type
+            Args: FulfillOrdersArgs variant of OrderArgs
+    - Master cell:
+        Data: ...
+        Lock: Master role
+            CodeHash: Limit Order Type ID
+            HashType: Type
+            Args: Empty
+        Lock: A lock that identifies the user
+Outputs:
+    - ...
+```
 
 ## Future
 
