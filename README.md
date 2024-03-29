@@ -395,6 +395,7 @@ An attacker could do the following:
 This is the reason why these scripts are instead designed around a similar but safer pattern:
 
 - A single transaction mint both a controlled cell and controller cell.
+- In a transaction there may be multiple controlled cell and controller cell.
 - At minting time one of the cells reference the other one using the signed relative index distance between each other.
 - The controlled cell satisfies specific user needs.
 - The controlled cell uses the new script as lock
@@ -406,7 +407,7 @@ This is the reason why these scripts are instead designed around a similar but s
 
 ### Owned Owner Script
 
-While iCKB Logic script is independent to the withdrawal request lock choice, this lock has some pretty restrictive constraints, as no information can be stored in its lock args nor in its cell data. For this reason has been developed Owned Owner Script. This script lifecycle consists of two transactions: Mint and Melt.
+While iCKB Logic script is independent to the withdrawal request lock choice, this lock has some pretty restrictive constraints, as no information can be stored in its lock args nor in its cell data. For this reason has been developed Owned Owner Script. In a transaction there may be multiple owned cells and owner cells. This script lifecycle consists of two transactions: Mint and Melt.
 
 #### Mint Owned Owner
 
@@ -501,11 +502,11 @@ Interacting directly with the iCKB protocol has some limitations:
 
 - In transactions containing NervosDAO script, no more than 64 output cells are allowed.
 - iCKB Logic discourages deposits bigger or smaller than the standard deposit size.
-- There is a mismatch from the amount the user wants to withdraw and the deposits available in the iCKB pool.
+- There may be a mismatch between the amount the user wants to withdraw and the deposits available in the iCKB pool.
 - NervosDAO doesn't allow to partially withdraw from a deposit.
 - There is no easy way to merge multiple user intentions within a single deposit or withdrawal.
 
-To abstract over NervosDAO and iCKB protocol limitations, it has been created a lock that implements limit order logic, abstracting user intentions, and that anyone can partially match, similarly to an ACP lock. This lock aims to be compatible with all types that follows the sUDT convention of storing the amount in the first 16 bytes of cell data, at the moment sUDT and xUDT. This script lifecycle consists of three transactions: Mint, Match and Melt.
+To abstract over NervosDAO and iCKB protocol limitations, it has been created a lock that implements limit order logic, abstracting user intentions, and that anyone can match partially or fulfill completely, similarly to an ACP lock. This lock aims to be compatible with all types that follows the sUDT convention of storing the amount in the first 16 bytes of cell data, at the moment sUDT and xUDT. In a transaction there may be multiple orders cells. This script lifecycle consists of three kind of transactions: Mint, Match and Melt.
 
 **Limit Order Args molecule encoding:**
 
@@ -529,7 +530,7 @@ struct OrderInfo {
 
 struct MintOrderArgs {
     orderInfo: OrderInfo,
-    distance: Int32,
+    master_distance: Int32,
 }
 
 struct MatchOrderArgs {
@@ -537,27 +538,32 @@ struct MatchOrderArgs {
     master_outpoint: OutPoint,
 }
 
+struct FulfillOrderArgs {
+    master_outpoint: OutPoint,
+}
+
 union OrderArgs {
     MintOrderArgs,
     MatchOrderArgs,
+    FulfillOrderArgs,
 }
 ```
 
 #### Mint Limit Order
 
-In the first transaction, the output contains:
+In the Mint transaction, the output contains:
 
-1. The limit orders itself with this script as lock. This lock memorizes in its args:
-    - The order direction with `isUdtToCkb`.
-    - The order ratio with `ckbMultiplier` and `udtMultiplier`.
-    - The logarithm in base 2 of the minimum partial match with `logMinMatch`.
-    - The signed relative index distance between this cell and the master cell with `distance`.
+1. The limit order cell itself with an UDT as type and this script as lock. This lock args memorizes:
+    - `is_udt_to _ckb` expresses the order direction.
+    - `ckb_multiplier` and `udt_multiplier` expresses the order exchange ratio.
+    - `log_min_match` expresses the logarithm in base 2 of the minimum partial match of the wanted asset.
+    - `master_distance` expresses the signed relative index distance between this cell and the master cell.
 
-2. The master cell with this script as type and a lock that identifies the user.
+2. The master cell with this script as type and a lock that identifies the user. This cell controls the limit order cell.
 
 Validation rules:
 
-- `orders_index + signed_distance == master_index`
+- `orders_index + master_distance == master_index`
 - Order cell data length must be at least 16 bytes.
 
 **Example of Limit Order mint:**
@@ -585,7 +591,41 @@ Outputs:
         Lock: A lock that identifies the user
 ```
 
-#### Match Limit Order
+#### Match and Fulfill Limit Order
+
+In Match and Fulfill transactions the allowed input limit OrderArgs variants are MintOrderArgs and MatchOrdersArgs. While the allowed output limit OrderArgs variants are MatchOrdersArgs and FulfillOrdersArgs.
+
+Validation rules:
+
+- `in_ckb * ckb_multiplier + in_udt * udt_multiplier > out_ckb * ckb_multiplier + out_udt * udt_multiplier`
+- `in_wanted_asset + 2^log_min_match <= out_wanted_asset`
+- excluding the first 16 bytes that encode the amount, the rest of data bytes must be equal between input and output order.
+- FulfillOrdersArgs is not allowed as input order.
+- MintOrderArgs is not allowed as output order.
+
+**Example of Limit Order Match:**
+
+```yaml
+CellDeps:
+    - Limit Order data cell
+    - ...
+Inputs:
+    - Limit Order cell:
+        Data: [amount (16 bytes), ...]
+        Type: UDT
+        Lock: Limit Order role
+            CodeHash: Limit Order Type ID
+            HashType: Type
+            Args: MintOrderArgs variant of OrderArgs
+Outputs:
+    - Limit Order cell:
+        Data: [amount (16 bytes), ...]
+        Type: UDT
+        Lock: Limit Order role
+            CodeHash: Limit Order Type ID
+            HashType: Type
+            Args: MatchOrderArgs variant of OrderArgs
+```
 
 #### Melt Limit Order
 
