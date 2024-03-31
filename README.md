@@ -178,7 +178,7 @@ In a receipt cell data:
 
 - The first `4 bytes`, currently zeroed, are reserved as unionID in case of future iCKB updates.
 - The single deposit unoccupied CKB capacity is stored in `6 bytes`, this poses an hard-cap of `~2.8M CKB` per single deposit. This hard-cap prevents [a certain form of DoS](#standard-deposit), while still leaving enough slack for the standard deposit CKB size to grow for well over a hundred of years.
-- The quantity of immediately preceding deposits is stored in `2 bytes`, this poses an hard-cap of `65535` deposits per receipt. On the other side for simplicity [a transaction containing NervosDAO script is currently limited to `64` output cells](https://github.com/nervosnetwork/ckb-system-scripts/blob/814eb82c44f560dbdad2be97eb85464062920237/c/dao.c#L38-L41) so that processing is simplified. This limitation may be relaxed later on in a future NervosDAO script update.
+- The quantity of deposits is stored in `2 bytes`, this poses an hard-cap of `65535` deposits per receipt. On the other side for simplicity [a transaction containing NervosDAO script is currently limited to `64` output cells](https://github.com/nervosnetwork/ckb-system-scripts/blob/814eb82c44f560dbdad2be97eb85464062920237/c/dao.c#L38-L41) so that processing is simplified. This limitation may be relaxed later on in a future NervosDAO script update.
 
 Summing up, in the first deposit phase, these rules must be followed:
 
@@ -186,7 +186,7 @@ Summing up, in the first deposit phase, these rules must be followed:
 - A group of same size deposits must be accounted by a receipt.
 - A **receipt** is defined as a cell with iCKB Logic Type `{CodeHash: iCKB Logic Type ID, HashType: Type, Args: Empty}`, the first 12 bytes of cell data are reserved for:
   - `union_id` all zero, it's reserved for future updates to data encoding (4 bytes)
-  - `receipt_count` keeps track of the quantity of immediately preceding deposits (2 bytes)
+  - `receipt_count` keeps track of the quantity of deposits (2 bytes)
   - `receipt_amount` keeps track of the single deposit unoccupied capacity (6 bytes)
 - No more than 64 output cells are allowed, due to the current NervosDAO restriction.
 - CellDeps must contain iCKB Dep Group comprising of: iCKB Logic Script and Nervos DAO Script.
@@ -607,7 +607,7 @@ In Match and Fulfill transactions the allowed input limit OrderArgs variants are
 
 Validation rules:
 
-- `in_ckb * ckb_multiplier + in_udt * udt_multiplier > out_ckb * ckb_multiplier + out_udt * udt_multiplier`
+- `in_ckb * ckb_multiplier + in_udt * udt_multiplier <= out_ckb * ckb_multiplier + out_udt * udt_multiplier`
 - `in_wanted_asset + 2^log_min_match <= out_wanted_asset`
 - excluding the first 16 bytes that encode the amount, the rest of data bytes must be equal between input and output order.
 - FulfillOrdersArgs is not allowed as input order.
