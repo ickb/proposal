@@ -426,7 +426,7 @@ In the Mint transaction, the output contains:
 1. The owned cell with this script as lock.
 2. The owner cell with this script as type and a lock that identifies the user. This cell memorizes in data the signed relative index distance between the owned cell and itself as a signed 32 bit integer encoded in little-endian.
 
-Validation rule: `owned_index == owner_index + signed_distance`
+Validation rule: `owned_index == owner_index + owned_distance`
 
 **Example of withdrawal phase 1 using Owned Owner:**
 
@@ -459,14 +459,14 @@ Outputs:
         Data: Deposit cell's including block number
         Type: Nervos DAO
         Lock: Owned role
-            CodeHash: Owned Owner Hash
-            HashType: Data1
+            CodeHash: Owned Owner Type ID
+            HashType: Type
             Args: Empty
     - Owner cell:
         Data: Signed distance from Owned cell (4 bytes)
         Type: Owner role
-            CodeHash: Owned Owner Hash
-            HashType: Data1
+            CodeHash: Owned Owner Type ID
+            HashType: Type
             Args: Empty
         Lock: A lock that identifies the user
     - ...
@@ -491,14 +491,14 @@ Inputs:
         Data: Deposit cell's including block number
         Type: Nervos DAO
         Lock: Owned role
-            CodeHash: Owned Owner Hash
-            HashType: Data1
+            CodeHash: Owned Owner Type ID
+            HashType: Type
             Args: Empty
     - Owner cell:
         Data: Signed distance from Owned cell (4 bytes)
         Type: Owner role
-            CodeHash: Owned Owner Hash
-            HashType: Data1
+            CodeHash: Owned Owner Type ID
+            HashType: Type
             Args: Empty
         Lock: A lock that identifies the user
     - ...
