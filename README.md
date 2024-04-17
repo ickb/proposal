@@ -189,8 +189,8 @@ Summing up, in the first deposit phase, these rules must be followed:
 - A group of same size deposits must be accounted by a receipt.
 - A **receipt** is defined as a cell with iCKB Logic Type `{CodeHash: iCKB Logic Type ID, HashType: Type, Args: Empty}`, the first 16 bytes of cell data are reserved for:
   - `union_id` all zero, it's reserved for future updates to data encoding (4 bytes)
-  - `receipt_count` keeps track of the quantity of deposits (4 bytes)
-  - `receipt_amount` keeps track of the single deposit unoccupied capacity (8 bytes)
+  - `deposit_quantity` keeps track of the quantity of deposits (4 bytes)
+  - `deposit_amount` keeps track of the single deposit unoccupied capacity (8 bytes)
 - No more than 64 output cells are allowed, due to the current NervosDAO restriction.
 - CellDeps must contain iCKB Dep Group comprising of: iCKB Logic Script and Nervos DAO Script.
 
@@ -201,8 +201,8 @@ array Uint32 <byte; 4>;
 array Uint64 <byte; 8>;
 
 struct ReceiptDataV0 {
-    receipt_count: Uint32,
-    receipt_amount: Uint64,
+    deposit_quantity: Uint32,
+    deposit_amount: Uint64,
 }
 
 union ReceiptData {
@@ -230,8 +230,8 @@ Outputs:
     - Receipt:
         Data: ReceiptData
             union_id: All zero, reserved for future updates (4 bytes)
-            receipt_count: Quantity of deposits (4 bytes)
-            receipt_amount: Single deposit unoccupied capacity (8 bytes)
+            deposit_quantity: Quantity of deposits (4 bytes)
+            deposit_amount: Single deposit unoccupied capacity (8 bytes)
         Type:
             CodeHash: iCKB Logic Type ID
             HashType: Type
@@ -260,8 +260,8 @@ iCKB_value(unoccupied_capacity, AR_m) {
     return s;
 }
 
-receipt_iCKB_value(receipt_count, receipt_amount, AR_m) {
-    return receipt_count * iCKB_value(receipt_amount, AR_m);
+receipt_iCKB_value(deposit_quantity, deposit_amount, AR_m) {
+    return deposit_quantity * iCKB_value(deposit_amount, AR_m);
 }
 ```
 
@@ -331,8 +331,8 @@ iCKB_value(unoccupied_capacity, AR_m) {
     return s;
 }
 
-receipt_iCKB_value(receipt_count, receipt_amount, AR_m) {
-    return receipt_count * iCKB_value(receipt_amount, AR_m);
+receipt_iCKB_value(deposit_quantity, deposit_amount, AR_m) {
+    return deposit_quantity * iCKB_value(deposit_amount, AR_m);
 }
 
 deposit_iCKB_value(capacity, occupied_capacity, AR_m) {
