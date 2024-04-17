@@ -163,14 +163,11 @@ In this first phase the protocol:
 
 Given the impossibility to access the header in this phase, it cannot exist a strict requirement on deposits iCKB-equivalent size. On the other hand, to achieve higher deposits fungibility and to prevent a certain form of DoS, the protocol needs to incentivize [standard deposits](#standard-deposit).
 
-In particular, deposits bigger than the standard deposit size are actively disincentivized: the user will receive only 90% of the iCKB amount exceeding a standard deposit. The remaining 10% is offered as a discount to whoever is willing to withdraw from the oversized deposits. Additionally there is an hard-cap of `1M CKB` per single deposit. This hard-cap prevents [a certain form of DoS](#standard-deposit), while still leaving enough slack for the standard deposit CKB size to grow for well over a hundred of years.
+In particular, deposits bigger than the standard deposit size are actively disincentivized: the user will receive only 90% of the iCKB amount exceeding a standard deposit. The remaining 10% is offered as a discount to whoever is willing to withdraw from the oversized deposits. Additionally, the maximum unoccupied capacity per single deposit is fixed at `1M CKB`. This upper bound prevents [a certain form of DoS](#standard-deposit), while still leaving enough slack for the standard deposit CKB size to grow for well over a hundred of years.
 
-On the other side, deposits smaller than the standard deposit size are intrinsically disincentivized by L1 dynamics. As deposits gets smaller they incur a bigger penalty in form of unaccounted occupied capacity, up to 10% of the deposit. This translates to a minimum deposit of `820 CKB`:
+On the other side, deposits smaller than the standard deposit size are intrinsically disincentivized by L1 dynamics. As deposits gets smaller they incur a bigger penalty in form of unaccounted occupied capacity. Additionally, the minimum unoccupied capacity per single deposit is fixed at `1000 CKB`. This lower bound prevents users from making deposits too detrimental to themselves.
 
-- `82 CKB` of fixed occupied capacity, used for state rent of the deposit cell with iCKB Logic Script.
-- `738 CKB` of minimum unoccupied capacity, to be accounted by the receipt and later on converted in iCKB.
-
-Taking in consideration these incentives, at least 90% of the deposit amount is always converted, of course the optimal strategy for a depositor is to split his CKB into standard deposits.
+Taking in consideration these incentives, at least 90% of the deposit amount is always converted. Of course the optimal strategy for a depositor is to split his CKB into standard deposits.
 
 Since having a separate receipt per deposit cell would be capital inefficient, the protocol allows to account multiple deposit with a single receipt. An iCKB receipt accounts for a group of deposits with the same size, it just contains the single deposit unoccupied CKB capacity and the quantity of the accounted deposits. In a transaction output there can be many receipt cells and possibly more than one receipt for the same deposit size.
 
@@ -185,7 +182,7 @@ In a receipt cell data:
 Summing up, in the first deposit phase, these rules must be followed:
 
 - A **deposit** is defined as Nervos DAO deposit with an iCKB Logic Lock `{CodeHash: iCKB Logic Type ID, HashType: Type, Args: Empty}`.
-- The deposit size cannot be lower than `820 CKB` nor higher than `1M CKB`.
+- A single deposit unoccupied capacity cannot be lower than `1000 CKB` nor higher than `1M CKB`.
 - A group of same size deposits must be accounted by a receipt.
 - A **receipt** is defined as a cell with iCKB Logic Type `{CodeHash: iCKB Logic Type ID, HashType: Type, Args: Empty}`, the first 16 bytes of cell data are reserved for:
   - `union_id` all zero, it's reserved for future updates to data encoding (4 bytes)
