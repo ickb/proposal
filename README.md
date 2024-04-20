@@ -518,7 +518,7 @@ Interacting directly with the iCKB protocol has some limitations:
 
 To abstract over NervosDAO and iCKB protocol limitations, it has been created a lock that implements limit order logic, abstracting user intentions, and that anyone can match partially or fulfill completely, similarly to an ACP lock. This lock aims to be compatible with all types that follows the sUDT convention of storing the amount in the first 16 bytes of cell data, at the moment sUDT and xUDT. In a transaction there may be multiple orders cells. This script lifecycle consists of three kind of transactions: Mint, Match and Melt.
 
-**Limit Order Args molecule encoding:**
+**Limit Order data molecule encoding:**
 
 ```molecule
 array Hash <byte; 32>;
@@ -538,24 +538,24 @@ struct OrderInfo {
     log_min_match: byte,
 }
 
-struct MintOrderArgs {
+struct MintOrderData {
     orderInfo: OrderInfo,
     master_distance: Int32,
 }
 
-struct MatchOrderArgs {
+struct MatchOrderData {
     order_info: OrderInfo,
     master_outpoint: OutPoint,
 }
 
-struct FulfillOrderArgs {
+struct FulfillOrderData {
     master_outpoint: OutPoint,
 }
 
-union OrderArgs {
-    MintOrderArgs,
-    MatchOrderArgs,
-    FulfillOrderArgs,
+union OrderData {
+    MintOrderData,
+    MatchOrderData,
+    FulfillOrderData,
 }
 ```
 
@@ -563,7 +563,7 @@ union OrderArgs {
 
 In the Mint transaction, the output contains:
 
-1. The limit order cell itself with an UDT as type and this script as lock. This lock args memorizes:
+1. The limit order cell itself with an UDT as type and this script as lock. In the field [`lock` of `xUDT data`](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0052-extensible-udt/0052-extensible-udt.md#xudt-data) this lock memorizes following information:
     - `is_udt_to _ckb` expresses the order direction.
     - `ckb_multiplier` and `udt_multiplier` expresses the order exchange ratio.
     - `log_min_match` expresses the logarithm in base 2 of the minimum partial match of the wanted asset.
@@ -574,7 +574,7 @@ In the Mint transaction, the output contains:
 Validation rules:
 
 - `orders_index + master_distance == master_index`
-- Order cell data length must be at least 16 bytes.
+- Order cell data must be valid as xUDT data field
 
 **Example of Limit Order mint:**
 
@@ -586,12 +586,16 @@ Inputs:
     - ...
 Outputs:
     - Limit Order cell:
-        Data: [amount (16 bytes), ...]
-        Type: UDT
+        Data:
+            - Amount (16 bytes),
+            - xUDT data:
+                - lock : OrderData,
+                - data : ...
+        Type: xUDT
         Lock: Limit Order role
             CodeHash: Limit Order Type ID
             HashType: Type
-            Args: MintOrderArgs variant of OrderArgs
+            Args: Empty
     - Master cell:
         Data: ...
         Lock: Master role
@@ -603,15 +607,15 @@ Outputs:
 
 #### Match and Fulfill Limit Order
 
-In Match and Fulfill transactions the allowed input limit OrderArgs variants are MintOrderArgs and MatchOrdersArgs. While the allowed output limit OrderArgs variants are MatchOrdersArgs and FulfillOrdersArgs.
+In Match and Fulfill transactions the allowed input limit OrderData variants are MintOrderData and MatchOrderData. While the allowed output limit OrderData variants are MatchOrderData and FulfillOrderData.
 
 Validation rules:
 
 - `in_ckb * ckb_multiplier + in_udt * udt_multiplier <= out_ckb * ckb_multiplier + out_udt * udt_multiplier`
 - `in_wanted_asset + 2^log_min_match <= out_wanted_asset`
 - excluding the first 16 bytes that encode the amount, the rest of data bytes must be equal between input and output order.
-- FulfillOrdersArgs is not allowed as input order.
-- MintOrderArgs is not allowed as output order.
+- FulfillOrderData is not allowed as input order.
+- MintOrderData is not allowed as output order.
 
 **Example of Limit Order Match:**
 
@@ -621,25 +625,33 @@ CellDeps:
     - ...
 Inputs:
     - Limit Order cell:
-        Data: [amount (16 bytes), ...]
-        Type: UDT
+        Data:
+            - Amount (16 bytes),
+            - xUDT data:
+                - lock : MintOrderData variant of OrderData,
+                - data : ...
+        Type: xUDT
         Lock: Limit Order role
             CodeHash: Limit Order Type ID
             HashType: Type
-            Args: MintOrderArgs variant of OrderArgs
+            Args: Empty
 Outputs:
     - Limit Order cell:
-        Data: [amount (16 bytes), ...]
-        Type: UDT
+        Data:
+            - Amount (16 bytes),
+            - xUDT data:
+                - lock : MatchOrderData variant of OrderData,
+                - data : ...
+        Type: xUDT
         Lock: Limit Order role
             CodeHash: Limit Order Type ID
             HashType: Type
-            Args: MatchOrderArgs variant of OrderArgs
+            Args: Empty
 ```
 
 #### Melt Limit Order
 
-In the Melt transaction, the input contains both the order cell and the master cell. If one of the two is missing the script does't validate. Any limit OrderArgs variant is allowed as input.
+In the Melt transaction, the input contains both the order cell and the master cell. If one of the two is missing the script does't validate. Any limit OrderData variant is allowed as input.
 
 **Example of Limit Order melt:**
 
@@ -649,12 +661,16 @@ CellDeps:
     - ...
 Inputs:
     - Limit Order cell:
-        Data: [amount (16 bytes), ...]
-        Type: UDT
+        Data:
+            - Amount (16 bytes),
+            - xUDT data:
+                - lock : FulfillOrderData variant of OrderData,
+                - data : ...
+        Type: xUDT
         Lock: Limit Order role
             CodeHash: Limit Order Type ID
             HashType: Type
-            Args: FulfillOrdersArgs variant of OrderArgs
+            Args: Empty
     - Master cell:
         Data: ...
         Lock: Master role
