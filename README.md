@@ -563,7 +563,7 @@ union OrderData {
 
 In the Mint transaction, the output contains:
 
-1. The limit order cell itself with an UDT as type and this script as lock. In the field [`lock` of `xUDT data`](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0052-extensible-udt/0052-extensible-udt.md#xudt-data) this lock memorizes following information:
+1. The limit order cell itself with an UDT as type and this script as lock. In the cell data field, this lock memorizes following information:
     - `is_udt_to _ckb` expresses the order direction.
     - `ckb_multiplier` and `udt_multiplier` expresses the order exchange ratio.
     - `log_min_match` expresses the logarithm in base 2 of the minimum partial match of the wanted asset.
@@ -574,7 +574,6 @@ In the Mint transaction, the output contains:
 Validation rules:
 
 - `orders_index + master_distance == master_index`
-- Order cell data must be valid as xUDT data field
 
 **Example of Limit Order mint:**
 
@@ -588,9 +587,7 @@ Outputs:
     - Limit Order cell:
         Data:
             - Amount (16 bytes),
-            - xUDT data:
-                - lock : OrderData,
-                - data : ...
+            - MintOrderData variant of OrderData
         Type: xUDT
         Lock: Limit Order role
             CodeHash: Limit Order Type ID
@@ -627,9 +624,7 @@ Inputs:
     - Limit Order cell:
         Data:
             - Amount (16 bytes),
-            - xUDT data:
-                - lock : MintOrderData variant of OrderData,
-                - data : ...
+            - MintOrderData variant of OrderData
         Type: xUDT
         Lock: Limit Order role
             CodeHash: Limit Order Type ID
@@ -639,9 +634,7 @@ Outputs:
     - Limit Order cell:
         Data:
             - Amount (16 bytes),
-            - xUDT data:
-                - lock : MatchOrderData variant of OrderData,
-                - data : ...
+            - MatchOrderData variant of OrderData
         Type: xUDT
         Lock: Limit Order role
             CodeHash: Limit Order Type ID
@@ -663,9 +656,7 @@ Inputs:
     - Limit Order cell:
         Data:
             - Amount (16 bytes),
-            - xUDT data:
-                - lock : FulfillOrderData variant of OrderData,
-                - data : ...
+            - FulfillOrderData variant of OrderData
         Type: xUDT
         Lock: Limit Order role
             CodeHash: Limit Order Type ID
