@@ -539,13 +539,13 @@ struct OrderInfo {
 }
 
 struct MintOrderData {
-    orderInfo: OrderInfo,
     master_distance: Int32,
+    orderInfo: OrderInfo,
 }
 
 struct MatchOrderData {
-    order_info: OrderInfo,
     master_outpoint: OutPoint,
+    order_info: OrderInfo,
 }
 
 struct FulfillOrderData {
