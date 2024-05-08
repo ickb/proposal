@@ -194,12 +194,12 @@ Summing up, in the first deposit phase, these rules must be followed:
 **Receipt data molecule encoding:**
 
 ```molecule
-array Uint32 <byte; 4>;
-array Uint64 <byte; 8>;
+array Uint32          [byte; 4];
+array Uint64          [byte; 8];
 
 struct ReceiptDataV0 {
     deposit_quantity: Uint32,
-    deposit_amount: Uint64,
+    deposit_amount:   Uint64,
 }
 
 union ReceiptData {
@@ -412,10 +412,10 @@ While iCKB Logic script is independent to the withdrawal request lock choice, th
 **Owner data molecule encoding:**
 
 ```molecule
-array Int32 <byte; 4>;
+array Uint32          [byte; 4];
 
-struct OwnerOwnedData {
-    owned_distance : Int32,
+struct OwnedOwnerData {
+    owned_distance:   Int32,
 }
 ```
 
@@ -521,38 +521,41 @@ To abstract over NervosDAO and iCKB protocol limitations, it has been created a 
 **Limit Order data molecule encoding:**
 
 ```molecule
-array Hash <byte; 32>;
-array Uint64 <byte; 8>;
-array Uint32 <byte; 4>;
-array Int32 <byte; 4>;
+array Uint8           [byte; 1];
+array Uint32          [byte; 4];
+array Uint64          [byte; 8];
+
+array Boolean         [byte; 1];
+array Int32           [byte; 4];
+array Byte32          [byte; 32];
 
 struct OutPoint {
-    tx_hash : Hash,
-    index : Uint32,
+    tx_hash:          Byte32,
+    index:            Uint32,
 }
 
 struct OrderInfo {
-    is_udt_to _ckb: byte,
-    ckb_multiplier: Uint64,
-    udt_multiplier: Uint64,
-    log_min_match: byte,
+    is_udt_to_ckb:    Boolean,
+    ckb_multiplier:   Uint64,
+    udt_multiplier:   Uint64,
+    log_min_match:    Uint8,
 }
 
 struct MintOrderData {
-    master_distance: Int32,
-    orderInfo: OrderInfo,
+    master_distance:  Int32,
+    orderInfo:        OrderInfo,
 }
 
 struct MatchOrderData {
-    master_outpoint: OutPoint,
-    order_info: OrderInfo,
+    master_outpoint:  OutPoint,
+    order_info:       OrderInfo,
 }
 
 struct FulfillOrderData {
-    master_outpoint: OutPoint,
+    master_outpoint:  OutPoint,
 }
 
-union OrderData {
+union PartialOrderData {
     MintOrderData,
     MatchOrderData,
     FulfillOrderData,
