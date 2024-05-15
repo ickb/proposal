@@ -194,17 +194,18 @@ Summing up, in the first deposit phase, these rules must be followed:
 **Receipt data molecule encoding:**
 
 ```molecule
-array Uint32          [byte; 4];
-array Uint64          [byte; 8];
+array Uint32           [byte; 4];
+array Uint64           [byte; 8];
 
 struct ReceiptDataV0 {
-    deposit_quantity: Uint32,
-    deposit_amount:   Uint64,
+    deposit_quantity:  Uint32,
+    deposit_amount:    Uint64,
 }
 
 union ReceiptData {
     ReceiptDataV0,
 }
+
 ```
 
 **Example of deposit phase 1:**
@@ -412,10 +413,10 @@ While iCKB Logic script is independent to the withdrawal request lock choice, th
 **Owner data molecule encoding:**
 
 ```molecule
-array Uint32          [byte; 4];
+array Int32            [byte; 4];
 
 struct OwnedOwnerData {
-    owned_distance:   Int32,
+    owned_distance:    Int32,
 }
 ```
 
@@ -516,49 +517,47 @@ Interacting directly with the iCKB protocol has some limitations:
 - NervosDAO doesn't allow to partially withdraw from a deposit.
 - There is no easy way to merge multiple user intentions within a single deposit or withdrawal.
 
-To abstract over NervosDAO and iCKB protocol limitations, it has been created a lock that implements limit order logic, abstracting user intentions, and that anyone can match partially or fulfill completely, similarly to an ACP lock. This lock aims to be compatible with all types that follows the sUDT convention of storing the amount in the first 16 bytes of cell data, at the moment sUDT and xUDT. In a transaction there may be multiple orders cells. This script lifecycle consists of three kind of transactions: Mint, Match and Melt.
+To abstract over NervosDAO and iCKB protocol limitations, it has been created a lock that implements limit order logic, abstracting user intentions, and that anyone can match partially or completely, similarly to an ACP lock. This lock aims to be compatible with all types that follows the sUDT convention of storing the amount in the first 16 bytes of cell data, at the moment sUDT and xUDT. In a transaction there may be multiple orders cells. This script lifecycle consists of three kind of transactions: Mint, Match and Melt.
 
 **Limit Order data molecule encoding:**
 
 ```molecule
-array Uint8           [byte; 1];
-array Uint32          [byte; 4];
-array Uint64          [byte; 8];
+array Uint8            [byte; 1];
+array Uint32           [byte; 4];
+array Uint64           [byte; 8];
 
-array Boolean         [byte; 1];
-array Int32           [byte; 4];
-array Byte32          [byte; 32];
+array Int32            [byte; 4];
+array Byte32           [byte; 32];
 
 struct OutPoint {
-    tx_hash:          Byte32,
-    index:            Uint32,
+    tx_hash:           Byte32,
+    index:             Uint32,
+}
+
+struct Ratio {
+    ckb_multiplier:    Uint64,
+    udt_multiplier:    Uint64,
 }
 
 struct OrderInfo {
-    is_udt_to_ckb:    Boolean,
-    ckb_multiplier:   Uint64,
-    udt_multiplier:   Uint64,
-    log_min_match:    Uint8,
+    ckb_to_udt:        Ratio,
+    udt_to_ckb:        Ratio,
+    ckb_min_match_log: Uint8,
 }
 
 struct MintOrderData {
-    master_distance:  Int32,
-    orderInfo:        OrderInfo,
+    master_distance:   Int32,
+    order_info:        OrderInfo,
 }
 
 struct MatchOrderData {
-    master_outpoint:  OutPoint,
-    order_info:       OrderInfo,
+    master_outpoint:   OutPoint,
+    order_info:        OrderInfo,
 }
 
-struct FulfillOrderData {
-    master_outpoint:  OutPoint,
-}
-
-union PartialOrderData {
+union OrderData {
     MintOrderData,
     MatchOrderData,
-    FulfillOrderData,
 }
 ```
 
@@ -567,10 +566,10 @@ union PartialOrderData {
 In the Mint transaction, the output contains:
 
 1. The limit order cell itself with an UDT as type and this script as lock. In the cell data field, this lock memorizes following information:
-    - `is_udt_to _ckb` expresses the order direction.
-    - `ckb_multiplier` and `udt_multiplier` expresses the order exchange ratio.
-    - `log_min_match` expresses the logarithm in base 2 of the minimum partial match of the wanted asset.
     - `master_distance` expresses the signed relative index distance between this cell and the master cell.
+    - `ckb_to_udt` expresses the order exchange ratio from CKB to UDT.
+    - `udt_to_ckb` expresses the order exchange ratio from UDT to CKB
+    - `ckb_min_match_log` expresses the logarithm in base 2 of the minimum partial match of the exchanged asset. The UDT minimum match is calculated using the `udt_to_ckb` ratio.
 
 2. The master cell with this script as type and a lock that identifies the user. This cell controls the limit order cell.
 
@@ -605,16 +604,16 @@ Outputs:
         Lock: A lock that identifies the user
 ```
 
-#### Match and Fulfill Limit Order
+#### Match Limit Order
 
-In Match and Fulfill transactions the allowed input limit OrderData variants are MintOrderData and MatchOrderData. While the allowed output limit OrderData variants are MatchOrderData and FulfillOrderData.
+In Match transactions the allowed input limit OrderData variants are MintOrderData and MatchOrderData. While the allowed output variant is MatchOrderData.
 
 Validation rules:
 
 - `in_ckb * ckb_multiplier + in_udt * udt_multiplier <= out_ckb * ckb_multiplier + out_udt * udt_multiplier`
 - `in_wanted_asset + 2^log_min_match <= out_wanted_asset`
 - excluding the first 16 bytes that encode the amount, the rest of data bytes must be equal between input and output order.
-- FulfillOrderData is not allowed as input order.
+- An order already completely fulfilled is not allowed as input order.
 - MintOrderData is not allowed as output order.
 
 **Example of Limit Order Match:**
@@ -659,7 +658,7 @@ Inputs:
     - Limit Order cell:
         Data:
             - Amount (16 bytes),
-            - FulfillOrderData variant of OrderData
+            - MatchOrderData variant of OrderData
         Type: xUDT
         Lock: Limit Order role
             CodeHash: Limit Order Type ID
