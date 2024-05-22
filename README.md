@@ -546,6 +546,7 @@ struct OrderInfo {
 }
 
 struct MintOrderData {
+    padding:           Byte32,
     master_distance:   Int32,
     order_info:        OrderInfo,
 }
