@@ -4,6 +4,10 @@
 
 If you would like to listen to an introduction of the project before diving in, Jordan Mack explains iCKB in less than 7 minutes during an episode of [Hashing it Out](https://www.youtube.com/watch?v=CcFFuenup38&t=781s).
 
+## Testnet DApp
+
+If you would like to try out the DApp to get an idea on how it works, [iCKB DApp is live on testnet](http://ickb.github.io/v1-interface).
+
 ## Problem
 
 ### NervosDAO Illiquidity
@@ -695,6 +699,7 @@ A few things changed since the inception, these are the updated use cases:
 ## Useful Resources
 
 - [Hashing it Out introduction to iCKB](https://www.youtube.com/watch?v=CcFFuenup38&t=781s)
+- [iCKB Testnet DApp](https://ickb.github.io/v1-interface)
 - [iCKB journey into CoBuild on Nervos Talk](https://talk.nervos.org/t/ickb-journey-into-cobuild/7918)
 - [\[AMA\] Everything iCKB on Nervos Talk](https://talk.nervos.org/t/ama-everything-ickb/7871)
 - [Thread for iCKB development on Discord](https://discord.com/channels/657799690070523914/980237827122032730)
