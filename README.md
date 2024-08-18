@@ -412,7 +412,7 @@ This is the reason why these scripts are instead designed around a similar but s
 
 ### Owned Owner Script
 
-While iCKB Logic script is independent to the withdrawal request lock choice, this lock has some pretty restrictive constraints, as no information can be stored in its lock args nor in its cell data. For this reason has been developed Owned Owner Script. In a transaction there may be multiple owned cells and owner cells. This script lifecycle consists of two transactions: Mint and Melt.
+While iCKB Logic script is independent to the withdrawal request lock choice, this lock has some pretty restrictive constraints, as no information can be stored in its lock args nor in its cell data. For this reason has been developed Owned Owner Script. This script can only be used in conjunction with withdrawal requests. In a transaction there may be multiple owned cells and owner cells. This script lifecycle consists of two transactions: Mint and Melt.
 
 **Owner data molecule encoding:**
 
