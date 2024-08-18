@@ -511,10 +511,6 @@ Outputs:
     - ...
 ```
 
-### ⚠️ Warning on Limit Order Script ⚠️
-
-If a UDT needs to store data on Witness, then for good measure it should not be used in conjunction with the limit order script. The limit order cell doesn't rely on signature-based verification, so the witnesses in the same group (lock, input type and output type) can be modified by an attacker after user signature. Generally speaking if a script in a transaction needs to store data in the witness and this data can be tampered without the transaction becoming invalid, then this transaction must not employ the following limit order script.
-
 ### Limit Order Script
 
 Interacting directly with the iCKB protocol has some limitations:
@@ -525,7 +521,7 @@ Interacting directly with the iCKB protocol has some limitations:
 - NervosDAO doesn't allow to partially withdraw from a deposit.
 - There is no easy way to merge multiple user intentions within a single deposit or withdrawal.
 
-To abstract over NervosDAO and iCKB protocol limitations, it has been created a lock that implements limit order logic, abstracting user intentions, and that anyone can match partially or completely, similarly to an ACP lock. This lock aims to be compatible with all types that: follows the sUDT convention of storing the amount in the first 16 bytes of cell data and store no data in the witness, at the moment sUDT and partially xUDT. In a transaction there may be multiple orders cells. This script lifecycle consists of three kind of transactions: Mint, Match and Melt.
+To abstract over NervosDAO and iCKB protocol limitations, it has been created a lock that implements limit order logic, abstracting user intentions, and that anyone can match partially or completely, similarly to an ACP lock. This lock aims to be compatible with all types that: follows the sUDT convention of storing the amount in the first 16 bytes of cell data and store no data in the witness, at the moment sUDT and partially xUDT. If a UDT needs to store data on Witness, then it should not be used in conjunction with the limit order script. In a transaction there may be multiple orders cells. This script lifecycle consists of three kind of transactions: Mint, Match and Melt.
 
 **Limit Order data molecule encoding:**
 
@@ -683,6 +679,14 @@ Inputs:
 Outputs:
     - ...
 ```
+
+## Warning: Unsigned Lock Witnesses Malleability ⚠️
+
+All the script presented in this proposal (iCKB Script, Owned Owner Script and Limit Order Script) follow a novel pattern of using a script both as lock in one cell and type into another cell. While the pattern allows great flexibility, it also comes with an implicit weakness: the cell that uses the script as lock doesn't rely on signature-based verification, so the witnesses in the same group (lock, input type and output type) can be modified by an attacker after user signature. [Credits to @XuJiandong for the discovery](https://github.com/ickb/v1-core/issues/10).
+
+**Rule of thumb**: if a script in a transaction needs to store data in the witness and this data can be tampered without the transaction becoming invalid, then this transaction must not employ the scripts presented in the current proposal.
+
+This witnesses malleability doesn't affect the current iCKB use-cases as no data that can be freely tampered is ever stored into witnesses.
 
 ## Future
 
