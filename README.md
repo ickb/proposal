@@ -26,6 +26,18 @@ Looking far away, this protocol could also enable Godwoken switch from pCKB to a
 
 In the past there has been an effort to tackle this challenge by [NexisDAO with dCKB](https://docs.nexisdao.com/nexisdao/mint-dckb). Their approach is to tokenize the holder receipt, which in turn becomes tradeable and so the holder keeps being liquid. The issue with their approach is that only the original owner can unlock the deposit. Judging by their [GitHub repository's issues](https://github.com/NexisDao/NexisDao-core/issues), dCKB does not appear to be actively maintained.
 
+### wstCKB (Under Development)
+
+At the moment only this public information is available on wstCKB:
+
+> Stable++ also introduces Liquidity Staking through Nervos Dao. Users can stake CKB in exchange for wstCKB, allowing them to earn staking rewards while still being able to use their wstCKB for investments without losing liquidity.
+
+At direct question, [Alive24 explained](https://t.me/Stablepp/881):
+
+> At the moment, as LST is still under development [...] If anything disclosable, we attempt to make wstCKB in a way similar to wstETH in terms of rebasing mechanism and anonymous Nervos DAO cell deposit and withdrawal. Any further details are still under development and adjustment. [...] I've read the proposal today and we found a lot in common! Thanks for the advice and definitely it would be of inspirations.
+
+Which brings the question: [Is really worth developing an iCKB look-alike and doubling the effort?](https://github.com/stablepp/media-kit/issues/1)
+
 ## Solution
 
 ### Enter iCKB
@@ -714,6 +726,7 @@ A few things changed since the inception, these are the updated use cases:
 - [Reference implementation](https://github.com/ickb/v1-core)
 - [Reference proposal](https://github.com/ickb/proposal)
 - [Initial proposal on Nervos Talk](https://talk.nervos.org/t/looking-for-feedback-ickb-a-tokenization-of-nervosdao-deposits/6772)
+- [Is wstCKB just another iCKB?](https://github.com/stablepp/media-kit/issues/1)
 
 ## License
 
