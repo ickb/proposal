@@ -28,13 +28,15 @@ In the past there has been an effort to tackle this challenge by [NexisDAO with 
 
 ### wstCKB (Under Development)
 
-At the moment only this public information is available on wstCKB:
+Currently there is a new effort to tackle this challenge by Stable++. They are developing a new solution behind closed doors and as such not much information is publicly available on wstCKB, [except for](https://www.reddit.com/r/NervosNetwork/comments/1etnlqv/stable_part_2/):
 
 > Stable++ also introduces Liquidity Staking through Nervos Dao. Users can stake CKB in exchange for wstCKB, allowing them to earn staking rewards while still being able to use their wstCKB for investments without losing liquidity.
 
-At direct question, [Alive24 explained](https://t.me/Stablepp/881):
+At direct question on their public Telegram group, [Alive24 explained](https://t.me/Stablepp/881):
 
-> At the moment, as LST is still under development [...] If anything disclosable, we attempt to make wstCKB in a way similar to wstETH in terms of rebasing mechanism and anonymous Nervos DAO cell deposit and withdrawal. Any further details are still under development and adjustment. [...] I've read the proposal today and we found a lot in common! Thanks for the advice and definitely it would be of inspirations.
+> At the moment, as LST is still under development [...] If anything **disclosable**, we attempt to make wstCKB in a way similar to wstETH in terms of rebasing mechanism and anonymous Nervos DAO cell deposit and withdrawal. Any further details are still under development and adjustment. [...] I've read the proposal today and we found a lot in common! Thanks for the advice and definitely it would be of inspirations.
+
+From the information now available seems wstCKB is staying clear of dCKB mistakes and closely following iCKB steps. 
 
 Which brings the question: [Is really worth developing an iCKB look-alike and doubling the effort?](https://github.com/stablepp/media-kit/issues/1)
 
