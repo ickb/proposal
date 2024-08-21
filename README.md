@@ -36,7 +36,7 @@ At direct question on their public Telegram group, [Alive24 explained](https://t
 
 > At the moment, as LST is still under development [...] If anything **disclosable**, we attempt to make wstCKB in a way similar to wstETH in terms of rebasing mechanism and anonymous Nervos DAO cell deposit and withdrawal. Any further details are still under development and adjustment. [...] I've read the proposal today and we found a lot in common! Thanks for the advice and definitely it would be of inspirations.
 
-From the information now available seems wstCKB is staying clear of dCKB mistakes and closely following iCKB steps. 
+From the information now available seems wstCKB is staying clear of dCKB mistakes and closely following iCKB steps.
 
 Which brings the question: [Is really worth developing an iCKB look-alike and doubling the effort?](https://github.com/stablepp/media-kit/issues/1)
 
@@ -44,7 +44,9 @@ Which brings the question: [Is really worth developing an iCKB look-alike and do
 
 ### Enter iCKB
 
-iCKB is the name for a [xUDT token](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0052-extensible-udt/0052-extensible-udt.md) that represents deposits in the protocol. As with dCKB, iCKB's approach is to tokenize NervosDAO receipts, but with a twist: the protocol owns all the CKB deposits and maintains a pool of them. This means that all the deposits and withdrawals are shared, so anyone can use anyone else's deposit to exit once it's mature.
+The **inflation-protected CKB** (iCKB) is a Nervos L1 [xUDT token](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0052-extensible-udt/0052-extensible-udt.md) responsible for protecting users against [Nervos secondary issuance inflation](https://www.nervos.org/knowledge-base/understanding_nervos_ckb_issuance_model#secondary_issuance) like NervosDAO, while at the sime time being a liquid asset. In this proposal, the **inflation-protected CKB** will be referred as iCKB.
+
+As with dCKB, iCKB's approach is to tokenize NervosDAO receipts, but with a twist: the protocol owns all the CKB deposits and maintains a pool of them. This means that all the deposits and withdrawals are shared, so anyone can use anyone else's deposit to exit once it's mature.
 
 This protocol aims to solve two problems with NervosDAO:
 
