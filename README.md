@@ -40,6 +40,11 @@ From the information now available seems wstCKB is staying clear of dCKB mistake
 
 Which brings the question: [Is really worth developing an iCKB look-alike and doubling the effort?](https://github.com/stablepp/media-kit/issues/1)
 
+Let's say, a wstCKB too similar to iCKB is developed, the result would be a split liquidity between iCKB and wstCKB, so smaller Deposit Pool size for both, which would bring the following downsides for everyone:
+
+1. Longer withdrawal wait time as the temporal density of deposits maturity depends on Deposit Pool size.
+2. [Busiwork Attack feasibility](https://github.com/ickb/proposal/issues/8).
+
 ## Solution
 
 ### Enter iCKB
