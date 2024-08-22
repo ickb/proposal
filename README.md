@@ -709,6 +709,28 @@ All the script presented in this proposal (iCKB Script, Owned Owner Script and L
 
 This witnesses malleability doesn't affect the current iCKB use-cases as no data that can be freely tampered is ever stored into witnesses.
 
+## Deployment
+
+iCKB has been developed in the public as a public good. As such iCKB will be deployed in the same way as [NervosDAO](https://explorer.nervos.org/en/script/0x82d76d1b75fe2fd9a27dfbaa65a039221a380d76c926f378d3f81cf3e7e13f2e/type/deployed_cells), it's a deployment by type, but with zero lock. For example, NervosDAO deployed cell on mainnet is:
+
+```yaml
+Outputs:
+    - NervosDAO:
+        Data: NervosDAO binary
+        Type: deployment by type
+            CodeHash: 0x00000000000000000000000000000000000000000000000000545950455f4944
+            HashType: Type
+            Args: 0xb2a8500929d6a1294bf9bf1bf565f549fa4a5f1316a3306ad3d4783e64bcf626
+        Lock: Zero lock
+            CodeHash: 0x0000000000000000000000000000000000000000000000000000000000000000
+            HashType: Data
+            Args: Empty
+```
+
+This means that the script is upgradable, but only with a chain fork.
+
+The reason is the following: let's assume iCKB was deployed by type with normal lock, then whoever controls the lock is able to update the binary and steal all the funds. This is not acceptable for a public good such iCKB.
+
 ## Future
 
 At the inception of iCKB, the following were the intended possible use cases:
