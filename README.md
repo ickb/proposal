@@ -81,11 +81,11 @@ Jordan Mack's comments on Nervos L1 & iCKB:
 
 ### Phroi
 
-I'm the the ideas baker and solidity developer behind Opthy, 3° among peers at August 2021 Hackathon! [Phroi](http://phroi.com) as pseudonym exists since that Hackathon, here you can find the code I wrote in that occasion: [core](https://github.com/opthydefi/opthy-v0-core), [tests](https://github.com/opthydefi/opthy-v0-tests) and [ui](https://github.com/opthydefi/opthy-v0-ui-web). Later on I continued working with Hexmate on [Opthy](https://github.com/opthydefi/opthy-v1-core) until May 2022, when I left for becoming a solo Indie Hacker. Since then I'm working on a few projects under different pseudonyms.
+I'm a developer, going by the pseudonym Phroi. I'd like to spend my time working on projects that give meaning to my life and improve the life of users. Win-win situations. The best way to interact with me is in a written format, English is not my native language. A bit on the over-thinker side, so much that I'm unwillingly finding vulnerabilities in other people work.
 
 ### Discovering iCKB
 
-During February 2022, while [testing the ground for a NervosDAO based ISPO](https://discord.com/channels/657799690070523914/657799690552606745/943306112889933864), I discovered the untapped need for a token that liquefies and bridges interests from L1 to L2 and so with Jordan Macks's help I started researching its feasibility.
+During February 2022, while [testing the ground for a NervosDAO based ISPO](https://discord.com/channels/657799690070523914/657799690552606745/943306112889933864), I discovered the untapped need for a token that liquefies and bridges interests from L1 to L2 and so with Jordan Macks's help I started researching its feasibility. It's since then that I'm working on iCKB.
 
 ## Diving Into The Protocol
 
