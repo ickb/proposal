@@ -723,7 +723,8 @@ A few things changed since the inception, these are the updated use cases:
 - ISPO is a well thought model, but currently Nervos has already a Community Fund. So the need has already been addressed. Developing an ISPO now may provide different paths & rules for accessing funding.
 - Switching from pCKB to iCKB would give free interests to any CKB holder on Godwoken, then again feels like Godwoken never really found its use case.
 - In the short term the most impactful iCKB result will be that more users will feel comfortable in stacking into NervosDAO by using iCKB. So more and more CKB will be locked into NervosDAO, which is an achievement in itself.
-- In the long term more and more decentralized finance protocols will integrate iCKB. So users will be able to enjoy the interests payed out by both these protocols and NervosDAO.
+- In the medium term more and more decentralized finance protocols will integrate iCKB. So users will be able to enjoy the interests payed out by both these protocols and NervosDAO.
+- In the long term more and more UTXO chains will be integrated with Nervos thanks to [RGB++, iCKB is in the ideal position of taking advantage of this](https://github.com/ckb-cell/RGBPlusPlus-design/blob/main/docs/light-paper-en.md#coins). Users from other chains will be able to enjoy the interests payed out by NervosDAO, while being liquid. Also other chains protocols will be able to build on top of iCKB. So users will be able to enjoy the interests payed out by both these other chains protocols and NervosDAO.
 
 ## Useful Resources
 
