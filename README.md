@@ -206,10 +206,10 @@ In a receipt cell data:
 
 Summing up, in the first deposit phase, these rules must be followed:
 
-- A **deposit** is defined as Nervos DAO deposit with an iCKB Logic Lock `{CodeHash: iCKB Logic Type ID, HashType: Type, Args: Empty}`.
+- A **deposit** is defined as Nervos DAO deposit with an iCKB Logic Lock `{CodeHash: iCKB Logic Hash, HashType: Data1, Args: Empty}`.
 - A single deposit unoccupied capacity cannot be lower than `1000 CKB` nor higher than `1M CKB`.
 - A group of same size deposits must be accounted by a receipt.
-- A **receipt** is defined as a cell with iCKB Logic Type `{CodeHash: iCKB Logic Type ID, HashType: Type, Args: Empty}`, the first 16 bytes of cell data are reserved for:
+- A **receipt** is defined as a cell with iCKB Logic Type `{CodeHash: iCKB Logic Hash, HashType: Data1, Args: Empty}`, the first 16 bytes of cell data are reserved for:
   - `union_id` all zero, it's reserved for future updates to data encoding (4 bytes)
   - `deposit_quantity` keeps track of the quantity of deposits (4 bytes)
   - `deposit_amount` keeps track of the single deposit unoccupied capacity (8 bytes)
@@ -246,8 +246,8 @@ Outputs:
         Data: 8 bytes filled with zeros
         Type: Nervos DAO
         Lock:
-            CodeHash: iCKB Logic Type ID
-            HashType: Type
+            CodeHash: iCKB Logic Hash
+            HashType: Data1
             Args: Empty
     - ...
     - Receipt:
@@ -256,8 +256,8 @@ Outputs:
             deposit_quantity: Quantity of deposits (4 bytes)
             deposit_amount: Single deposit unoccupied capacity (8 bytes)
         Type:
-            CodeHash: iCKB Logic Type ID
-            HashType: Type
+            CodeHash: iCKB Logic Hash
+            HashType: Data1
             Args: Empty
         Lock: A lock that identifies the user
 ```
@@ -306,8 +306,8 @@ Inputs:
     - Receipt:
         Data: ReceiptData
         Type:
-            CodeHash: iCKB Logic Type ID
-            HashType: Type
+            CodeHash: iCKB Logic Hash
+            HashType: Data1
             Args: Empty
         Lock: A lock that identifies the user
     - ...
@@ -317,7 +317,7 @@ Outputs:
         Type:
             CodeHash: Standard xUDT Script
             HashType: Data1
-            Args: [iCKB Logic Type ID, 0x80000000]
+            Args: [iCKB Logic Script Hash, 0x80000000]
         Lock: A lock that identifies the user
 ```
 
@@ -383,15 +383,15 @@ Inputs:
         Data: 8 bytes filled with zeros
         Type: Nervos DAO
         Lock:
-            CodeHash: iCKB Logic Type ID
-            HashType: Type
+            CodeHash: iCKB Logic Hash
+            HashType: Data1
             Args: Empty
     - Token:
         Data: amount (16 bytes)
         Type:
             CodeHash: Standard xUDT Script
             HashType: Data1
-            Args: [iCKB Logic Type ID, 0x80000000]
+            Args: [iCKB Logic Script Hash, 0x80000000]
         Lock: A lock that identifies the user
     - ...
 Outputs:
@@ -469,15 +469,15 @@ Inputs:
         Data: 8 bytes filled with zeros
         Type: Nervos DAO
         Lock:
-            CodeHash: iCKB Logic Type ID
-            HashType: Type
+            CodeHash: iCKB Logic Hash
+            HashType: Data1
             Args: Empty
     - Token:
         Data: amount (16 bytes)
         Type:
             CodeHash: Standard xUDT Script
             HashType: Data1
-            Args: [iCKB Logic Type ID, 0x80000000]
+            Args: [iCKB Logic Script Hash, 0x80000000]
         Lock: A lock that identifies the user
     - ...
 Outputs:
@@ -485,14 +485,14 @@ Outputs:
         Data: Deposit cell's including block number
         Type: Nervos DAO
         Lock: Owned role
-            CodeHash: Owned Owner Type ID
-            HashType: Type
+            CodeHash: Owned Owner Hash
+            HashType: Data1
             Args: Empty
     - Owner cell:
         Data: Signed distance from Owned cell (4 bytes)
         Type: Owner role
-            CodeHash: Owned Owner Type ID
-            HashType: Type
+            CodeHash: Owned Owner Hash
+            HashType: Data1
             Args: Empty
         Lock: A lock that identifies the user
     - ...
@@ -517,14 +517,14 @@ Inputs:
         Data: Deposit cell's including block number
         Type: Nervos DAO
         Lock: Owned role
-            CodeHash: Owned Owner Type ID
-            HashType: Type
+            CodeHash: Owned Owner Hash
+            HashType: Data1
             Args: Empty
     - Owner cell:
         Data: Signed distance from Owned cell (4 bytes)
         Type: Owner role
-            CodeHash: Owned Owner Type ID
-            HashType: Type
+            CodeHash: Owned Owner Hash
+            HashType: Data1
             Args: Empty
         Lock: A lock that identifies the user
     - ...
@@ -618,14 +618,14 @@ Outputs:
             - MintOrderData variant of OrderData
         Type: xUDT
         Lock: Limit Order role
-            CodeHash: Limit Order Type ID
-            HashType: Type
+            CodeHash: Limit Order Hash
+            HashType: Data1
             Args: Empty
     - Master cell:
         Data: ...
         Lock: Master role
-            CodeHash: Limit Order Type ID
-            HashType: Type
+            CodeHash: Limit Order Hash
+            HashType: Data1
             Args: Empty
         Lock: A lock that identifies the user
 ```
@@ -655,8 +655,8 @@ Inputs:
             - MintOrderData variant of OrderData
         Type: xUDT
         Lock: Limit Order role
-            CodeHash: Limit Order Type ID
-            HashType: Type
+            CodeHash: Limit Order Hash
+            HashType: Data1
             Args: Empty
 Outputs:
     - Limit Order cell:
@@ -665,8 +665,8 @@ Outputs:
             - MatchOrderData variant of OrderData
         Type: xUDT
         Lock: Limit Order role
-            CodeHash: Limit Order Type ID
-            HashType: Type
+            CodeHash: Limit Order Hash
+            HashType: Data1
             Args: Empty
 ```
 
@@ -687,14 +687,14 @@ Inputs:
             - MatchOrderData variant of OrderData
         Type: xUDT
         Lock: Limit Order role
-            CodeHash: Limit Order Type ID
-            HashType: Type
+            CodeHash: Limit Order Hash
+            HashType: Data1
             Args: Empty
     - Master cell:
         Data: ...
         Lock: Master role
-            CodeHash: Limit Order Type ID
-            HashType: Type
+            CodeHash: Limit Order Hash
+            HashType: Data1
             Args: Empty
         Lock: A lock that identifies the user
 Outputs:
@@ -709,27 +709,37 @@ All the script presented in this proposal (iCKB Script, Owned Owner Script and L
 
 This witnesses malleability doesn't affect the current iCKB use-cases as no data that can be freely tampered is ever stored into witnesses.
 
-## Deployment
+## Non-Upgradable Deployment
 
-iCKB has been developed in the public as a public good. As such iCKB will be deployed in the same way as [NervosDAO](https://explorer.nervos.org/en/script/0x82d76d1b75fe2fd9a27dfbaa65a039221a380d76c926f378d3f81cf3e7e13f2e/type/deployed_cells), it's a deployment by type, but with zero lock. For example, NervosDAO deployed cell on mainnet is:
+From the start iCKB has been built in the open as a public good. As such iCKB scripts will be deployed in a non-upgradable way. The reason is the following: let's assume iCKB was deployed by type, then whoever controls the lock is hypothetically able to update the binary and steal all the funds. This is not acceptable for a public good such iCKB.
+
+Since no entity owns the deployed scripts, the scripts should be deployed with an unlockable lock. In this case the chosen lock is the `secp256k1_blake160` zero lock:
 
 ```yaml
 Outputs:
-    - NervosDAO:
-        Data: NervosDAO binary
-        Type: deployment by type
-            CodeHash: 0x00000000000000000000000000000000000000000000000000545950455f4944
-            HashType: Type
-            Args: 0xb2a8500929d6a1294bf9bf1bf565f549fa4a5f1316a3306ad3d4783e64bcf626
-        Lock: Zero lock
-            CodeHash: 0x0000000000000000000000000000000000000000000000000000000000000000
-            HashType: Data
-            Args: Empty
+    - iCKB Script cell:
+        Data: iCKB Script binary
+        Type: Empty
+        Lock: Secp256k1_blake160 zero lock
+            CodeHash: Secp256k1_blake160 Type ID
+            HashType: type
+            Args: 0x0000000000000000000000000000000000000000
+    - Owned-Owner Script cell:
+        Data: Owned-Owner Script binary
+        Type: Empty
+        Lock: Secp256k1_blake160 zero lock
+            CodeHash: Secp256k1_blake160 Type ID
+            HashType: type
+            Args: 0x0000000000000000000000000000000000000000
+    - Limit Order Script cell:
+        Data: Limit Order Script binary
+        Type: Empty
+        Lock: Secp256k1_blake160 zero lock
+            CodeHash: Secp256k1_blake160 Type ID
+            HashType: type
+            Args: 0x0000000000000000000000000000000000000000
+    - ...
 ```
-
-This means that the script is upgradable, but only with a chain fork.
-
-The reason is the following: let's assume iCKB was deployed by type with normal lock, then whoever controls the lock is able to update the binary and steal all the funds. This is not acceptable for a public good such iCKB.
 
 ## Future
 
