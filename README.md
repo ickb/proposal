@@ -589,9 +589,10 @@ union OrderData {
 
 #### Mint Limit Order
 
-In the Mint transaction, the output contains:
+In Mint transactions, the output contains:
 
 1. The limit order cell itself with an UDT as type and this script as lock. In the cell data field, this lock memorizes following information:
+    - `padding` is used to achieve the same `OrderData` length for both variants.
     - `master_distance` expresses the signed relative index distance between this cell and the master cell.
     - `ckb_to_udt` expresses the order exchange ratio from CKB to UDT.
     - `udt_to_ckb` expresses the order exchange ratio from UDT to CKB
@@ -601,7 +602,10 @@ In the Mint transaction, the output contains:
 
 Validation rules:
 
+- Only the `MintOrderData` variant of `OrderData` is allowed for a newly minted order.
 - `orders_index + master_distance == master_index`
+- `ckb_min_match_log` only valid values are from 0 to 64, extremes included.
+- Additional cell data is not allowed in order cells.
 
 **Example of Limit Order mint:**
 
@@ -632,15 +636,21 @@ Outputs:
 
 #### Match Limit Order
 
-In Match transactions the allowed input limit OrderData variants are MintOrderData and MatchOrderData. While the allowed output variant is MatchOrderData.
+In Match transactions the allowed input limit `OrderData` variants are `MintOrderData` and `MatchOrderData`. While the only allowed output variant is `MatchOrderData`.
+
+The only difference between `MintOrderData` and `MatchOrderData` is that `padding` and `master_distance` are discarded in favour of `master_outpoint`, which keeps track of original master outpoint of the matched order.
 
 Validation rules:
 
 - `in_ckb * ckb_multiplier + in_udt * udt_multiplier <= out_ckb * ckb_multiplier + out_udt * udt_multiplier`
 - `in_wanted_asset + 2^log_min_match <= out_wanted_asset`
-- excluding the first 16 bytes that encode the amount, the rest of data bytes must be equal between input and output order.
-- An order already completely fulfilled is not allowed as input order.
-- MintOrderData is not allowed as output order.
+- An order already completely fulfilled cannot be matched.
+- Only `MatchOrderData` variant of `OrderData` is allowed as the matched order in output.
+- Implicit Master outpoint must be equal between input and its matched output order:
+    1. If input `OrderData` is the variant `MintOrderData`, then input order `outpoint.tx_hash` must be equal to its matched output order `master_outpoint.tx_hash`. Additionally, input order `outpoint.index + master_distance` must be equal to its matched output order `master_outpoint.index`.
+    2. If input `OrderData` is the variant `MatchOrderData`, then `master_outpoint` must be equal between input and its matched output order.
+- `ckb_to_udt`, `udt_to_ckb` and `ckb_min_match_log`must be equal between input and its matched output order.
+- Additional cell data is not allowed in order cells.
 
 **Example of Limit Order Match:**
 
@@ -672,7 +682,13 @@ Outputs:
 
 #### Melt Limit Order
 
-In the Melt transaction, the input contains both the order cell and the master cell. If one of the two is missing the script does't validate. Any limit OrderData variant is allowed as input.
+In the Melt transaction, the input contains both the order cell and its master cell. If one of the two is missing the script does't validate. Any limit `OrderData` variant is allowed as input.
+
+Validation rules:
+
+- Implicit Master outpoint must be equal between input order cell and its input master cell:
+    1. If order's `OrderData` is the variant `MintOrderData`, then order `outpoint.tx_hash` must be equal to its input master `outpoint.tx_hash`. Additionally, order `outpoint.index + master_distance` must be equal to its master `outpoint.index`.
+    2. If order's `OrderData` is the variant `MatchOrderData`, then order `master_outpoint` must be equal to its master `outpoint`.
 
 **Example of Limit Order melt:**
 
