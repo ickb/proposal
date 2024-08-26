@@ -623,7 +623,7 @@ Outputs:
             Args: Empty
     - Master cell:
         Data: ...
-        Lock: Master role
+        Type: Master role
             CodeHash: Limit Order Hash
             HashType: Data1
             Args: Empty
@@ -692,7 +692,7 @@ Inputs:
             Args: Empty
     - Master cell:
         Data: ...
-        Lock: Master role
+        Type: Master role
             CodeHash: Limit Order Hash
             HashType: Data1
             Args: Empty
