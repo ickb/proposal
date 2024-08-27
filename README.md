@@ -603,7 +603,7 @@ In Mint transactions, the output contains:
 Validation rules:
 
 - Only the `MintOrderData` variant of `OrderData` is allowed for a newly minted order.
-- `orders_index + master_distance == master_index`
+- Minted order output `index` plus `MintOrderData.master_distance` must be equal to its master cell output `index`.
 - `ckb_min_match_log` only valid values are from 0 to 64, extremes included.
 - Additional cell data is not allowed in order cells.
 
@@ -649,7 +649,7 @@ Validation rules:
 - Implicit Master outpoint must be equal between input and its matched output order:
     1. If input `OrderData` is the variant `MintOrderData`, then input order `outpoint.tx_hash` must be equal to its matched output order `master_outpoint.tx_hash`. Additionally, input order `outpoint.index + master_distance` must be equal to its matched output order `master_outpoint.index`.
     2. If input `OrderData` is the variant `MatchOrderData`, then `master_outpoint` must be equal between input and its matched output order.
-- `ckb_to_udt`, `udt_to_ckb` and `ckb_min_match_log`must be equal between input and its matched output order.
+- `ckb_to_udt`, `udt_to_ckb` and `ckb_min_match_log` must be equal between input and its matched output order.
 - Additional cell data is not allowed in order cells.
 
 **Example of Limit Order Match:**
