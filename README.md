@@ -402,6 +402,16 @@ Outputs:
     - ...
 ```
 
+### Multiple iCKB Actions in a TX
+
+It's possible to include multiple actions from different phases in one transaction.
+
+One transaction can mix and include many actions from different iCKB phases. For example, a single transaction can consist of all the following actions:
+
+1. Create some new iCKB Deposits and their Receipt.
+2. Transform another Receipt into the xUDT iCKB token.
+3. Using the xUDT iCKB token to withdraw from some iCKB Deposits.
+
 ## Ancillary Scripts
 
 The iCKB protocol without additional scripts would be difficult to use, this section describes the L1 scripts that have been developed to address iCKB user needs.
@@ -716,6 +726,16 @@ Inputs:
 Outputs:
     - ...
 ```
+
+### Multiple Limit Order Actions in a TX
+
+It's possible to include multiple actions from different phases in one transaction.
+
+One transaction can mix and include many actions from different Limit Order phases. For example, a single transaction can consist of all the following actions:
+
+1. Mint many new Limit Orders.
+2. Match many existing Limit Orders.
+3. Melt many old Limit Orders.
 
 ## Warning: Unsigned Lock Witnesses Malleability ⚠️
 
