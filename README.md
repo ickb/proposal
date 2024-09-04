@@ -200,9 +200,8 @@ For simplicity [a transaction containing NervosDAO script is currently limited t
 
 In a receipt cell data:
 
-- The third `8 bytes` store the deposit unoccupied capacity, which is the single deposit capacity minus its occupied capacity, the actual `deposit_amount`. A single receipt tracks a group of deposits with same unoccupied capacity in the current tx output. Multiple receipts for a specific unoccupied capacity may be created where each one keep track of a different group of deposits.
-- The second `4 bytes` store the quantity of deposits with same unoccupied capacity being tracked in the tx output. A tx may create many deposits with the same unoccupied capacity. This counter keeps track of how many deposits with the same unoccupied capacity are being tracking in the current tx by this specific receipt.
-- The first `4 bytes`, currently zeroed, are reserved as unionID in case of future iCKB updates, see [molecule specification for union serialization](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0008-serialization/0008-serialization.md#union). This field is currently unused as likely the contracts are gonna be [deployed by in a non-upgradable manner](#non-upgradable-deployment). This field is being kept in the remote possibility that iCKB Scripts are deployed in an upgradable manner. At that point a future `v2` revision of the script could encode data in a different way.
+- The second `8 bytes` store the deposit unoccupied capacity, which is the single deposit capacity minus its occupied capacity, the actual `deposit_amount`. A single receipt tracks a group of deposits with same unoccupied capacity in the current tx output. Multiple receipts for a specific unoccupied capacity may be created where each one keep track of a different group of deposits.
+- The first `4 bytes` store the quantity of deposits with same unoccupied capacity being tracked in the tx output. A tx may create many deposits with the same unoccupied capacity. This counter keeps track of how many deposits with the same unoccupied capacity are being tracking in the current tx by this specific receipt.
 
 Summing up, in the first deposit phase, these rules must be followed:
 
@@ -210,7 +209,6 @@ Summing up, in the first deposit phase, these rules must be followed:
 - A single deposit unoccupied capacity cannot be lower than `1000 CKB` nor higher than `1M CKB`.
 - A group of same size deposits must be accounted by a receipt.
 - A **receipt** is defined as a cell with iCKB Logic Type `{CodeHash: iCKB Logic Hash, HashType: Data1, Args: Empty}`, the first 16 bytes of cell data are reserved for:
-  - `union_id` all zero, it's reserved for future updates to data encoding (4 bytes)
   - `deposit_quantity` keeps track of the quantity of deposits (4 bytes)
   - `deposit_amount` keeps track of the single deposit unoccupied capacity (8 bytes)
 - No more than 64 output cells are allowed, due to the current NervosDAO restriction.
@@ -222,15 +220,10 @@ Summing up, in the first deposit phase, these rules must be followed:
 array Uint32           [byte; 4];
 array Uint64           [byte; 8];
 
-struct ReceiptDataV0 {
+struct ReceiptData {
     deposit_quantity:  Uint32,
     deposit_amount:    Uint64,
 }
-
-union ReceiptData {
-    ReceiptDataV0,
-}
-
 ```
 
 **Example of deposit phase 1:**
@@ -252,7 +245,6 @@ Outputs:
     - ...
     - Receipt:
         Data: ReceiptData
-            union_id: All zero, reserved for future updates (4 bytes)
             deposit_quantity: Quantity of deposits (4 bytes)
             deposit_amount: Single deposit unoccupied capacity (8 bytes)
         Type:
