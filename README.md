@@ -282,7 +282,7 @@ receipt_iCKB_value(deposit_quantity, deposit_amount, AR_m) {
 
 - The total iCKB value of input tokens and input receipts must be equal to the total iCKB value of output tokens.
 - iCKB xUDT flags are set to `0x80000000` to enable [xUDT owner mode by input type](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0052-extensible-udt/0052-extensible-udt.md#owner-mode-update). This flag must later on be encoded as a `Uint32` Little Endian, so it's final encoding is `0x00000080`.
-- HeaderDeps must contain the transaction hash of the deposit block for each receipt.
+- HeaderDeps must include the hash of the header of the on-chain block containing the receipt tx for each receipt being converted into iCKB xUDT.
 - CellDeps must contain iCKB Dep Group comprising of: iCKB Logic Script, Standard xUDT Script and Nervos DAO Script.
 
 **Example of deposit phase 2:**
@@ -292,7 +292,7 @@ CellDeps:
     - iCKB Dep Group cell
     - ...
 HeaderDeps: 
-    - Deposit block
+    - Receipt Block Header Hash
     - ...
 Inputs:
     - Receipt:
@@ -358,7 +358,7 @@ deposit_iCKB_value(capacity, occupied_capacity, AR_m) {
 - The total iCKB value of input tokens and input receipts must be bigger or equal to the total iCKB value of output tokens and input deposits, the deposits being withdrawn.
 - Withdrawal Request lock must have zero args length and no information stored in the data cell.
 - No more than 64 output cells are allowed, due to the current NervosDAO restriction.
-- HeaderDeps must contain the transaction hash of the deposit block for each deposit being used to withdraw and each receipt cashed out.
+- HeaderDeps must include the hash of the header of the on-chain block containing the deposits for each deposit being used to withdraw and each receipt being directly cashed out.
 - CellDeps must contain iCKB Dep Group comprising of: iCKB Logic Script, Standard xUDT Script and Nervos DAO Script.
 
 **Example of withdrawal phase 1:**
@@ -368,7 +368,7 @@ CellDeps:
     - iCKB Dep Group cell
     - ...
 HeaderDeps: 
-    - Deposit block
+    - Deposit Block Header Hash
     - ...
 Inputs:
     - Nervos DAO deposit cell with iCKB Logic Script:
@@ -464,7 +464,7 @@ CellDeps:
     - Owned Owner data cell
     - ...
 HeaderDeps: 
-    - Deposit block
+    - Deposit Block Header Hash
     - ...
 Inputs:
     - Nervos DAO deposit cell with iCKB Logic Script:
@@ -512,7 +512,7 @@ CellDeps:
     - Owned Owner data cell
     - ...
 HeaderDeps: 
-    - Deposit block
+    - Deposit Block Header Hash
     - ...
 Inputs:
     - Nervos DAO phase 1 withdrawal cell:
