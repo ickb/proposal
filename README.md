@@ -739,35 +739,106 @@ This witnesses malleability doesn't affect the current iCKB use-cases as no data
 
 ## Non-Upgradable Deployment
 
-From the start iCKB has been built in the open as a public good. As such iCKB scripts will be deployed in a non-upgradable way. The reason is the following: let's assume iCKB was deployed by type, then whoever controls the lock is hypothetically able to update the binary and steal all the funds. This is not acceptable for a public good such iCKB.
+From the start iCKB has been built in the open as a public good. As such iCKB scripts are deployed in a non-upgradable way. The reason is the following: let's assume iCKB was deployed by type, then whoever controls the lock is hypothetically able to update the binary and steal all the funds. This is not acceptable for a public good such iCKB.
 
-Since no entity owns the deployed scripts, the scripts should be deployed with an unlockable lock. In this case the chosen lock is the `secp256k1_blake160` zero lock:
+Since no entity owns the deployed scripts, the scripts are deployed with a `secp256k1_blake160` zero lock, an unlockable lock.
 
-```yaml
-Outputs:
-    - iCKB Script cell:
-        Data: iCKB Script binary
-        Type: Empty
-        Lock: Secp256k1_blake160 zero lock
-            CodeHash: Secp256k1_blake160 Type ID
-            HashType: type
-            Args: 0x0000000000000000000000000000000000000000
-    - Owned-Owner Script cell:
-        Data: Owned-Owner Script binary
-        Type: Empty
-        Lock: Secp256k1_blake160 zero lock
-            CodeHash: Secp256k1_blake160 Type ID
-            HashType: type
-            Args: 0x0000000000000000000000000000000000000000
-    - Limit Order Script cell:
-        Data: Limit Order Script binary
-        Type: Empty
-        Lock: Secp256k1_blake160 zero lock
-            CodeHash: Secp256k1_blake160 Type ID
-            HashType: type
-            Args: 0x0000000000000000000000000000000000000000
-    - ...
-```
+Additionally, it has been created the following dependency group:
+
+- iCKB Logic
+- Limit Order
+- Owned-Owner
+- xUDT
+- Secp256k1 Blake160
+- NervosDAO
+- Secp256k1 Data
+- Secp256k1 Blake160 Multisig
+
+### [Mainnet Deployment](https://explorer.nervos.org/transaction/0xd7309191381f5a8a2904b8a79958a9be2752dbba6871fa193dab6aeb29dc8f44)
+
+#### [iCKB Logic Mainnet Deployment](https://explorer.nervos.org/script/0x2a8100ab5990fa055ab1b50891702e1e895c7bd1df6322cd725c1a6115873bd3/data1)
+
+| parameter | value |
+| --- | --- |
+| code_hash | 0x2a8100ab5990fa055ab1b50891702e1e895c7bd1df6322cd725c1a6115873bd3 |
+| hash_type | data1 |
+| tx_hash | 0x621a6f38de3b9f453016780edac3b26bfcbfa3e2ecb47c2da275471a5d3ed165 |
+| index | 0x0 |
+| dep_type | depGroup |
+
+#### [Limit Order Mainnet Deployment](https://explorer.nervos.org/script/0x49dfb6afee5cc8ac4225aeea8cb8928b150caf3cd92fea33750683c74b13254a/data1)
+
+| parameter | value |
+| --- | --- |
+| code_hash | 0x49dfb6afee5cc8ac4225aeea8cb8928b150caf3cd92fea33750683c74b13254a |
+| hash_type | data1 |
+| tx_hash | 0x621a6f38de3b9f453016780edac3b26bfcbfa3e2ecb47c2da275471a5d3ed165 |
+| index | 0x0 |
+| dep_type | depGroup |
+
+#### [Owned-Owner Mainnet Deployment](https://explorer.nervos.org/script/0xacc79e07d107831feef4c70c9e683dac5644d5993b9cb106dca6e74baa381bd0/data1)
+
+| parameter | value |
+| --- | --- |
+| code_hash | 0xacc79e07d107831feef4c70c9e683dac5644d5993b9cb106dca6e74baa381bd0 |
+| hash_type | data1 |
+| tx_hash | 0x621a6f38de3b9f453016780edac3b26bfcbfa3e2ecb47c2da275471a5d3ed165 |
+| index | 0x0 |
+| dep_type | depGroup |
+
+#### iCKB xUDT Mainnet
+
+| parameter | value |
+| --- | --- |
+| code_hash | 0x50bd8d6680b8b9cf98b73f3c08faf8b2a21914311954118ad6609be6e78a1b95 |
+| hash_type | data1 |
+| args | 0xb73b6ab39d79390c6de90a09c96b290c331baf1798ed6f97aed02590929734e800000080 |
+| tx_hash | 0x621a6f38de3b9f453016780edac3b26bfcbfa3e2ecb47c2da275471a5d3ed165 |
+| index | 0x0 |
+| dep_type | depGroup |
+
+### [Testnet Deployment](https://pudge.explorer.nervos.org/transaction/0x9ac989b3355764f76cdce02c69dedb819fdfbcbda49a7db1a2c9facdfdb9a7fe)
+
+#### [iCKB Logic Testnet Deployment](https://pudge.explorer.nervos.org/script/0x2a8100ab5990fa055ab1b50891702e1e895c7bd1df6322cd725c1a6115873bd3/data1)
+
+| parameter | value |
+| --- | --- |
+| code_hash | 0x2a8100ab5990fa055ab1b50891702e1e895c7bd1df6322cd725c1a6115873bd3 |
+| hash_type | data1 |
+| tx_hash | 0xf7ece4fb33d8378344cab11fcd6a4c6f382fd4207ac921cf5821f30712dcd311 |
+| index | 0x0 |
+| dep_type | depGroup |
+
+#### [Limit Order Testnet Deployment](https://pudge.explorer.nervos.org/script/0x49dfb6afee5cc8ac4225aeea8cb8928b150caf3cd92fea33750683c74b13254a/data1)
+
+| parameter | value |
+| --- | --- |
+| code_hash | 0x49dfb6afee5cc8ac4225aeea8cb8928b150caf3cd92fea33750683c74b13254a |
+| hash_type | data1 |
+| tx_hash | 0xf7ece4fb33d8378344cab11fcd6a4c6f382fd4207ac921cf5821f30712dcd311 |
+| index | 0x0 |
+| dep_type | depGroup |
+
+#### [Owned-Owner Testnet Deployment](https://pudge.explorer.nervos.org/script/0xacc79e07d107831feef4c70c9e683dac5644d5993b9cb106dca6e74baa381bd0/data1)
+
+| parameter | value |
+| --- | --- |
+| code_hash | 0xacc79e07d107831feef4c70c9e683dac5644d5993b9cb106dca6e74baa381bd0 |
+| hash_type | data1 |
+| tx_hash | 0xf7ece4fb33d8378344cab11fcd6a4c6f382fd4207ac921cf5821f30712dcd311 |
+| index | 0x0 |
+| dep_type | depGroup |
+
+#### iCKB xUDT Testnet
+
+| parameter | value |
+| --- | --- |
+| code_hash | 0x50bd8d6680b8b9cf98b73f3c08faf8b2a21914311954118ad6609be6e78a1b95 |
+| hash_type | data1 |
+| args | 0xb73b6ab39d79390c6de90a09c96b290c331baf1798ed6f97aed02590929734e800000080 |
+| tx_hash | 0xf7ece4fb33d8378344cab11fcd6a4c6f382fd4207ac921cf5821f30712dcd311 |
+| index | 0x0 |
+| dep_type | depGroup |
 
 ## Future
 
