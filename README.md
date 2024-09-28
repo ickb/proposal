@@ -869,15 +869,18 @@ A few things changed since the inception, these are the updated use cases:
 
 ## Useful Resources
 
+- [iCKB DApp](https://ickb.org)
 - [Hashing it Out introduction to iCKB](https://www.youtube.com/watch?v=CcFFuenup38&t=781s)
-- [iCKB Testnet DApp](https://ickb.github.io/v1-interface)
-- [iCKB journey into CoBuild on Nervos Talk](https://talk.nervos.org/t/ickb-journey-into-cobuild/7918)
+- [iCKB Thread on Telegram](https://t.me/NervosNation/307406)
 - [\[AMA\] Everything iCKB on Nervos Talk](https://talk.nervos.org/t/ama-everything-ickb/7871)
 - [Thread for iCKB development on Discord](https://discord.com/channels/657799690070523914/980237827122032730)
-- [Reference implementation](https://github.com/ickb/v1-core)
-- [Reference proposal](https://github.com/ickb/proposal)
+- [iCKB AMA on Reddit](https://old.reddit.com/r/NervosNetwork/comments/1erw6v8/ickb_ama/)
+- [iCKB journey into CoBuild on Nervos Talk](https://talk.nervos.org/t/ickb-journey-into-cobuild/7918)
+- [iCKB Scripts code](https://github.com/ickb/v1-core/tree/master/scripts)
+- [Scalebit Audit](https://scalebit.xyz/reports/20240911-ICKB-Final-Audit-Report.pdf)
 - [Initial proposal on Nervos Talk](https://talk.nervos.org/t/looking-for-feedback-ickb-a-tokenization-of-nervosdao-deposits/6772)
 - [Is wstCKB just another iCKB?](https://github.com/stablepp/media-kit/issues/1)
+- [Reference proposal](https://github.com/ickb/proposal)
 
 ## License
 
