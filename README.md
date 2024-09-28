@@ -544,7 +544,7 @@ Interacting directly with the iCKB protocol has some limitations:
 - NervosDAO doesn't allow to partially withdraw from a deposit.
 - There is no easy way to merge multiple user intentions within a single deposit or withdrawal.
 
-To abstract over NervosDAO and iCKB protocol limitations, it has been created a lock that implements limit order logic, abstracting user intentions, and that anyone can match partially or completely, similarly to an ACP lock. This lock aims to be compatible with all types that: follows the sUDT convention of storing the amount in the first 16 bytes of cell data and store no data in the witness, at the moment sUDT and partially xUDT. If a UDT needs to store data on Witness, then it should not be used in conjunction with the limit order script. In a transaction there may be multiple orders cells. This script lifecycle consists of three kind of transactions: Mint, Match and Melt.
+To abstract over NervosDAO and iCKB protocol limitations, it has been created a lock that implements limit order logic, abstracting user intentions, and that anyone can match partially or completely, similarly to an ACP lock. This lock aims to be compatible with all types that follows the sUDT convention of storing the amount in the first 16 bytes of cell data and store no data in the witness, at the moment sUDT and partially xUDT. If a UDT needs to store data on Witness, then it should not be used in conjunction with the limit order script. In a transaction there may be multiple orders cells. This script lifecycle consists of three kind of transactions: Mint, Match and Melt.
 
 **Limit Order data molecule encoding:**
 
@@ -729,7 +729,11 @@ One transaction can mix and include many actions from different Limit Order phas
 2. Match many existing Limit Orders.
 3. Melt many old Limit Orders.
 
-## Warning: Unsigned Lock Witnesses Malleability ⚠️
+## Audit
+
+This proposal and the [code of iCKB Scripts](https://github.com/ickb/v1-core/tree/master/scripts) has been both internally reviewed by individuals with deep experience in Nervos L1 and [externally audited by the Scalebit team](http://scalebit.xyz/reports/20240911-ICKB-Final-Audit-Report.pdf), an internationally recognized blockchain security team.
+
+### Unsigned Lock Witnesses Malleability
 
 All the script presented in this proposal (iCKB Script, Owned Owner Script and Limit Order Script) follow a novel pattern of using a script both as lock in one cell and type into another cell. While the pattern allows great flexibility, it also comes with an implicit weakness: the cell that uses the script as lock doesn't rely on signature-based verification, so the witnesses in the same group (lock, input type and output type) can be modified by an attacker after user signature. [Credits to @XuJiandong for the discovery](https://github.com/ickb/v1-core/issues/10).
 
@@ -737,9 +741,15 @@ All the script presented in this proposal (iCKB Script, Owned Owner Script and L
 
 This witnesses malleability doesn't affect the current iCKB use-cases as no data that can be freely tampered is ever stored into witnesses.
 
+### Confusion Attack on Limit Order
+
+Due to the architectural design of Nervos L1, output locks are not executed during the transaction validation process. Consequently, an attacker may create a limit order that shares the same master cell as an already existing limit order. This situation may lead to confusion to the front-end code regarding the identification of the correct limit order. Users must exercise particular caution when melting their limit order and master cell, as selecting the incorrect limit order could result in the permanent locking of the funds associated with their original limit order. More details in the [dedicated GitHub issue](https://github.com/ickb/proposal/issues/19).
+
+**Rule of thumb**: if two limit orders of any UDT share the same implicit Master Outpoint, the front-end must track every preceding transaction in the chain of limit order partial matches until is found the original transaction that also contains as outputs both limit order and master cell.
+
 ## Non-Upgradable Deployment
 
-From the start iCKB has been built in the open as a public good. As such iCKB scripts are deployed in a non-upgradable way. The reason is the following: let's assume iCKB was deployed by type, then whoever controls the lock is hypothetically able to update the binary and steal all the funds. This is not acceptable for a public good such iCKB.
+From the start iCKB has been built in the open as a public good. As such iCKB scripts have been deployed in a non-upgradable way. The reason is the following: let's assume iCKB was deployed by type, then whoever controls the lock is hypothetically able to update the binary and steal all the funds. This is not acceptable for a public good such iCKB.
 
 Since no entity owns the deployed scripts, the scripts are deployed with a `secp256k1_blake160` zero lock, an unlockable lock.
 
