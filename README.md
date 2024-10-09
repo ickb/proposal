@@ -803,6 +803,8 @@ Additionally, it has been created the following dependency group:
 | name | iCKB |
 | symbol | iCKB |
 | decimals | 8 |
+| metadata_tx_hash | 0x490cd47d7491b8dcb74f22bd7607b176bf7dbe13d4cc9c2d0f50dc7208082f6d |
+| script_hash | 0xd485c2271949c232e3f5d46128336c716f90bcbf3cb278696083689fbbcd407a |
 | code_hash | 0x50bd8d6680b8b9cf98b73f3c08faf8b2a21914311954118ad6609be6e78a1b95 |
 | hash_type | data1 |
 | args | 0xb73b6ab39d79390c6de90a09c96b290c331baf1798ed6f97aed02590929734e800000080 |
@@ -849,6 +851,8 @@ Additionally, it has been created the following dependency group:
 | name | iCKB |
 | symbol | iCKB |
 | decimals | 8 |
+| metadata_tx_hash | 0x8b33577d05662003f206fb2886c32810866dca51821f0db31e3a05b06a7e3bf9 |
+| script_hash | 0xd485c2271949c232e3f5d46128336c716f90bcbf3cb278696083689fbbcd407a |
 | code_hash | 0x50bd8d6680b8b9cf98b73f3c08faf8b2a21914311954118ad6609be6e78a1b95 |
 | hash_type | data1 |
 | args | 0xb73b6ab39d79390c6de90a09c96b290c331baf1798ed6f97aed02590929734e800000080 |
