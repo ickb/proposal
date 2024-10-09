@@ -1,4 +1,4 @@
-# iCKB
+# ![iCKB](./logo.png)
 
 ## Listenable Introduction
 
@@ -800,6 +800,9 @@ Additionally, it has been created the following dependency group:
 
 | parameter | value |
 | --- | --- |
+| name | iCKB |
+| symbol | iCKB |
+| decimals | 8 |
 | code_hash | 0x50bd8d6680b8b9cf98b73f3c08faf8b2a21914311954118ad6609be6e78a1b95 |
 | hash_type | data1 |
 | args | 0xb73b6ab39d79390c6de90a09c96b290c331baf1798ed6f97aed02590929734e800000080 |
@@ -843,6 +846,9 @@ Additionally, it has been created the following dependency group:
 
 | parameter | value |
 | --- | --- |
+| name | iCKB |
+| symbol | iCKB |
+| decimals | 8 |
 | code_hash | 0x50bd8d6680b8b9cf98b73f3c08faf8b2a21914311954118ad6609be6e78a1b95 |
 | hash_type | data1 |
 | args | 0xb73b6ab39d79390c6de90a09c96b290c331baf1798ed6f97aed02590929734e800000080 |
@@ -884,4 +890,4 @@ A few things changed since the inception, these are the updated use cases:
 
 ## License
 
-This proposal is licensed under the terms of the [Creative Commons Attribution Share Alike 4.0 International License](https://github.com/ickb/proposal/blob/master/LICENSE.txt).
+This proposal is distributed under [MIT License](https://github.com/ickb/proposal/blob/master/LICENSE.txt).
