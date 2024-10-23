@@ -733,7 +733,7 @@ One transaction can mix and include many actions from different Limit Order phas
 
 This proposal and the [code of iCKB Scripts](https://github.com/ickb/v1-core/tree/master/scripts) has been both internally reviewed by individuals with deep experience in Nervos L1 and [externally audited by the Scalebit team](http://scalebit.xyz/reports/20240911-ICKB-Final-Audit-Report.pdf), an internationally recognized blockchain security team.
 
-### Unsigned Lock Witnesses Malleability
+## Unsigned Lock Witnesses Malleability
 
 All the script presented in this proposal (iCKB Script, Owned Owner Script and Limit Order Script) follow a novel pattern of using a script both as lock in one cell and type into another cell. While the pattern allows great flexibility, it also comes with an implicit weakness: the cell that uses the script as lock doesn't rely on signature-based verification, so the witnesses in the same group (lock, input type and output type) can be modified by an attacker after user signature. [Credits to @XuJiandong for the discovery](https://github.com/ickb/v1-core/issues/10).
 
@@ -741,11 +741,39 @@ All the script presented in this proposal (iCKB Script, Owned Owner Script and L
 
 This witnesses malleability doesn't affect the current iCKB use-cases as no data that can be freely tampered is ever stored into witnesses.
 
-### Confusion Attack on Limit Order
+## Confusion Attack on Limit Order
 
 Due to the architectural design of Nervos L1, output locks are not executed during the transaction validation process. Consequently, an attacker may create a limit order that shares the same master cell as an already existing limit order. This situation may lead to confusion to the front-end code regarding the identification of the correct limit order. Users must exercise particular caution when melting their limit order and master cell, as selecting the incorrect limit order could result in the permanent locking of the funds associated with their original limit order. More details in the [dedicated GitHub issue](https://github.com/ickb/proposal/issues/19).
 
-**Rule of thumb**: if two limit orders of any UDT share the same implicit Master Outpoint, the front-end must track every preceding transaction in the chain of limit order partial matches until is found the original transaction that also contains as outputs both limit order and master cell.
+The most practical solution is to fetch the original Mint tx of the Limit Order (LO). With the Mint tx, it's possible to validate (on the front-end) that all the LO parameters are the same between the current LO and the initial Mint LO, but in case there are still multiple LO for the same Master Cell, there must be an additional heuristic.
+
+### Directional LO Heuristic
+
+Directional LO do not increase in value, usually they are constant in value thru their life-cycle. They only increase in value when whoever matches them make mistakes. Normally once a certain progress it's reached (eg LO has been 50% matched), it is not reversible.
+
+**Qualifications for Directional LO**:
+
+- LO has same parameters as Mint LO
+- LO has at least the same value as Mint LO
+
+**Heuristic**: say there are multiple LO with same Master cell, the LO with the **best progress** is chosen.
+
+**Counter intuitive property**: LO 100% matched (with value equal to Mint) is preferred over 0% LO matched (with possibly bigger value, but very likely forged by an attacker)
+
+### Dual-Sided LO Heuristic
+
+Dual-Sided LO (those with two ratios) can increase in value. They increase in value when whoever matches them go back and forth between the two assets. So there is no concept of progress here. Any distribution of assets in the LO is not final and can be altered at any time.
+
+**Qualifications for Dual-Sided LO**:
+
+- LO has same parameters as Mint LO
+- LO has at least the same value as Mint LO
+
+**Heuristic**: say there are multiple LO with same Master cell, the LO with the **best value** is chosen.
+
+### Implementation
+
+An implementation of this patch can be found in [iCKB/V1-Core](https://github.com/ickb/v1-core/commit/1d90b1fb37d5a2a359372300c9e4c9a9b29b4459).
 
 ## Non-Upgradable Deployment
 
