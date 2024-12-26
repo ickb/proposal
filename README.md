@@ -4,9 +4,9 @@
 
 If you would like to listen to an introduction of the project before diving in, Jordan Mack explains iCKB in less than 7 minutes during an episode of [Hashing it Out](https://www.youtube.com/watch?v=CcFFuenup38&t=781s).
 
-## Testnet DApp
+## DApp
 
-If you would like to try out the DApp to get an idea on how it works, [iCKB DApp is live on testnet](http://ickb.github.io/v1-interface).
+If you would like to try out the DApp to get an idea on how it works, [iCKB DApp is live on both mainnet and testnet](http://ickb.org).
 
 ## Problem
 
